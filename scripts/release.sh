@@ -22,13 +22,13 @@
 set -euo pipefail
 
 # ── Config ────────────────────────────────────────────────────────
-SCHEME="Slapppy"
-PROJECT="Slapppy/Slapppy.xcodeproj"
+SCHEME="Slappy"
+PROJECT="Slappy/Slappy.xcodeproj"
 APP_VERSION="1.0"
 BUILD_DIR="build"
 ARCHIVE_PATH="$BUILD_DIR/Slapppy.xcarchive"
 EXPORT_PATH="$BUILD_DIR/export"
-APP_PATH="$EXPORT_PATH/Slapppy.app"
+APP_PATH="$EXPORT_PATH/Slappy.app"
 DMG_PATH="$BUILD_DIR/Slapppy-$APP_VERSION.dmg"
 
 # Credentials — prefer env vars; fall back to the placeholders below
