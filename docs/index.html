@@ -291,6 +291,65 @@
       letter-spacing: -.01em;
     }
 
+    /* Email compose output */
+    .email-compose {
+      width: min(420px, 88vw);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-top: 14px;
+      opacity: 0; transform: translateY(6px);
+      transition: opacity .4s, transform .4s;
+      text-align: left;
+    }
+
+    .email-compose.show { opacity: 1; transform: none; }
+
+    .ec-topbar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+    }
+
+    .ec-dots { display: flex; gap: 5px; }
+    .ecd { width: 10px; height: 10px; border-radius: 50%; display: block; }
+    .ecd.r { background: #ff5f57; }
+    .ecd.y { background: #febc2e; }
+    .ecd.g { background: #28c840; }
+
+    .ec-title {
+      flex: 1; text-align: center; margin-right: 30px;
+      font-size: 11px; font-weight: 600; color: var(--fg);
+    }
+
+    .ec-field {
+      display: flex; gap: 8px; align-items: baseline;
+      padding: 5px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+    }
+
+    .ec-key { color: var(--fg-3); font-weight: 500; width: 28px; flex-shrink: 0; }
+    .ec-val { color: var(--fg-2); }
+
+    .ec-body {
+      padding: 10px 12px;
+      font-size: 12px; line-height: 1.7; color: var(--fg-2);
+      min-height: 72px;
+    }
+
+    .ec-typed { color: var(--accent); font-weight: 600; }
+
+    .ec-cursor {
+      display: inline-block; color: var(--accent);
+      animation: ec-blink 1s ease-in-out infinite;
+      font-weight: 200; margin-left: 1px;
+    }
+
+    @keyframes ec-blink { 0%,45%{opacity:1}50%,100%{opacity:0} }
+
     /* Hero CTAs */
     .hero-actions {
       display: flex; gap: 12px;
@@ -817,6 +876,18 @@
         <div class="tp-output-value" id="hero-output-value"></div>
       </div>
     </div>
+
+    <div class="email-compose" id="hero-email-compose">
+      <div class="ec-topbar">
+        <div class="ec-dots"><span class="ecd r"></span><span class="ecd y"></span><span class="ecd g"></span></div>
+        <div class="ec-title">New Message</div>
+      </div>
+      <div class="ec-field"><span class="ec-key">To</span><span class="ec-val">client@company.com</span></div>
+      <div class="ec-field"><span class="ec-key">Subj</span><span class="ec-val">Re: Q4 proposal</span></div>
+      <div class="ec-body">
+        Looking forward to your feedback.<br><br><span class="ec-typed">Best regards,<br>Arsène</span><span class="ec-cursor">|</span>
+      </div>
+    </div>
   </div>
 
   <div class="hero-actions reveal reveal-d3">
@@ -934,11 +1005,12 @@
                 <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
                   <div class="popup-section-label">Gestures</div>
                   <div class="popup-row">
-                    <svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity=".8">
-                      <path d="M2 2h16L2 9h16"/>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
+                      <circle cx="8.5" cy="7.5" r="3.5"/>
+                      <path d="M12 7.5v-2a4 4 0 0 0-4-4 4 4 0 0 0-4 4v2a4 4 0 0 0 4 4 4 4 0 0 0 2-.5"/>
                     </svg>
-                    <div class="popup-row-name">Z — Screenshot</div>
-                    <div class="popup-tag tag-k">⌘⇧4</div>
+                    <div class="popup-row-name">@ — email address</div>
+                    <div class="popup-tag tag-t">Text</div>
                   </div>
                 </div>
               </div>
@@ -967,34 +1039,34 @@
       <div class="demo-list">
         <div class="demo-item" id="di0" style="--di-color:#34c759">
           <div class="demo-item-top">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#34c759 13%,transparent)">🥁</div>
-            <div class="demo-item-label">Tap a rhythm</div>
+            <div class="demo-item-icon" style="background:color-mix(in srgb,#34c759 13%,transparent)">✉️</div>
+            <div class="demo-item-label">Email sign-off</div>
           </div>
-          <div class="demo-item-hint">⌥ + quick-quick-slow-quick</div>
+          <div class="demo-item-hint">⌥ + quick-quick · pause · quick-quick</div>
           <div class="demo-item-result" id="dr0" style="background:color-mix(in srgb,#34c759 10%,transparent);color:#34c759">
-            💬 arsene@protonmail.com
+            ✉️ Best regards, Arsène — typed
           </div>
         </div>
 
-        <div class="demo-item" id="di1" style="--di-color:#bf5af2">
+        <div class="demo-item" id="di1" style="--di-color:#0071e3">
           <div class="demo-item-top">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#bf5af2 13%,transparent)">✏️</div>
-            <div class="demo-item-label">Draw a Z gesture</div>
+            <div class="demo-item-icon" style="background:color-mix(in srgb,#0071e3 13%,transparent)">@</div>
+            <div class="demo-item-label">Draw an @ gesture</div>
           </div>
-          <div class="demo-item-hint">⌥ + trace a Z with the cursor</div>
-          <div class="demo-item-result" id="dr1" style="background:color-mix(in srgb,#bf5af2 10%,transparent);color:#bf5af2">
-            🎙️ Mute microphone
+          <div class="demo-item-hint">⌥ + trace an @ with the cursor</div>
+          <div class="demo-item-result" id="dr1" style="background:color-mix(in srgb,#0071e3 10%,transparent);color:#0071e3">
+            ✉️ arsene@protonmail.com
           </div>
         </div>
 
         <div class="demo-item" id="di2" style="--di-color:#ff9f0a">
           <div class="demo-item-top">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#ff9f0a 13%,transparent)">📋</div>
-            <div class="demo-item-label">Another rhythm</div>
+            <div class="demo-item-icon" style="background:color-mix(in srgb,#ff9f0a 13%,transparent)">💬</div>
+            <div class="demo-item-label">Quick reply</div>
           </div>
-          <div class="demo-item-hint">⌥ + slow — quick quick</div>
+          <div class="demo-item-hint">⌥ + slow · quick quick</div>
           <div class="demo-item-result" id="dr2" style="background:color-mix(in srgb,#ff9f0a 10%,transparent);color:#ff9f0a">
-            📝 Best regards, Arsène
+            💬 I'll get back to you by EOD!
           </div>
         </div>
       </div>
@@ -1012,6 +1084,18 @@
           <div>
             <div class="tp-output-label" id="demo-output-label">Text snippet</div>
             <div class="tp-output-value" id="demo-output-value"></div>
+          </div>
+        </div>
+
+        <div class="email-compose" id="demo-email-compose">
+          <div class="ec-topbar">
+            <div class="ec-dots"><span class="ecd r"></span><span class="ecd y"></span><span class="ecd g"></span></div>
+            <div class="ec-title">New Message</div>
+          </div>
+          <div class="ec-field"><span class="ec-key">To</span><span class="ec-val">client@company.com</span></div>
+          <div class="ec-field"><span class="ec-key">Subj</span><span class="ec-val">Re: Q4 proposal</span></div>
+          <div class="ec-body">
+            Looking forward to your feedback.<br><br><span class="ec-typed">Best regards,<br>Arsène</span><span class="ec-cursor">|</span>
           </div>
         </div>
       </div>
@@ -1199,14 +1283,15 @@ function pressCursor(cursorEl) {
 
 /* ── Generic trackpad animator ── */
 function makeAnimator(ids) {
-  const cursor   = document.getElementById(ids.cursor);
-  const ripples  = document.getElementById(ids.ripples);
-  const gsvg     = document.getElementById(ids.gsvg);
-  const gpath    = document.getElementById(ids.gpath);
-  const outEl    = document.getElementById(ids.output);
-  const outIcon  = document.getElementById(ids.outputIcon);
-  const outLabel = document.getElementById(ids.outputLabel);
-  const outValue = document.getElementById(ids.outputValue);
+  const cursor      = document.getElementById(ids.cursor);
+  const ripples     = document.getElementById(ids.ripples);
+  const gsvg        = document.getElementById(ids.gsvg);
+  const gpath       = document.getElementById(ids.gpath);
+  const outEl       = document.getElementById(ids.output);
+  const outIcon     = document.getElementById(ids.outputIcon);
+  const outLabel    = document.getElementById(ids.outputLabel);
+  const outValue    = document.getElementById(ids.outputValue);
+  const emailCompose = document.getElementById(ids.emailCompose);
 
   async function tap(x, y, color) {
     cursor.style.left = x + '%';
@@ -1271,10 +1356,14 @@ function makeAnimator(ids) {
   }
 
   async function showOutput(demo) {
-    outIcon.textContent  = demo.outputIcon;
-    outLabel.textContent = demo.outputLabel;
-    outValue.textContent = demo.outputValue;
-    outEl.classList.add('show');
+    if (demo.outputType === 'email-compose') {
+      emailCompose.classList.add('show');
+    } else {
+      outIcon.textContent  = demo.outputIcon;
+      outLabel.textContent = demo.outputLabel;
+      outValue.textContent = demo.outputValue;
+      outEl.classList.add('show');
+    }
   }
 
   async function hideAll() {
@@ -1283,6 +1372,7 @@ function makeAnimator(ids) {
     gpath.style.transition = 'none';
     gpath.style.strokeDashoffset = gpath.style.strokeDasharray || '0';
     outEl.classList.remove('show');
+    emailCompose.classList.remove('show');
   }
 
   return { runTaps, runGesture, showOutput, hideAll };
@@ -1299,14 +1389,19 @@ const DEMOS = [
       { x:50, y:51, t:1110},
     ],
     color: '#34c759',
-    outputIcon: '💬', outputLabel: 'Text snippet', outputValue: 'arsene@protonmail.com',
+    outputType: 'email-compose',
   },
   {
     type: 'gesture',
-    points: [[18,24],[82,24],[18,76],[82,76]],
-    gestureMs: 1300,
-    color: '#bf5af2',
-    outputIcon: '🎙️', outputLabel: 'Shortcut triggered', outputValue: 'Mute microphone',
+    // @ symbol: inner circle CCW + outer wrap
+    points: [
+      [65,50],[58,37],[50,33],[42,37],[36,50],[42,63],[50,67],[58,63],[64,51],
+      [64,32],[50,23],[32,30],[22,50],[28,68],[46,76]
+    ],
+    gestureMs: 1600,
+    color: '#0071e3',
+    outputType: 'normal',
+    outputIcon: '✉️', outputLabel: 'Email address typed', outputValue: 'arsene@protonmail.com',
   },
   {
     type: 'taps',
@@ -1316,7 +1411,8 @@ const DEMOS = [
       { x:50, y:52, t:1300 },
     ],
     color: '#ff9f0a',
-    outputIcon: '📝', outputLabel: 'Text snippet', outputValue: 'Best regards, Arsène',
+    outputType: 'normal',
+    outputIcon: '💬', outputLabel: 'Quick reply pasted', outputValue: "I'll get back to you by EOD!",
   },
 ];
 
@@ -1327,6 +1423,7 @@ const DEMOS = [
     gsvg: 'hero-gesture-svg', gpath: 'hero-gesture-path',
     output: 'hero-output', outputIcon: 'hero-output-icon',
     outputLabel: 'hero-output-label', outputValue: 'hero-output-value',
+    emailCompose: 'hero-email-compose',
   });
 
   async function run(idx) {
@@ -1351,6 +1448,7 @@ const DEMOS = [
     gsvg: 'demo-gesture-svg', gpath: 'demo-gesture-path',
     output: 'demo-output', outputIcon: 'demo-output-icon',
     outputLabel: 'demo-output-label', outputValue: 'demo-output-value',
+    emailCompose: 'demo-email-compose',
   });
 
   function setActive(idx) {
