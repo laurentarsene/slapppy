@@ -8,9 +8,8 @@
   <link rel="canonical" href="https://www.slapppy.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&display=swap" rel="stylesheet" />
   <style>
-    /* ─── Reset & base ─────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -21,23 +20,23 @@
       --fg-3:      #aeaeb2;
       --accent:    #0071e3;
       --accent-2:  #0077ed;
-      --border:    rgba(0,0,0,.08);
-      --shadow:    0 2px 24px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
-      --shadow-lg: 0 32px 80px rgba(0,0,0,.16), 0 4px 16px rgba(0,0,0,.08);
+      --border:    rgba(0,0,0,.09);
+      --shadow:    0 2px 20px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.04);
+      --shadow-lg: 0 24px 72px rgba(0,0,0,.14), 0 4px 16px rgba(0,0,0,.07);
       --radius:    18px;
       --font:      'Inter', system-ui, -apple-system, sans-serif;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg:        #000000;
+        --bg:        #000;
         --bg-card:   #1c1c1e;
         --fg:        #f5f5f7;
         --fg-2:      #98989d;
         --fg-3:      #48484a;
         --border:    rgba(255,255,255,.08);
-        --shadow:    0 2px 24px rgba(0,0,0,.4), 0 1px 4px rgba(0,0,0,.2);
-        --shadow-lg: 0 32px 80px rgba(0,0,0,.55), 0 4px 16px rgba(0,0,0,.3);
+        --shadow:    0 2px 20px rgba(0,0,0,.4), 0 1px 3px rgba(0,0,0,.2);
+        --shadow-lg: 0 24px 72px rgba(0,0,0,.55), 0 4px 16px rgba(0,0,0,.3);
       }
     }
 
@@ -50,46 +49,33 @@
       overflow-x: hidden;
     }
 
-    /* ─── Typography ───────────────────────────────────── */
     .eyebrow {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase;
       color: var(--accent);
     }
 
     h1 {
-      font-size: clamp(44px, 7.5vw, 84px);
-      font-weight: 800;
-      letter-spacing: -.035em;
-      line-height: 1.04;
+      font-size: clamp(42px, 7vw, 80px);
+      font-weight: 800; letter-spacing: -.035em; line-height: 1.05;
     }
 
     h2 {
-      font-size: clamp(30px, 4.5vw, 50px);
-      font-weight: 700;
-      letter-spacing: -.03em;
-      line-height: 1.1;
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 700; letter-spacing: -.03em; line-height: 1.1;
     }
 
-    h3 { font-size: 18px; font-weight: 600; letter-spacing: -.01em; }
+    h3 { font-size: 17px; font-weight: 600; letter-spacing: -.01em; }
     p  { line-height: 1.65; color: var(--fg-2); }
 
-    /* ─── Layout ───────────────────────────────────────── */
-    .container { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
-    section { padding: 120px 0; }
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 112px 0; }
 
-    /* ─── Nav ──────────────────────────────────────────── */
+    /* ── NAV ── */
     nav {
-      position: fixed;
-      inset: 0 0 auto;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 36px;
-      height: 52px;
+      position: fixed; inset: 0 0 auto; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 36px; height: 52px;
       background: color-mix(in srgb, var(--bg) 72%, transparent);
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -102,20 +88,18 @@
       color: var(--fg); text-decoration: none;
     }
 
-    .nav-logo svg { width: 20px; height: 20px; color: var(--accent); }
+    .nav-logo svg { width: 19px; height: 19px; color: var(--accent); }
 
     .nav-cta {
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 7px 16px;
-      background: var(--accent);
+      padding: 7px 16px; background: var(--accent);
       color: #fff; border-radius: 980px;
-      font-size: 13px; font-weight: 600;
-      text-decoration: none;
+      font-size: 13px; font-weight: 600; text-decoration: none;
       transition: opacity .2s, transform .2s;
     }
     .nav-cta:hover { opacity: .88; transform: scale(.98); }
 
-    /* ─── Hero ─────────────────────────────────────────── */
+    /* ── HERO ── */
     #hero {
       min-height: 100svh;
       display: flex; flex-direction: column;
@@ -128,194 +112,196 @@
 
     .hero-glow {
       position: absolute; inset: -50%;
-      background: radial-gradient(ellipse 55% 45% at 50% 28%,
-        color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%);
+      background: radial-gradient(ellipse 60% 50% at 50% 30%,
+        color-mix(in srgb, var(--accent) 15%, transparent), transparent 70%);
       pointer-events: none;
     }
 
-    /* Mac frame */
-    .mac-frame {
-      position: relative; z-index: 1;
-      width: 440px; max-width: 100%;
-      margin-bottom: 52px;
-      border-radius: 14px;
-      overflow: visible;
-      box-shadow: var(--shadow-lg);
-    }
-
-    .mac-menubar {
-      background: #2a2a2a;
-      border-radius: 14px 14px 0 0;
-      height: 28px;
-      display: flex; align-items: center;
-      justify-content: space-between;
-      padding: 0 14px;
-      border-bottom: 1px solid rgba(255,255,255,.07);
-    }
-
-    .mac-menubar-l {
-      display: flex; gap: 14px; align-items: center;
-      font-size: 11.5px; font-weight: 500;
-      color: rgba(255,255,255,.8);
-    }
-
-    .mac-menubar-l span:first-child { font-size: 13px; }
-
-    .mac-menubar-r {
-      display: flex; gap: 10px; align-items: center;
-      font-size: 11px; color: rgba(255,255,255,.6);
-    }
-
-    .mac-icon-pill {
-      display: flex; align-items: center; gap: 4px;
-      padding: 2px 6px; border-radius: 5px;
-      background: rgba(0,113,227,.35);
-      color: #60b3ff;
-    }
-
-    .mac-icon-pill svg { width: 13px; height: 13px; }
-
-    /* Popup window (positioned inside .mac-frame below menu bar) */
-    .mac-popup-wrap {
-      background: #1e1e1e;
-      border-radius: 0 0 14px 14px;
-      padding: 12px;
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .mac-popup {
-      width: 270px;
-      background: var(--bg-card);
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.15);
-      border: 1px solid var(--border);
-      overflow: hidden;
-    }
-
-    .popup-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .popup-title {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 12px; font-weight: 700; color: var(--fg);
-      letter-spacing: -.01em;
-    }
-
-    .popup-title svg { color: var(--accent); width: 12px; height: 12px; }
-
-    .popup-status {
-      display: flex; align-items: center; gap: 4px;
-      font-size: 10px; color: var(--fg-2);
-    }
-
-    .status-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: #34c759;
-      animation: pulse-dot 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-dot { 0%,100%{opacity:1}50%{opacity:.4} }
-
-    .popup-body { padding: 10px 12px; }
-
-    .popup-add {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 11px; font-weight: 600; color: var(--accent);
-      margin-bottom: 12px;
-    }
-
-    .popup-label {
-      font-size: 9px; font-weight: 700;
-      letter-spacing: .08em; text-transform: uppercase;
-      color: var(--fg-3); margin-bottom: 6px;
-    }
-
-    .popup-row {
-      display: flex; align-items: center; gap: 6px;
-      padding: 3px 0;
-    }
-
-    .popup-dots {
-      display: flex; align-items: flex-end; gap: 2px; height: 12px;
-    }
-
-    .pdot {
-      border-radius: 2px;
-      background: var(--accent);
-      width: 3px;
-    }
-
-    .popup-row-name {
-      font-size: 11px; color: var(--fg); flex: 1;
-      font-weight: 500;
-    }
-
-    .popup-row-tag {
-      font-size: 9px; font-weight: 600;
-      padding: 1px 5px; border-radius: 4px;
-    }
-
-    .tag-text { background: color-mix(in srgb,#34c759 12%,transparent); color:#34c759; }
-    .tag-key  { background: color-mix(in srgb,var(--accent) 12%,transparent); color:var(--accent); }
-
-    /* Tap demo in popup */
-    .popup-demo-row {
-      display: flex; align-items: center; gap: 3px;
-      margin-top: 10px; padding-top: 10px;
-      border-top: 1px solid var(--border);
-    }
-
-    .pdemo-dot {
-      border-radius: 50%; background: var(--accent);
-      opacity: 0; transform: scale(.3);
-    }
-
-    .pdemo-dot.pop { animation: dot-pop .3s cubic-bezier(.34,1.56,.64,1) forwards; }
-    @keyframes dot-pop { 0%{opacity:0;transform:scale(.3)} 60%{opacity:1;transform:scale(1)} 100%{opacity:.7;transform:scale(1)} }
-
-    .popup-match {
-      display: flex; align-items: center; gap: 5px;
-      margin-top: 8px; padding: 5px 8px;
-      background: color-mix(in srgb,#34c759 10%,transparent);
-      border-radius: 7px; font-size: 10px; font-weight: 600;
-      color: #34c759; opacity: 0; transform: translateY(3px);
-      transition: opacity .3s, transform .3s;
-    }
-    .popup-match.show { opacity: 1; transform: none; }
-
-    /* ─── Hero text ─────────────────────────────────────── */
-    .hero-eyebrow { margin-bottom: 18px; position: relative; z-index: 1; }
+    .hero-eyebrow { margin-bottom: 20px; position: relative; z-index: 1; }
 
     .hero-title {
       position: relative; z-index: 1;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
       background: linear-gradient(155deg, var(--fg) 0%, var(--fg-2) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
     .hero-sub {
-      font-size: clamp(17px, 2.2vw, 20px);
-      max-width: 540px; margin: 0 auto 40px;
+      font-size: clamp(16px, 2vw, 19px);
+      max-width: 520px; margin: 0 auto 52px;
       color: var(--fg-2); position: relative; z-index: 1;
-      font-weight: 400;
     }
 
+    /* ── HERO TRACKPAD BLOCK ── */
+    .hero-trackpad-block {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0;
+      margin-bottom: 48px;
+    }
+
+    .hero-tap-instruction {
+      font-size: clamp(20px, 2.8vw, 28px);
+      font-weight: 700; letter-spacing: -.025em;
+      color: var(--fg);
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .hero-tap-instruction .key-chip {
+      display: inline-flex; align-items: center;
+      padding: 4px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 18px; font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08), 0 -1px 0 rgba(0,0,0,.04) inset;
+      color: var(--fg);
+    }
+
+    /* Trackpad */
+    .trackpad {
+      background: linear-gradient(180deg, #dcdce0 0%, #c8c8cc 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(0,0,0,.16);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.65),
+        0 6px 28px rgba(0,0,0,.16),
+        0 1px 4px rgba(0,0,0,.09);
+      aspect-ratio: 16/10;
+      width: min(420px, 88vw);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .trackpad {
+        background: linear-gradient(180deg, #303032 0%, #242426 100%);
+        border: 1px solid rgba(255,255,255,.1);
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.06),
+          0 6px 28px rgba(0,0,0,.45);
+      }
+    }
+
+    /* trackpad center line */
+    .trackpad::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 28%;
+      height: 1px;
+      background: rgba(0,0,0,.06);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .trackpad::after { background: rgba(255,255,255,.05); }
+    }
+
+    /* Cursor dot */
+    .tp-cursor {
+      position: absolute;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: rgba(0,113,227,.92);
+      box-shadow: 0 0 0 5px rgba(0,113,227,.18), 0 2px 8px rgba(0,0,0,.25);
+      transform: translate(-50%,-50%);
+      pointer-events: none; z-index: 10;
+      transition: left .35s cubic-bezier(.4,0,.2,1), top .35s cubic-bezier(.4,0,.2,1);
+    }
+
+    .tp-cursor.press { animation: cursor-press .25s ease-out; }
+
+    @keyframes cursor-press {
+      0%   { transform: translate(-50%,-50%) scale(1); }
+      35%  { transform: translate(-50%,-50%) scale(.5); }
+      100% { transform: translate(-50%,-50%) scale(1); }
+    }
+
+    /* Ripple ring */
+    .tp-ripple {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid;
+      transform: translate(-50%,-50%) scale(0);
+      animation: tp-ripple .75s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes tp-ripple {
+      0%   { transform: translate(-50%,-50%) scale(0);   opacity: .9; }
+      100% { transform: translate(-50%,-50%) scale(1);   opacity: 0; }
+    }
+
+    /* Filled flash dot */
+    .tp-flash {
+      position: absolute;
+      border-radius: 50%;
+      transform: translate(-50%,-50%) scale(0);
+      animation: tp-flash .4s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes tp-flash {
+      0%   { transform: translate(-50%,-50%) scale(0);   opacity: 1; }
+      50%  { transform: translate(-50%,-50%) scale(1.1); opacity: .75; }
+      100% { transform: translate(-50%,-50%) scale(1.8); opacity: 0; }
+    }
+
+    /* Gesture path SVG */
+    .tp-gesture-svg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 9;
+      opacity: 0; transition: opacity .2s;
+    }
+
+    /* Output bubble */
+    .tp-output {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      width: min(420px, 88vw);
+      margin-top: 14px;
+      opacity: 0; transform: translateY(6px);
+      transition: opacity .4s, transform .4s;
+      min-height: 56px;
+    }
+
+    .tp-output.show { opacity: 1; transform: none; }
+
+    .tp-output-icon {
+      width: 34px; height: 34px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; flex-shrink: 0;
+    }
+
+    .tp-output-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      color: var(--fg-3); margin-bottom: 2px;
+    }
+
+    .tp-output-value {
+      font-size: 15px; font-weight: 600; color: var(--fg);
+      letter-spacing: -.01em;
+    }
+
+    /* Hero CTAs */
     .hero-actions {
       display: flex; gap: 12px;
       justify-content: center; flex-wrap: wrap;
-      margin-bottom: 16px; position: relative; z-index: 1;
+      margin-bottom: 14px; position: relative; z-index: 1;
     }
 
     .btn-primary {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 13px 26px;
-      background: var(--accent); color: #fff;
-      border-radius: 980px;
+      padding: 13px 26px; background: var(--accent);
+      color: #fff; border-radius: 980px;
       font-size: 16px; font-weight: 600; font-family: var(--font);
       text-decoration: none;
       transition: background .2s, transform .15s;
@@ -324,369 +310,403 @@
 
     .btn-secondary {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 13px 26px;
-      background: var(--bg-card); color: var(--fg);
-      border-radius: 980px;
+      padding: 13px 26px; background: var(--bg-card);
+      color: var(--fg); border-radius: 980px;
       font-size: 16px; font-weight: 500; font-family: var(--font);
-      text-decoration: none;
-      border: 1px solid var(--border);
+      text-decoration: none; border: 1px solid var(--border);
       box-shadow: var(--shadow);
       transition: opacity .2s, transform .15s;
     }
     .btn-secondary:hover { opacity: .8; transform: scale(.98); }
 
-    .hero-fine {
-      font-size: 12px; color: var(--fg-3);
-      position: relative; z-index: 1;
+    .hero-fine { font-size: 12px; color: var(--fg-3); position: relative; z-index: 1; }
+
+    /* ── CONTEXT (Mac frame) ── */
+    #context {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 0;
     }
 
-    /* ─── Animated trackpad section ─────────────────────── */
-    #features {
+    .context-inner {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 40px;
+    }
+
+    .context-header { text-align: center; }
+    .context-header h2 { margin-top: 10px; }
+    .context-header p {
+      font-size: 17px; margin-top: 12px;
+      max-width: 440px; margin-left: auto; margin-right: auto;
+    }
+
+    /* Mac frame */
+    .mac-wrap {
+      position: relative;
+      display: flex; justify-content: center;
+    }
+
+    .mac-frame {
+      width: min(460px, 92vw);
+      border-radius: 14px; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(0,0,0,.18);
+    }
+
+    .mac-menubar {
+      background: #2a2a2a; height: 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 14px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .mac-mb-l {
+      display: flex; gap: 14px; align-items: center;
+      font-size: 11.5px; font-weight: 500; color: rgba(255,255,255,.8);
+    }
+
+    .mac-mb-r {
+      display: flex; gap: 10px; align-items: center;
+      font-size: 11px; color: rgba(255,255,255,.55);
+    }
+
+    .mac-icon-pill {
+      display: flex; align-items: center; gap: 4px;
+      padding: 2px 7px; border-radius: 5px;
+      background: rgba(0,113,227,.35); color: #60b3ff;
+    }
+
+    .mac-icon-pill svg { width: 12px; height: 12px; }
+
+    .mac-desktop {
+      background: #1a1a1a;
+      padding: 12px; display: flex; justify-content: flex-end;
+      min-height: 180px; align-items: flex-start;
+    }
+
+    .mac-popup {
+      width: 240px;
       background: var(--bg-card);
+      border-radius: 12px;
+      box-shadow: 0 16px 48px rgba(0,0,0,.4), 0 2px 6px rgba(0,0,0,.15);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .popup-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 12px; border-bottom: 1px solid var(--border);
+    }
+
+    .popup-hdr-title {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700; color: var(--fg);
+    }
+
+    .popup-hdr-title svg { color: var(--accent); width: 11px; height: 11px; }
+
+    .popup-hdr-status {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 10px; color: var(--fg-2);
+    }
+
+    .pdot-green {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #34c759;
+      animation: pdot-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pdot-pulse { 0%,100%{opacity:1}50%{opacity:.4} }
+
+    .popup-body { padding: 10px 12px 14px; }
+
+    .popup-add-btn {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 600; color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .popup-section-label {
+      font-size: 9px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--fg-3); margin-bottom: 7px;
+    }
+
+    .popup-row {
+      display: flex; align-items: center; gap: 7px; padding: 4px 0;
+    }
+
+    .popup-rhythm {
+      display: flex; align-items: flex-end; gap: 2px; height: 11px;
+    }
+
+    .prb {
+      width: 3px; border-radius: 2px; background: var(--accent); opacity: .8;
+    }
+
+    .popup-row-name {
+      font-size: 11px; font-weight: 500; color: var(--fg); flex: 1;
+    }
+
+    .popup-tag {
+      font-size: 9px; font-weight: 600;
+      padding: 1px 5px; border-radius: 4px;
+    }
+
+    .tag-t { background: color-mix(in srgb,#34c759 13%,transparent); color:#34c759; }
+    .tag-k { background: color-mix(in srgb,var(--accent) 13%,transparent); color:var(--accent); }
+
+    /* Annotation callout */
+    .mac-annotation {
+      position: absolute;
+      background: var(--fg);
+      color: var(--bg);
+      font-size: 11px; font-weight: 600;
+      padding: 5px 10px; border-radius: 8px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .mac-annotation::after {
+      content: '';
+      position: absolute;
+      border: 5px solid transparent;
+    }
+
+    .mac-annotation.top-right {
+      top: -32px; right: 60px;
+    }
+
+    .mac-annotation.top-right::after {
+      bottom: -10px; right: 18px;
+      border-top-color: var(--fg);
+    }
+
+    .mac-annotation.left {
+      left: -130px; top: 50px;
+    }
+
+    .mac-annotation.left::after {
+      right: -10px; top: 8px;
+      border-left-color: var(--fg);
+    }
+
+    @media (max-width: 640px) {
+      .mac-annotation { display: none; }
+    }
+
+    /* ── DEMO SECTION (animated trackpad, full 3-loop) ── */
+    #features {
+      background: var(--bg);
       border-top: 1px solid var(--border);
     }
 
-    .features-header { text-align: center; margin-bottom: 72px; }
-    .features-header h2 { margin-top: 10px; }
-    .features-header p {
-      font-size: 18px; margin-top: 14px;
-      max-width: 500px; margin-left: auto; margin-right: auto;
+    .features-hdr { text-align: center; margin-bottom: 64px; }
+    .features-hdr h2 { margin-top: 10px; }
+    .features-hdr p {
+      font-size: 17px; margin-top: 12px;
+      max-width: 460px; margin-left: auto; margin-right: auto;
     }
 
     .demo-layout {
       display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 56px;
-      align-items: center;
+      grid-template-columns: 240px 1fr;
+      gap: 52px; align-items: center;
     }
 
-    /* Demo list */
     .demo-list {
-      display: flex; flex-direction: column; gap: 4px;
+      display: flex; flex-direction: column; gap: 3px;
     }
 
     .demo-item {
-      padding: 16px 18px;
-      border-radius: 12px;
-      cursor: default;
-      transition: background .2s;
+      padding: 14px 16px; border-radius: 11px;
       border-left: 2px solid transparent;
+      transition: background .2s, border-color .2s;
     }
 
     .demo-item.active {
-      background: var(--bg);
-      border-left-color: var(--demo-color, var(--accent));
+      background: var(--bg-card);
+      border-left-color: var(--di-color, var(--accent));
     }
 
-    .demo-item-header {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 4px;
+    .demo-item-top {
+      display: flex; align-items: center; gap: 9px; margin-bottom: 3px;
     }
 
     .demo-item-icon {
-      width: 28px; height: 28px; border-radius: 8px;
+      width: 26px; height: 26px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+    }
+
+    .demo-item-label {
+      font-size: 13px; font-weight: 700; color: var(--fg);
+    }
+
+    .demo-item-hint {
+      font-size: 11px; color: var(--fg-3);
+      padding-left: 35px;
+    }
+
+    .demo-item-result {
+      display: flex; align-items: center; gap: 5px;
+      padding: 5px 8px; margin-top: 7px; margin-left: 35px;
+      border-radius: 6px;
+      font-size: 11px; font-weight: 600;
+      opacity: 0; transform: translateY(3px);
+      transition: opacity .3s, transform .3s;
+      max-width: 190px; word-break: break-all;
+    }
+
+    .demo-item.active .demo-item-result.show {
+      opacity: 1; transform: none;
+    }
+
+    .demo-trackpad-wrap {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 14px;
+    }
+
+    /* ── SCHEMATIC ── */
+    #schematic {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+    }
+
+    .sch-hdr { text-align: center; margin-bottom: 64px; }
+    .sch-hdr h2 { margin-top: 10px; }
+    .sch-hdr p { font-size: 17px; margin-top: 12px; max-width: 440px; margin-left: auto; margin-right: auto; }
+
+    .sch-flow {
+      display: grid;
+      grid-template-columns: 1fr 36px 1fr 36px 1fr;
+      gap: 14px; align-items: center;
+      max-width: 820px; margin: 0 auto;
+    }
+
+    .sch-inputs { display: flex; flex-direction: column; gap: 12px; }
+
+    .sch-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 13px; padding: 16px 18px;
+    }
+
+    .sch-label {
+      font-size: 9px; font-weight: 700;
+      letter-spacing: .09em; text-transform: uppercase;
+      color: var(--fg-3); margin-bottom: 9px;
+    }
+
+    .sch-tap-bars {
+      display: flex; align-items: flex-end; gap: 4px; height: 22px;
+    }
+
+    .sch-bar { background: var(--accent); border-radius: 3px; width: 8px; opacity: .8; }
+
+    .sch-gesture-vis { height: 22px; display: flex; align-items: center; }
+
+    .sch-desc { font-size: 11px; color: var(--fg-2); margin-top: 8px; }
+
+    .sch-arrow { display: flex; justify-content: center; color: var(--fg-3); }
+
+    .sch-engine {
+      background: color-mix(in srgb, var(--accent) 8%, var(--bg-card));
+      border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+      border-radius: 16px; padding: 22px 14px; text-align: center;
+    }
+
+    .sch-engine-icon { font-size: 26px; margin-bottom: 9px; display: block; }
+    .sch-engine h3 { font-size: 13px; color: var(--fg); margin-bottom: 5px; }
+    .sch-engine p  { font-size: 11px; line-height: 1.5; }
+
+    .sch-outputs { display: flex; flex-direction: column; gap: 10px; }
+
+    .sch-output {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 14px;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+    }
+
+    .sch-output-icon {
+      width: 30px; height: 30px; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
       font-size: 14px; flex-shrink: 0;
     }
 
-    .demo-item-label {
-      font-size: 14px; font-weight: 700; color: var(--fg);
-      letter-spacing: -.01em;
+    .sch-output-title  { font-size: 12px; font-weight: 600; color: var(--fg); }
+    .sch-output-eg     { font-size: 10px; color: var(--fg-3); margin-top: 1px; font-style: italic; }
+
+    @media (max-width: 700px) {
+      .sch-flow { grid-template-columns: 1fr; }
+      .sch-arrow { transform: rotate(90deg); }
     }
 
-    .demo-item-hint {
-      font-size: 12px; color: var(--fg-3);
-      padding-left: 38px;
-    }
+    /* ── HOW IT WORKS ── */
+    #how { background: var(--bg); border-top: 1px solid var(--border); }
 
-    .demo-item-output {
-      display: flex; align-items: center; gap: 6px;
-      padding: 6px 10px; margin-top: 8px; margin-left: 38px;
-      border-radius: 7px;
-      font-size: 12px; font-weight: 600;
-      opacity: 0; transform: translateY(4px);
-      transition: opacity .35s, transform .35s;
-      max-width: 200px;
-      word-break: break-all;
-    }
-
-    .demo-item.active .demo-item-output.show {
-      opacity: 1; transform: none;
-    }
-
-    /* Trackpad visual */
-    .trackpad-wrap {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 16px;
-    }
-
-    .trackpad {
-      background: linear-gradient(180deg, #dcdce0 0%, #c8c8cc 100%);
-      border-radius: 20px;
-      border: 1px solid rgba(0,0,0,.15);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.6),
-        0 4px 24px rgba(0,0,0,.14),
-        0 1px 4px rgba(0,0,0,.08);
-      aspect-ratio: 16/10;
-      width: 100%;
-      max-width: 380px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .trackpad {
-        background: linear-gradient(180deg, #2e2e30 0%, #222224 100%);
-        border: 1px solid rgba(255,255,255,.1);
-        box-shadow:
-          inset 0 1px 0 rgba(255,255,255,.05),
-          0 4px 24px rgba(0,0,0,.4);
-      }
-    }
-
-    .tp-cursor {
-      position: absolute;
-      width: 15px; height: 15px;
-      border-radius: 50%;
-      background: rgba(0,113,227,.9);
-      box-shadow: 0 0 0 4px rgba(0,113,227,.22), 0 2px 8px rgba(0,0,0,.25);
-      transform: translate(-50%,-50%);
-      pointer-events: none;
-      z-index: 10;
-      opacity: 0;
-      transition: left .45s cubic-bezier(.4,0,.2,1), top .45s cubic-bezier(.4,0,.2,1), opacity .2s;
-    }
-
-    .tp-ripples { position: absolute; inset: 0; pointer-events: none; z-index: 8; }
-
-    .tp-ripple {
-      position: absolute;
-      width: 54px; height: 54px;
-      border-radius: 50%;
-      border: 1.5px solid;
-      transform: translate(-50%,-50%) scale(0);
-      animation: tp-ripple .65s ease-out forwards;
-      pointer-events: none;
-    }
-
-    @keyframes tp-ripple {
-      0%   { transform: translate(-50%,-50%) scale(0); opacity: .8; }
-      100% { transform: translate(-50%,-50%) scale(1); opacity: 0; }
-    }
-
-    /* Gesture path SVG overlay */
-    .tp-gesture-svg {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      pointer-events: none; z-index: 9;
-      opacity: 0; transition: opacity .2s;
-    }
-
-    .tp-gesture-path {
-      fill: none;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    /* Output bubble below trackpad */
-    .tp-output {
-      display: flex; align-items: center; gap: 12px;
-      padding: 13px 18px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      width: 100%; max-width: 380px;
-      opacity: 0; transform: translateY(6px);
-      transition: opacity .4s, transform .4s;
-      min-height: 52px;
-    }
-
-    .tp-output.show { opacity: 1; transform: none; }
-
-    .tp-output-icon {
-      width: 32px; height: 32px;
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; flex-shrink: 0;
-    }
-
-    .tp-output-label {
-      font-size: 11px; font-weight: 600;
-      letter-spacing: .04em; text-transform: uppercase;
-      color: var(--fg-3); margin-bottom: 2px;
-    }
-
-    .tp-output-value {
-      font-size: 14px; font-weight: 600; color: var(--fg);
-      letter-spacing: -.01em;
-    }
-
-    /* ─── Schematic ─────────────────────────────────────── */
-    #schematic {
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .schematic-header { text-align: center; margin-bottom: 72px; }
-    .schematic-header h2 { margin-top: 10px; }
-    .schematic-header p { font-size: 18px; margin-top: 14px; max-width: 480px; margin-left: auto; margin-right: auto; }
-
-    .schematic-flow {
-      display: grid;
-      grid-template-columns: 1fr 40px 1fr 40px 1fr;
-      gap: 16px;
-      align-items: center;
-      max-width: 860px;
-      margin: 0 auto;
-    }
-
-    .schematic-inputs { display: flex; flex-direction: column; gap: 14px; }
-
-    .schematic-input-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px 20px;
-    }
-
-    .schematic-input-label {
-      font-size: 9px; font-weight: 700;
-      letter-spacing: .1em; text-transform: uppercase;
-      color: var(--fg-3); margin-bottom: 10px;
-    }
-
-    .schematic-tap-visual {
-      display: flex; align-items: flex-end; gap: 5px; height: 26px;
-    }
-
-    .schematic-tap-bar {
-      background: var(--accent); border-radius: 3px;
-      width: 9px; opacity: .8;
-    }
-
-    .schematic-gesture-visual { height: 26px; display: flex; align-items: center; }
-
-    .schematic-input-desc {
-      font-size: 11px; color: var(--fg-2); margin-top: 8px;
-    }
-
-    .schematic-arrow {
-      display: flex; justify-content: center; color: var(--fg-3);
-    }
-
-    .schematic-engine {
-      background: color-mix(in srgb, var(--accent) 8%, var(--bg-card));
-      border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
-      border-radius: 18px;
-      padding: 24px 16px;
-      text-align: center;
-    }
-
-    .schematic-engine-icon { font-size: 28px; margin-bottom: 10px; display: block; }
-    .schematic-engine h3 { font-size: 14px; color: var(--fg); margin-bottom: 5px; }
-    .schematic-engine p  { font-size: 11px; line-height: 1.5; }
-
-    .schematic-outputs { display: flex; flex-direction: column; gap: 12px; }
-
-    .schematic-output-chip {
-      display: flex; align-items: center; gap: 10px;
-      padding: 12px 16px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 11px;
-    }
-
-    .schematic-output-icon {
-      width: 32px; height: 32px;
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; flex-shrink: 0;
-    }
-
-    .schematic-output-title { font-size: 12px; font-weight: 600; color: var(--fg); }
-    .schematic-output-example { font-size: 11px; color: var(--fg-3); margin-top: 1px; font-style: italic; }
-
-    @media (max-width: 720px) {
-      .schematic-flow {
-        grid-template-columns: 1fr;
-      }
-      .schematic-arrow { transform: rotate(90deg); }
-    }
-
-    /* ─── How it works ─────────────────────────────────── */
-    #how { background: var(--bg-card); border-top: 1px solid var(--border); }
-
-    .how-header { text-align: center; margin-bottom: 72px; }
-    .how-header h2 { margin-top: 10px; }
+    .how-hdr { text-align: center; margin-bottom: 64px; }
+    .how-hdr h2 { margin-top: 10px; }
 
     .steps {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 0; position: relative;
     }
 
-    .step { padding: 0 28px; text-align: center; position: relative; }
+    .step { padding: 0 26px; text-align: center; position: relative; }
 
     .step:not(:last-child)::after {
       content: ''; position: absolute;
-      right: 0; top: 20px;
-      height: 44px; width: 1px;
+      right: 0; top: 18px; height: 42px; width: 1px;
       background: var(--border);
     }
 
-    .step-number {
-      width: 44px; height: 44px; border-radius: 50%;
+    .step-num {
+      width: 42px; height: 42px; border-radius: 50%;
       background: var(--accent); color: #fff;
-      font-size: 17px; font-weight: 700;
+      font-size: 16px; font-weight: 700;
       display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 18px;
+      margin: 0 auto 16px;
     }
 
     .step h3 { margin-bottom: 8px; }
     .step p  { font-size: 14px; }
 
-    /* ─── Pricing ──────────────────────────────────────── */
+    /* ── PRICING ── */
     #download {
-      text-align: center;
-      background: var(--bg);
+      text-align: center; background: var(--bg-card);
       border-top: 1px solid var(--border);
     }
 
-    .download-card {
+    .dl-card {
       display: inline-flex; flex-direction: column;
-      align-items: center; gap: 24px;
-      padding: 60px 68px;
-      background: var(--bg-card);
-      border-radius: 28px;
-      border: 1px solid var(--border);
+      align-items: center; gap: 22px;
+      padding: 56px 64px;
+      background: var(--bg);
+      border-radius: 26px; border: 1px solid var(--border);
       box-shadow: var(--shadow-lg);
-      max-width: 500px; width: 100%;
+      max-width: 490px; width: 100%;
     }
 
-    .download-icon { font-size: 60px; line-height: 1; }
-    .download-card h2 { font-size: 30px; }
-    .download-card > p { font-size: 15px; max-width: 320px; text-align: center; }
+    .dl-icon { font-size: 56px; line-height: 1; }
+    .dl-card h2 { font-size: 28px; }
+    .dl-card > p { font-size: 15px; max-width: 300px; text-align: center; }
 
-    .price-display {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 8px;
+    .price-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+    .price-row {
+      display: flex; align-items: baseline; gap: 3px;
     }
 
-    .price-top {
-      display: flex; align-items: baseline; gap: 4px;
-    }
-
-    .price-currency { font-size: 26px; font-weight: 700; color: var(--fg); }
-    .price-amount   { font-size: 60px; font-weight: 800; letter-spacing: -.04em; color: var(--fg); line-height: 1; }
-    .price-period   { font-size: 17px; font-weight: 400; color: var(--fg-2); }
+    .price-cur { font-size: 24px; font-weight: 700; color: var(--fg); }
+    .price-num { font-size: 58px; font-weight: 800; letter-spacing: -.04em; color: var(--fg); line-height: 1; }
+    .price-mo  { font-size: 16px; font-weight: 400; color: var(--fg-2); }
 
     .price-trial {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 5px 14px;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 13px;
       background: color-mix(in srgb,#34c759 12%,transparent);
       border-radius: 980px;
       font-size: 12px; font-weight: 700; color: #34c759;
@@ -694,26 +714,25 @@
 
     .price-note { font-size: 12px; color: var(--fg-3); }
 
-    .feature-list {
-      list-style: none;
-      display: flex; flex-direction: column; gap: 10px;
-      width: 100%; text-align: left;
+    .feat-list {
+      list-style: none; display: flex; flex-direction: column;
+      gap: 9px; width: 100%; text-align: left;
     }
 
-    .feature-list li {
-      display: flex; align-items: center; gap: 10px;
+    .feat-list li {
+      display: flex; align-items: center; gap: 9px;
       font-size: 14px; color: var(--fg-2);
     }
 
-    .feature-list li::before {
+    .feat-list li::before {
       content: '✓'; flex-shrink: 0;
-      width: 19px; height: 19px; border-radius: 50%;
-      background: color-mix(in srgb,#34c759 14%,transparent);
+      width: 18px; height: 18px; border-radius: 50%;
+      background: color-mix(in srgb,#34c759 13%,transparent);
       color: #34c759; font-size: 10px; font-weight: 700;
       display: flex; align-items: center; justify-content: center;
     }
 
-    .refund-note { font-size: 11px !important; color: var(--fg-3) !important; margin-top: -6px; }
+    .refund { font-size: 11px !important; color: var(--fg-3) !important; margin-top: -4px; }
 
     .version-badge {
       display: inline-block; padding: 3px 11px;
@@ -722,238 +741,277 @@
       font-size: 11px; font-weight: 600;
     }
 
-    /* ─── Footer ───────────────────────────────────────── */
+    /* ── FOOTER ── */
     footer {
-      padding: 36px 24px; text-align: center;
+      padding: 34px 24px; text-align: center;
       border-top: 1px solid var(--border);
     }
-
     footer p { font-size: 12px; color: var(--fg-3); }
     footer a { color: var(--fg-2); text-decoration: none; }
     footer a:hover { color: var(--fg); }
 
-    /* ─── Scroll reveal ────────────────────────────────── */
+    /* ── REVEAL ── */
     .reveal {
-      opacity: 0; transform: translateY(28px);
+      opacity: 0; transform: translateY(26px);
       transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
     }
     .reveal.visible { opacity: 1; transform: none; }
-    .reveal-delay-1 { transition-delay: .08s; }
-    .reveal-delay-2 { transition-delay: .16s; }
-    .reveal-delay-3 { transition-delay: .24s; }
+    .reveal-d1 { transition-delay: .08s; }
+    .reveal-d2 { transition-delay: .16s; }
+    .reveal-d3 { transition-delay: .24s; }
 
-    /* ─── Responsive ───────────────────────────────────── */
-    @media (max-width: 720px) {
-      section { padding: 80px 0; }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      section { padding: 72px 0; }
       nav { padding: 0 18px; }
       .demo-layout { grid-template-columns: 1fr; }
       .demo-list { order: 2; }
-      .trackpad-wrap { order: 1; }
+      .demo-trackpad-wrap { order: 1; }
       .step:not(:last-child)::after { display: none; }
-      .download-card { padding: 44px 28px; }
-      .mac-frame { width: 340px; }
-      .mac-popup { width: 220px; }
+      .dl-card { padding: 40px 24px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ─── Nav ───────────────────────────────────────────── -->
+<!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">
-    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.9"
-         stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
       <path d="M8 3v5M11 2v8M14 3v5M17 6v4"/>
       <path d="M5 10c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v6a6 6 0 0 1-6 6 6 6 0 0 1-6-6v-6Z"/>
     </svg>
     Slapppy
   </a>
-  <a href="#download" class="nav-cta">
-    Try free · €2.99/mo
-  </a>
+  <a href="#download" class="nav-cta">Try free · €2.99/mo</a>
 </nav>
 
-<!-- ─── Hero ───────────────────────────────────────────── -->
+<!-- ── HERO ── -->
 <section id="hero">
   <div class="hero-glow"></div>
 
-  <!-- Mac frame: menu bar + popup window -->
-  <div class="mac-frame reveal" id="mockup-reveal">
-    <!-- macOS menu bar strip -->
-    <div class="mac-menubar">
-      <div class="mac-menubar-l">
-        <span>&#xF8FF;</span>
-        <span>Finder</span>
-        <span>File</span>
-        <span>Edit</span>
-      </div>
-      <div class="mac-menubar-r">
-        <span>10:41</span>
-        <!-- wifi icon -->
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5">
-          <path d="M1 4.5A7.5 7.5 0 0 1 11 4.5M3 7a4.5 4.5 0 0 1 6 0M5 9.5a2 2 0 0 1 2 0"/>
-          <circle cx="6" cy="11" r=".6" fill="currentColor" stroke="none"/>
-        </svg>
-        <!-- Slapppy icon highlighted in menu bar -->
-        <div class="mac-icon-pill">
-          <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M8 3v5M11 2v8M14 3v5M17 6v4"/>
-            <path d="M5 10c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v6a6 6 0 0 1-6 6 6 6 0 0 1-6-6v-6Z"/>
-          </svg>
-        </div>
-        <!-- spotlight -->
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5">
-          <circle cx="5" cy="5" r="3.5"/><path d="M8 8l2.5 2.5"/>
-        </svg>
-      </div>
+  <p class="eyebrow hero-eyebrow reveal">Menu bar app · macOS · Works everywhere</p>
+  <h1 class="hero-title reveal reveal-d1">Stop typing<br>what you always type.</h1>
+  <p class="hero-sub reveal reveal-d2">
+    Your email, your address, your standard replies — Slapppy maps them to a tap on your trackpad so you never retype the same thing twice.
+  </p>
+
+  <!-- Trackpad block -->
+  <div class="hero-trackpad-block reveal reveal-d2">
+    <div class="hero-tap-instruction">
+      Hold <span class="key-chip">⌥</span> and tap a beat on the trackpad.
     </div>
 
-    <!-- Desktop area: popup positioned under Slapppy icon -->
-    <div class="mac-popup-wrap">
-      <div class="mac-popup">
-        <div class="popup-header">
-          <div class="popup-title">
-            <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M8 3v5M11 2v8M14 3v5M17 6v4"/>
-              <path d="M5 10c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v6a6 6 0 0 1-6 6 6 6 0 0 1-6-6v-6Z"/>
-            </svg>
-            Slapppy
-          </div>
-          <div class="popup-status">
-            <div class="status-dot"></div>
-            ⌥ + tap
-          </div>
-        </div>
-        <div class="popup-body">
-          <div class="popup-add">
-            <svg width="11" height="11" viewBox="0 0 11 11" fill="currentColor">
-              <circle cx="5.5" cy="5.5" r="5"/>
-              <path d="M5.5 3v5M3 5.5h5" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
-            </svg>
-            Record a pattern
-          </div>
-          <div class="popup-label">Patterns</div>
-          <div class="popup-row">
-            <div class="popup-dots">
-              <div class="pdot" style="height:6px"></div>
-              <div class="pdot" style="height:11px"></div>
-              <div class="pdot" style="height:6px"></div>
-              <div class="pdot" style="height:11px"></div>
-            </div>
-            <div class="popup-row-name">arsene@email.com</div>
-            <div class="popup-row-tag tag-text">Text</div>
-          </div>
-          <div class="popup-row">
-            <div class="popup-dots">
-              <div class="pdot" style="height:11px"></div>
-              <div class="pdot" style="height:6px"></div>
-              <div class="pdot" style="height:11px"></div>
-            </div>
-            <div class="popup-row-name">Mute mic</div>
-            <div class="popup-row-tag tag-key">⌘⇧M</div>
-          </div>
+    <div class="trackpad" id="hero-trackpad">
+      <div class="tp-cursor" id="hero-cursor" style="left:50%;top:52%"></div>
+      <div id="hero-ripples"></div>
+      <svg class="tp-gesture-svg" id="hero-gesture-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path id="hero-gesture-path" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d=""/>
+      </svg>
+    </div>
 
-          <div class="popup-demo-row">
-            <div class="pdemo-dot" id="pd1" style="width:8px;height:8px"></div>
-            <div class="pdemo-dot" id="pd2" style="width:11px;height:11px"></div>
-            <div class="pdemo-dot" id="pd3" style="width:8px;height:8px"></div>
-            <div class="pdemo-dot" id="pd4" style="width:11px;height:11px"></div>
-            <span style="font-size:10px;color:var(--fg-3);margin-left:3px">…</span>
-          </div>
-          <div class="popup-match" id="popup-match">
-            <svg width="12" height="12" viewBox="0 0 12 12">
-              <circle cx="6" cy="6" r="6" fill="#34c759"/>
-              <path d="M3.5 6l2 2 3-3" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-            arsene@email.com — typed ✓
-          </div>
-        </div>
+    <div class="tp-output" id="hero-output">
+      <div class="tp-output-icon" id="hero-output-icon">💬</div>
+      <div>
+        <div class="tp-output-label" id="hero-output-label">Text snippet</div>
+        <div class="tp-output-value" id="hero-output-value"></div>
       </div>
     </div>
   </div>
 
-  <p class="eyebrow hero-eyebrow reveal reveal-delay-1">Menu bar app · macOS · Works in every app</p>
-  <h1 class="hero-title reveal reveal-delay-1">Stop typing<br>what you always type.</h1>
-  <p class="hero-sub reveal reveal-delay-2">
-    Slapppy lives quietly in your menu bar. Hold ⌥ anywhere on your Mac, tap a rhythm or draw a shape on the trackpad — and whatever you mapped to it gets fired instantly. Your email, a shortcut, a saved reply. One motion.
-  </p>
-
-  <div class="hero-actions reveal reveal-delay-3">
+  <div class="hero-actions reveal reveal-d3">
     <a href="https://slapppy.lemonsqueezy.com/checkout/buy/1c36ec5c-88a2-4b07-a0f4-276a1327b871" class="btn-primary">
       Start free — 14 days
     </a>
-    <a href="#features" class="btn-secondary">
-      See how it works
-    </a>
+    <a href="#context" class="btn-secondary">See how it works</a>
   </div>
-  <p class="hero-fine reveal reveal-delay-3">14-day free trial · then €2.99/month · cancel anytime · macOS 26+</p>
+  <p class="hero-fine reveal reveal-d3">14-day free trial · then €2.99/month · cancel anytime · macOS 26+</p>
 </section>
 
-<!-- ─── Animated trackpad demo ─────────────────────────── -->
+<!-- ── CONTEXT (Mac frame) ── -->
+<section id="context">
+  <div class="container">
+    <div class="context-inner">
+      <div class="context-header reveal">
+        <p class="eyebrow">The app</p>
+        <h2>It lives quietly<br>in your menu bar.</h2>
+        <p>One click opens your pattern library. From there, hold ⌥ and trigger any pattern from any app — browser, editor, Slack, anywhere.</p>
+      </div>
+
+      <div class="mac-wrap reveal">
+        <!-- Annotation: menu bar -->
+        <div class="mac-annotation top-right">Slapppy icon lives here</div>
+        <!-- Annotation: popup -->
+        <div class="mac-annotation left">Your pattern library</div>
+
+        <div class="mac-frame">
+          <!-- macOS menu bar -->
+          <div class="mac-menubar">
+            <div class="mac-mb-l">
+              <span style="font-size:13px">&#xF8FF;</span>
+              <span>Finder</span>
+              <span style="opacity:.6">File</span>
+              <span style="opacity:.6">Edit</span>
+            </div>
+            <div class="mac-mb-r">
+              <span>10:41</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4">
+                <path d="M1 4.5A7.5 7.5 0 0 1 11 4.5M3 7a4.5 4.5 0 0 1 6 0M5 9.5a2 2 0 0 1 2 0"/>
+                <circle cx="6" cy="11" r=".5" fill="currentColor" stroke="none"/>
+              </svg>
+              <!-- Slapppy icon, highlighted -->
+              <div class="mac-icon-pill">
+                <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M8 3v5M11 2v8M14 3v5M17 6v4"/>
+                  <path d="M5 10c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v6a6 6 0 0 1-6 6 6 6 0 0 1-6-6v-6Z"/>
+                </svg>
+              </div>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4">
+                <circle cx="5" cy="5" r="3.5"/><path d="M8 8l2.2 2.2"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Desktop area with popup -->
+          <div class="mac-desktop">
+            <div class="mac-popup">
+              <div class="popup-hdr">
+                <div class="popup-hdr-title">
+                  <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M8 3v5M11 2v8M14 3v5M17 6v4"/>
+                    <path d="M5 10c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v6a6 6 0 0 1-6 6 6 6 0 0 1-6-6v-6Z"/>
+                  </svg>
+                  Slapppy
+                </div>
+                <div class="popup-hdr-status">
+                  <div class="pdot-green"></div>
+                  ⌥ + tap
+                </div>
+              </div>
+              <div class="popup-body">
+                <div class="popup-add-btn">
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="currentColor">
+                    <circle cx="5.5" cy="5.5" r="5" fill="var(--accent)"/>
+                    <path d="M5.5 3v5M3 5.5h5" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+                  </svg>
+                  Record a pattern
+                </div>
+
+                <div class="popup-section-label">My patterns</div>
+
+                <div class="popup-row">
+                  <div class="popup-rhythm">
+                    <div class="prb" style="height:5px"></div>
+                    <div class="prb" style="height:9px"></div>
+                    <div class="prb" style="height:5px"></div>
+                    <div class="prb" style="height:9px"></div>
+                  </div>
+                  <div class="popup-row-name">arsene@email.com</div>
+                  <div class="popup-tag tag-t">Text</div>
+                </div>
+
+                <div class="popup-row">
+                  <div class="popup-rhythm">
+                    <div class="prb" style="height:9px"></div>
+                    <div class="prb" style="height:5px"></div>
+                    <div class="prb" style="height:9px"></div>
+                  </div>
+                  <div class="popup-row-name">Mute mic</div>
+                  <div class="popup-tag tag-k">⌘⇧M</div>
+                </div>
+
+                <div class="popup-row">
+                  <div class="popup-rhythm">
+                    <div class="prb" style="height:5px"></div>
+                    <div class="prb" style="height:5px"></div>
+                    <div class="prb" style="height:9px"></div>
+                    <div class="prb" style="height:5px"></div>
+                  </div>
+                  <div class="popup-row-name">Best regards, Arsène</div>
+                  <div class="popup-tag tag-t">Text</div>
+                </div>
+
+                <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+                  <div class="popup-section-label">Gestures</div>
+                  <div class="popup-row">
+                    <svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity=".8">
+                      <path d="M2 2h16L2 9h16"/>
+                    </svg>
+                    <div class="popup-row-name">Z — Screenshot</div>
+                    <div class="popup-tag tag-k">⌘⇧4</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="reveal" style="font-size:14px;color:var(--fg-3);max-width:360px;text-align:center">
+        Hold ⌥ from any app and tap your rhythm or draw a gesture. Slapppy recognizes it in real time.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── ANIMATED DEMO ── -->
 <section id="features">
   <div class="container">
-    <div class="features-header reveal">
-      <p class="eyebrow">What it does</p>
-      <h2>Your trackpad can do<br>a lot more than scroll.</h2>
-      <p>Three demos. Each one shows a tap rhythm or a drawn gesture — and the phrase or shortcut it fires.</p>
+    <div class="features-hdr reveal">
+      <p class="eyebrow">Three demos</p>
+      <h2>Tap a rhythm. Draw a shape.<br>Watch it fire.</h2>
+      <p>Each pattern or gesture maps to exactly what you need — a saved phrase or any keyboard action.</p>
     </div>
 
     <div class="demo-layout reveal">
-      <!-- Left: demo list -->
       <div class="demo-list">
-        <div class="demo-item" id="demo-item-0" style="--demo-color: #34c759">
-          <div class="demo-item-header">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#34c759 14%,transparent)">🥁</div>
+        <div class="demo-item" id="di0" style="--di-color:#34c759">
+          <div class="demo-item-top">
+            <div class="demo-item-icon" style="background:color-mix(in srgb,#34c759 13%,transparent)">🥁</div>
             <div class="demo-item-label">Tap a rhythm</div>
           </div>
-          <div class="demo-item-hint">Hold ⌥ · tap quick-quick-slow-quick</div>
-          <div class="demo-item-output" id="demo-out-0"
-               style="background:color-mix(in srgb,#34c759 10%,transparent);color:#34c759">
+          <div class="demo-item-hint">⌥ + quick-quick-slow-quick</div>
+          <div class="demo-item-result" id="dr0" style="background:color-mix(in srgb,#34c759 10%,transparent);color:#34c759">
             💬 arsene@protonmail.com
           </div>
         </div>
 
-        <div class="demo-item" id="demo-item-1" style="--demo-color: #bf5af2">
-          <div class="demo-item-header">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#bf5af2 14%,transparent)">✏️</div>
+        <div class="demo-item" id="di1" style="--di-color:#bf5af2">
+          <div class="demo-item-top">
+            <div class="demo-item-icon" style="background:color-mix(in srgb,#bf5af2 13%,transparent)">✏️</div>
             <div class="demo-item-label">Draw a Z gesture</div>
           </div>
-          <div class="demo-item-hint">Hold ⌥ · trace a Z with the cursor</div>
-          <div class="demo-item-output" id="demo-out-1"
-               style="background:color-mix(in srgb,#bf5af2 10%,transparent);color:#bf5af2">
+          <div class="demo-item-hint">⌥ + trace a Z with the cursor</div>
+          <div class="demo-item-result" id="dr1" style="background:color-mix(in srgb,#bf5af2 10%,transparent);color:#bf5af2">
             🎙️ Mute microphone
           </div>
         </div>
 
-        <div class="demo-item" id="demo-item-2" style="--demo-color: #ff9f0a">
-          <div class="demo-item-header">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#ff9f0a 14%,transparent)">📋</div>
+        <div class="demo-item" id="di2" style="--di-color:#ff9f0a">
+          <div class="demo-item-top">
+            <div class="demo-item-icon" style="background:color-mix(in srgb,#ff9f0a 13%,transparent)">📋</div>
             <div class="demo-item-label">Another rhythm</div>
           </div>
-          <div class="demo-item-hint">Hold ⌥ · slow — then quick quick</div>
-          <div class="demo-item-output" id="demo-out-2"
-               style="background:color-mix(in srgb,#ff9f0a 10%,transparent);color:#ff9f0a">
+          <div class="demo-item-hint">⌥ + slow — quick quick</div>
+          <div class="demo-item-result" id="dr2" style="background:color-mix(in srgb,#ff9f0a 10%,transparent);color:#ff9f0a">
             📝 Best regards, Arsène
           </div>
         </div>
       </div>
 
-      <!-- Right: trackpad visual -->
-      <div class="trackpad-wrap">
-        <div class="trackpad" id="trackpad">
-          <div class="tp-cursor" id="tp-cursor"></div>
-          <div class="tp-ripples" id="tp-ripples"></div>
-          <!-- SVG overlay for gesture paths -->
-          <svg class="tp-gesture-svg" id="tp-gesture-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path id="tp-gesture-path" class="tp-gesture-path" d=""/>
+      <div class="demo-trackpad-wrap">
+        <div class="trackpad" id="demo-trackpad">
+          <div class="tp-cursor" id="demo-cursor" style="left:50%;top:52%"></div>
+          <div id="demo-ripples"></div>
+          <svg class="tp-gesture-svg" id="demo-gesture-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path id="demo-gesture-path" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d=""/>
           </svg>
         </div>
-        <!-- Output bubble -->
-        <div class="tp-output" id="tp-output">
-          <div class="tp-output-icon" id="tp-output-icon">💬</div>
+        <div class="tp-output" id="demo-output">
+          <div class="tp-output-icon" id="demo-output-icon">💬</div>
           <div>
-            <div class="tp-output-label" id="tp-output-label">Text snippet</div>
-            <div class="tp-output-value" id="tp-output-value"></div>
+            <div class="tp-output-label" id="demo-output-label">Text snippet</div>
+            <div class="tp-output-value" id="demo-output-value"></div>
           </div>
         </div>
       </div>
@@ -961,79 +1019,79 @@
   </div>
 </section>
 
-<!-- ─── Schematic ─────────────────────────────────────────── -->
+<!-- ── SCHEMATIC ── -->
 <section id="schematic">
   <div class="container">
-    <div class="schematic-header reveal">
-      <p class="eyebrow">How it works under the hood</p>
+    <div class="sch-hdr reveal">
+      <p class="eyebrow">Under the hood</p>
       <h2>Two ways in.<br>Endless ways out.</h2>
       <p>Tap a beat or draw a shape — Slapppy matches it and fires exactly what you mapped to it.</p>
     </div>
 
-    <div class="schematic-flow reveal">
-      <div class="schematic-inputs">
-        <div class="schematic-input-card">
-          <div class="schematic-input-label">Input 1 — Tap rhythm</div>
-          <div class="schematic-tap-visual">
-            <div class="schematic-tap-bar" style="height:10px"></div>
-            <div class="schematic-tap-bar" style="height:20px"></div>
-            <div class="schematic-tap-bar" style="height:10px"></div>
-            <div class="schematic-tap-bar" style="height:20px"></div>
-            <div class="schematic-tap-bar" style="height:20px"></div>
+    <div class="sch-flow reveal">
+      <div class="sch-inputs">
+        <div class="sch-card">
+          <div class="sch-label">Input 1 — Tap rhythm</div>
+          <div class="sch-tap-bars">
+            <div class="sch-bar" style="height:9px"></div>
+            <div class="sch-bar" style="height:18px"></div>
+            <div class="sch-bar" style="height:9px"></div>
+            <div class="sch-bar" style="height:18px"></div>
+            <div class="sch-bar" style="height:18px"></div>
           </div>
-          <div class="schematic-input-desc">⌥ + tap a beat on the trackpad</div>
+          <div class="sch-desc">⌥ + tap a beat on the trackpad</div>
         </div>
-        <div class="schematic-input-card">
-          <div class="schematic-input-label">Input 2 — Drawn gesture</div>
-          <div class="schematic-gesture-visual">
-            <svg width="72" height="26" viewBox="0 0 72 26" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 5 L52 5 L6 21 L52 21" stroke-dasharray="110" stroke-dashoffset="110">
-                <animate attributeName="stroke-dashoffset" from="110" to="0" dur="1.6s" repeatCount="indefinite"/>
+        <div class="sch-card">
+          <div class="sch-label">Input 2 — Drawn gesture</div>
+          <div class="sch-gesture-vis">
+            <svg width="68" height="22" viewBox="0 0 68 22" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h60L4 18h60" stroke-dasharray="104" stroke-dashoffset="104">
+                <animate attributeName="stroke-dashoffset" from="104" to="0" dur="1.6s" repeatCount="indefinite"/>
               </path>
             </svg>
           </div>
-          <div class="schematic-input-desc">⌥ + draw any shape with the cursor</div>
+          <div class="sch-desc">⌥ + draw any shape with the cursor</div>
         </div>
       </div>
 
-      <div class="schematic-arrow">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 14h20M16 7l8 7-8 7"/>
+      <div class="sch-arrow">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 13h20M15 6l8 7-8 7"/>
         </svg>
       </div>
 
-      <div class="schematic-engine">
-        <span class="schematic-engine-icon">👆</span>
+      <div class="sch-engine">
+        <span class="sch-engine-icon">👆</span>
         <h3>Slapppy</h3>
-        <p>Fuzzy rhythm matching &amp; $1 Unistroke recognition — real time, on your Mac</p>
+        <p>Fuzzy rhythm matching + $1 Unistroke — real time, on your Mac</p>
       </div>
 
-      <div class="schematic-arrow">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 14h20M16 7l8 7-8 7"/>
+      <div class="sch-arrow">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 13h20M15 6l8 7-8 7"/>
         </svg>
       </div>
 
-      <div class="schematic-outputs">
-        <div class="schematic-output-chip">
-          <div class="schematic-output-icon" style="background:color-mix(in srgb,#34c759 12%,transparent)">💬</div>
+      <div class="sch-outputs">
+        <div class="sch-output">
+          <div class="sch-output-icon" style="background:color-mix(in srgb,#34c759 12%,transparent)">💬</div>
           <div>
-            <div class="schematic-output-title">Text snippet</div>
-            <div class="schematic-output-example">"arsene@protonmail.com"</div>
+            <div class="sch-output-title">Text snippet</div>
+            <div class="sch-output-eg">"arsene@protonmail.com"</div>
           </div>
         </div>
-        <div class="schematic-output-chip">
-          <div class="schematic-output-icon" style="background:color-mix(in srgb,#0071e3 12%,transparent)">⌨️</div>
+        <div class="sch-output">
+          <div class="sch-output-icon" style="background:color-mix(in srgb,#0071e3 12%,transparent)">⌨️</div>
           <div>
-            <div class="schematic-output-title">Keyboard shortcut</div>
-            <div class="schematic-output-example">F13 → Alfred · ⌘⇧4 · mute mic</div>
+            <div class="sch-output-title">Keyboard shortcut</div>
+            <div class="sch-output-eg">F13 → Alfred · ⌘⇧4 · mute mic</div>
           </div>
         </div>
-        <div class="schematic-output-chip">
-          <div class="schematic-output-icon" style="background:color-mix(in srgb,#ff9f0a 12%,transparent)">📋</div>
+        <div class="sch-output">
+          <div class="sch-output-icon" style="background:color-mix(in srgb,#ff9f0a 12%,transparent)">📋</div>
           <div>
-            <div class="schematic-output-title">Any saved phrase</div>
-            <div class="schematic-output-example">Sign-off · address · meeting link</div>
+            <div class="sch-output-title">Any saved phrase</div>
+            <div class="sch-output-eg">Sign-off · address · meeting link</div>
           </div>
         </div>
       </div>
@@ -1041,236 +1099,166 @@
   </div>
 </section>
 
-<!-- ─── How it works ────────────────────────────────────── -->
+<!-- ── HOW IT WORKS ── -->
 <section id="how">
   <div class="container">
-    <div class="how-header reveal">
+    <div class="how-hdr reveal">
       <p class="eyebrow">Setup in 60 seconds</p>
       <h2>Record once. Use forever.</h2>
     </div>
     <div class="steps">
       <div class="step reveal">
-        <div class="step-number">1</div>
+        <div class="step-num">1</div>
         <h3>Record your input</h3>
-        <p>Open Slapppy from the menu bar. Hold ⌥ and tap a rhythm or draw a gesture on the trackpad. Done — Slapppy captures it.</p>
+        <p>Open Slapppy from the menu bar. Hold ⌥ and tap a rhythm or draw a gesture on the trackpad. Slapppy captures it.</p>
       </div>
-      <div class="step reveal reveal-delay-1">
-        <div class="step-number">2</div>
+      <div class="step reveal reveal-d1">
+        <div class="step-num">2</div>
         <h3>Assign an output</h3>
-        <p>Pick what fires: a text snippet (anything you're tired of retyping) or a keyboard shortcut for any app or automation tool.</p>
+        <p>Pick what fires — a text snippet you're tired of retyping, or a keyboard shortcut for any app or automation tool.</p>
       </div>
-      <div class="step reveal reveal-delay-2">
-        <div class="step-number">3</div>
+      <div class="step reveal reveal-d2">
+        <div class="step-num">3</div>
         <h3>Use it anywhere</h3>
-        <p>From any app — browser, editor, Slack, anywhere — hold ⌥ and trigger your input. Slapppy fires the right action every time.</p>
+        <p>From any app, hold ⌥ and trigger your input. Slapppy fires the right action every time, silently, in the background.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── Pricing ───────────────────────────────────────────── -->
+<!-- ── PRICING ── -->
 <section id="download">
   <div class="container" style="display:flex;justify-content:center">
-    <div class="download-card reveal">
-      <div class="download-icon">👆</div>
+    <div class="dl-card reveal">
+      <div class="dl-icon">👆</div>
       <span class="version-badge">v1.0 · macOS 26+</span>
       <h2>Start free.<br>Stay if you love it.</h2>
-
-      <div class="price-display">
-        <div class="price-top">
-          <span class="price-currency">€</span>
-          <span class="price-amount">2.99</span>
-          <span class="price-period">/month</span>
+      <div class="price-wrap">
+        <div class="price-row">
+          <span class="price-cur">€</span>
+          <span class="price-num">2.99</span>
+          <span class="price-mo">/month</span>
         </div>
         <span class="price-trial">✦ 14-day free trial — no card needed</span>
         <span class="price-note">Cancel anytime from your account</span>
       </div>
-
-      <ul class="feature-list">
+      <ul class="feat-list">
         <li>Unlimited tap patterns &amp; drawn gestures</li>
         <li>Text snippets — paste anything in any app</li>
         <li>Keyboard shortcuts, F-keys, app triggers</li>
         <li>Runs entirely on your Mac — no cloud, no data sent</li>
         <li>2 MB · installs in seconds</li>
       </ul>
-
       <a href="https://slapppy.lemonsqueezy.com/checkout/buy/1c36ec5c-88a2-4b07-a0f4-276a1327b871"
          class="btn-primary" style="font-size:15px;width:100%;justify-content:center">
         Start 14-day free trial
       </a>
-
-      <p class="refund-note">Not happy after trying? Reply to your receipt for a full refund.</p>
+      <p class="refund">Not happy after trying? Reply to your receipt for a full refund.</p>
     </div>
   </div>
 </section>
 
-<!-- ─── Footer ───────────────────────────────────────────── -->
+<!-- ── FOOTER ── -->
 <footer>
   <div class="container">
-    <p>
-      Made with ♥ by Arsène Laurent ·
-      <a href="mailto:REPLACE_WITH_YOUR_EMAIL">Contact</a> ·
-      macOS only
-    </p>
+    <p>Made with ♥ by Arsène Laurent · <a href="mailto:REPLACE_WITH_YOUR_EMAIL">Contact</a> · macOS only</p>
   </div>
 </footer>
 
-<!-- ─── Scripts ──────────────────────────────────────────── -->
 <script>
-  /* ── Scroll reveal ── */
-  const revealObserver = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+/* ── Scroll reveal ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-  /* ── Popup tap animation (hero) ── */
-  function runPopupDemo() {
-    const ids = ['pd1','pd2','pd3','pd4'];
-    const delays = [0, 340, 580, 1380];
-    const badge = document.getElementById('popup-match');
-    ids.forEach(id => { const el = document.getElementById(id); if(el){el.classList.remove('pop');void el.offsetWidth;} });
-    badge.classList.remove('show');
-    ids.forEach((id,i) => {
-      setTimeout(() => {
-        const el = document.getElementById(id);
-        if(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');}
-      }, delays[i]);
-    });
-    setTimeout(() => badge.classList.add('show'), 2000);
-    setTimeout(runPopupDemo, 4500);
-  }
-  const mockupObs = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) { setTimeout(runPopupDemo, 700); mockupObs.disconnect(); }
-  });
-  const mockupEl = document.getElementById('mockup-reveal');
-  if (mockupEl) mockupObs.observe(mockupEl);
+/* ── Core animation helpers ── */
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-  /* ── Trackpad demo animation ── */
-  const DEMOS = [
-    {
-      type: 'taps',
-      taps: [
-        { x: 50, y: 52, delay: 0 },
-        { x: 50, y: 52, delay: 320 },
-        { x: 50, y: 52, delay: 560 },
-        { x: 50, y: 52, delay: 1380 },
-      ],
-      color: '#34c759',
-      outputIcon: '💬',
-      outputLabel: 'Text snippet',
-      outputValue: 'arsene@protonmail.com',
-    },
-    {
-      type: 'gesture',
-      // Z shape: top-left → top-right → bottom-left → bottom-right (as % of viewBox 100×100)
-      points: [ [18,25], [82,25], [18,75], [82,75] ],
-      gestureMs: 1400,
-      color: '#bf5af2',
-      outputIcon: '🎙️',
-      outputLabel: 'Shortcut triggered',
-      outputValue: 'Mute microphone',
-    },
-    {
-      type: 'taps',
-      taps: [
-        { x: 50, y: 52, delay: 0 },
-        { x: 50, y: 52, delay: 1000 },
-        { x: 50, y: 52, delay: 1300 },
-      ],
-      color: '#ff9f0a',
-      outputIcon: '📝',
-      outputLabel: 'Text snippet',
-      outputValue: 'Best regards, Arsène',
-    },
-  ];
+function makeTap(ripplesEl, x, y, color) {
+  /* Flash dot */
+  const flash = document.createElement('div');
+  flash.className = 'tp-flash';
+  flash.style.cssText = `left:${x}%;top:${y}%;width:22px;height:22px;background:${color}`;
+  ripplesEl.appendChild(flash);
+  flash.addEventListener('animationend', () => flash.remove(), { once: true });
 
-  const cursor    = document.getElementById('tp-cursor');
-  const ripplesCt = document.getElementById('tp-ripples');
-  const gestureSvg  = document.getElementById('tp-gesture-svg');
-  const gesturePath = document.getElementById('tp-gesture-path');
-  const outputEl    = document.getElementById('tp-output');
-  const outputIcon  = document.getElementById('tp-output-icon');
-  const outputLabel = document.getElementById('tp-output-label');
-  const outputValue = document.getElementById('tp-output-value');
+  /* Ripple ring */
+  const ring = document.createElement('div');
+  ring.className = 'tp-ripple';
+  ring.style.cssText = `left:${x}%;top:${y}%;width:80px;height:80px;border-color:${color}`;
+  ripplesEl.appendChild(ring);
+  ring.addEventListener('animationend', () => ring.remove(), { once: true });
+}
 
-  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function pressCursor(cursorEl) {
+  cursorEl.classList.remove('press');
+  void cursorEl.offsetWidth;
+  cursorEl.classList.add('press');
+}
 
-  function setCursor(xPct, yPct, instant) {
-    cursor.style.transition = instant
-      ? 'none'
-      : 'left .4s cubic-bezier(.4,0,.2,1), top .4s cubic-bezier(.4,0,.2,1), opacity .2s';
-    cursor.style.left = xPct + '%';
-    cursor.style.top  = yPct + '%';
+/* ── Generic trackpad animator ── */
+function makeAnimator(ids) {
+  const cursor   = document.getElementById(ids.cursor);
+  const ripples  = document.getElementById(ids.ripples);
+  const gsvg     = document.getElementById(ids.gsvg);
+  const gpath    = document.getElementById(ids.gpath);
+  const outEl    = document.getElementById(ids.output);
+  const outIcon  = document.getElementById(ids.outputIcon);
+  const outLabel = document.getElementById(ids.outputLabel);
+  const outValue = document.getElementById(ids.outputValue);
+
+  async function tap(x, y, color) {
+    cursor.style.left = x + '%';
+    cursor.style.top  = y + '%';
+    makeTap(ripples, x, y, color);
+    pressCursor(cursor);
+    await sleep(60);
   }
 
-  function createRipple(xPct, yPct, color) {
-    const r = document.createElement('div');
-    r.className = 'tp-ripple';
-    r.style.left = xPct + '%';
-    r.style.top  = yPct + '%';
-    r.style.borderColor = color;
-    ripplesCt.appendChild(r);
-    r.addEventListener('animationend', () => r.remove());
-  }
-
-  function setActiveDemo(idx) {
-    document.querySelectorAll('.demo-item').forEach((el, i) => {
-      el.classList.toggle('active', i === idx);
-    });
-    document.querySelectorAll('.demo-item-output').forEach(el => el.classList.remove('show'));
-  }
-
-  function showDemoOutput(idx) {
-    document.getElementById('demo-out-' + idx)?.classList.add('show');
-  }
-
-  async function runTapDemo(demo) {
-    setCursor(demo.taps[0].x, demo.taps[0].y, true);
+  async function runTaps(demo) {
     cursor.style.opacity = '1';
-    await sleep(80);
+    cursor.style.left = demo.taps[0].x + '%';
+    cursor.style.top  = demo.taps[0].y + '%';
+    await sleep(100);
 
-    const start = Date.now();
-    for (const tap of demo.taps) {
-      const elapsed = Date.now() - start;
-      const wait = tap.delay - elapsed;
+    const t0 = Date.now();
+    for (const pt of demo.taps) {
+      const wait = pt.t - (Date.now() - t0);
       if (wait > 0) await sleep(wait);
-      createRipple(tap.x, tap.y, demo.color);
+      await tap(pt.x, pt.y, demo.color);
     }
-    await sleep(300);
+    await sleep(280);
   }
 
-  async function runGestureDemo(demo) {
+  async function runGesture(demo) {
     const pts = demo.points;
-    const segMs = demo.gestureMs / (pts.length - 1);
+    const segMs = Math.round(demo.gestureMs / (pts.length - 1));
 
-    // Build SVG path string
-    const d = 'M ' + pts[0][0] + ' ' + pts[0][1] + ' ' +
-      pts.slice(1).map(p => 'L ' + p[0] + ' ' + p[1]).join(' ');
-
-    // Compute approximate path length for dash animation
+    /* build SVG path */
+    const d = 'M ' + pts.map(p => p[0] + ' ' + p[1]).join(' L ');
     let len = 0;
     for (let i = 1; i < pts.length; i++) {
-      const dx = pts[i][0] - pts[i-1][0];
-      const dy = pts[i][1] - pts[i-1][1];
+      const dx = pts[i][0] - pts[i-1][0], dy = pts[i][1] - pts[i-1][1];
       len += Math.sqrt(dx*dx + dy*dy);
     }
 
-    gesturePath.setAttribute('d', d);
-    gesturePath.setAttribute('stroke', demo.color);
-    gesturePath.setAttribute('stroke-dasharray', len);
-    gesturePath.setAttribute('stroke-dashoffset', len);
-    gestureSvg.style.opacity = '1';
+    gpath.setAttribute('d', d);
+    gpath.setAttribute('stroke', demo.color);
+    gpath.style.transition = 'none';
+    gpath.style.strokeDasharray = len;
+    gpath.style.strokeDashoffset = len;
+    gsvg.style.opacity = '1';
+    void gpath.offsetWidth;
 
-    // Animate path drawing
-    gesturePath.style.transition = `stroke-dashoffset ${demo.gestureMs}ms linear`;
-    void gesturePath.offsetWidth; // force reflow
-    gesturePath.style.strokeDashoffset = '0';
+    gpath.style.transition = `stroke-dashoffset ${demo.gestureMs}ms linear`;
+    gpath.style.strokeDashoffset = '0';
 
-    // Move cursor along path
-    setCursor(pts[0][0], pts[0][1], true);
+    /* move cursor along path */
     cursor.style.opacity = '1';
+    cursor.style.transition = 'none';
+    cursor.style.left = pts[0][0] + '%';
+    cursor.style.top  = pts[0][1] + '%';
     await sleep(20);
 
     for (let i = 1; i < pts.length; i++) {
@@ -1279,63 +1267,132 @@
       cursor.style.top  = pts[i][1] + '%';
       await sleep(segMs);
     }
-
     await sleep(200);
   }
 
-  async function resetGesture() {
-    gestureSvg.style.opacity = '0';
-    gesturePath.style.transition = 'none';
-    gesturePath.style.strokeDashoffset = gesturePath.getAttribute('stroke-dasharray') || '0';
-  }
-
   async function showOutput(demo) {
-    outputIcon.textContent  = demo.outputIcon;
-    outputLabel.textContent = demo.outputLabel;
-    outputValue.textContent = demo.outputValue;
-    outputEl.style.borderColor = demo.color.replace(')', ',.3)').replace('rgb','rgba') || '';
-    outputEl.classList.add('show');
+    outIcon.textContent  = demo.outputIcon;
+    outLabel.textContent = demo.outputLabel;
+    outValue.textContent = demo.outputValue;
+    outEl.classList.add('show');
   }
 
-  async function hideOutput() {
-    outputEl.classList.remove('show');
+  async function hideAll() {
+    cursor.style.opacity = '0';
+    gsvg.style.opacity   = '0';
+    gpath.style.transition = 'none';
+    gpath.style.strokeDashoffset = gpath.style.strokeDasharray || '0';
+    outEl.classList.remove('show');
   }
 
-  async function runDemoLoop(idx) {
+  return { runTaps, runGesture, showOutput, hideAll };
+}
+
+/* ── Demo sequences ── */
+const DEMOS = [
+  {
+    type: 'taps',
+    taps: [
+      { x:48, y:50, t:0   },
+      { x:52, y:53, t:310 },
+      { x:50, y:51, t:800 },
+      { x:50, y:51, t:1110},
+    ],
+    color: '#34c759',
+    outputIcon: '💬', outputLabel: 'Text snippet', outputValue: 'arsene@protonmail.com',
+  },
+  {
+    type: 'gesture',
+    points: [[18,24],[82,24],[18,76],[82,76]],
+    gestureMs: 1300,
+    color: '#bf5af2',
+    outputIcon: '🎙️', outputLabel: 'Shortcut triggered', outputValue: 'Mute microphone',
+  },
+  {
+    type: 'taps',
+    taps: [
+      { x:50, y:52, t:0    },
+      { x:50, y:52, t:1000 },
+      { x:50, y:52, t:1300 },
+    ],
+    color: '#ff9f0a',
+    outputIcon: '📝', outputLabel: 'Text snippet', outputValue: 'Best regards, Arsène',
+  },
+];
+
+/* ── Hero trackpad (starts on page load) ── */
+(function heroTrackpad() {
+  const anim = makeAnimator({
+    cursor: 'hero-cursor', ripples: 'hero-ripples',
+    gsvg: 'hero-gesture-svg', gpath: 'hero-gesture-path',
+    output: 'hero-output', outputIcon: 'hero-output-icon',
+    outputLabel: 'hero-output-label', outputValue: 'hero-output-value',
+  });
+
+  async function run(idx) {
     const demo = DEMOS[idx % DEMOS.length];
-    setActiveDemo(idx % DEMOS.length);
+    if (demo.type === 'taps')    await anim.runTaps(demo);
+    else                          await anim.runGesture(demo);
+    await anim.showOutput(demo);
+    await sleep(2200);
+    await anim.hideAll();
+    await sleep(500);
+    run(idx + 1);
+  }
 
-    if (demo.type === 'taps') {
-      await runTapDemo(demo);
-    } else {
-      await runGestureDemo(demo);
-    }
+  // Start after a short delay so the page has rendered
+  setTimeout(() => run(0), 900);
+})();
 
-    showDemoOutput(idx % DEMOS.length);
-    await showOutput(demo);
+/* ── Features demo trackpad (starts when in view) ── */
+(function demoTrackpad() {
+  const anim = makeAnimator({
+    cursor: 'demo-cursor', ripples: 'demo-ripples',
+    gsvg: 'demo-gesture-svg', gpath: 'demo-gesture-path',
+    output: 'demo-output', outputIcon: 'demo-output-icon',
+    outputLabel: 'demo-output-label', outputValue: 'demo-output-value',
+  });
+
+  function setActive(idx) {
+    document.querySelectorAll('.demo-item').forEach((el, i) => {
+      el.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.demo-item-result').forEach(el => el.classList.remove('show'));
+  }
+
+  function showResult(idx) {
+    document.getElementById('dr' + idx)?.classList.add('show');
+  }
+
+  async function run(idx) {
+    const i    = idx % DEMOS.length;
+    const demo = DEMOS[i];
+    setActive(i);
+
+    if (demo.type === 'taps')  await anim.runTaps(demo);
+    else                        await anim.runGesture(demo);
+
+    showResult(i);
+    await anim.showOutput(demo);
     await sleep(2000);
 
-    // Fade out
-    cursor.style.opacity = '0';
-    await resetGesture();
-    await hideOutput();
-    document.querySelectorAll('.demo-item-output').forEach(el => el.classList.remove('show'));
+    anim.hideAll();
+    document.querySelectorAll('.demo-item-result').forEach(el => el.classList.remove('show'));
     await sleep(500);
-
-    runDemoLoop(idx + 1);
+    run(idx + 1);
   }
 
-  // Start trackpad demo when section scrolls into view
-  const featuresObs = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) {
-      setTimeout(() => runDemoLoop(0), 600);
-      featuresObs.disconnect();
+  let started = false;
+  const featObs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting && !started) {
+      started = true;
+      setTimeout(() => run(0), 400);
     }
-  }, { threshold: 0.3 });
+  }, { threshold: 0.2 });
 
-  const featuresEl = document.getElementById('features');
-  if (featuresEl) featuresObs.observe(featuresEl);
+  const featEl = document.getElementById('features');
+  if (featEl) featObs.observe(featEl);
+})();
 </script>
-
 </body>
 </html>
