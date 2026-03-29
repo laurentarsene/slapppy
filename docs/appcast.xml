@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>Slapppy</title>
+    <link>https://laurentarsene.github.io/slapppy/appcast.xml</link>
+    <description>Slapppy release notes</description>
+    <language>en</language>
+    <item>
+      <title>Version 1.0</title>
+      <pubDate>Sun, 29 Mar 2026 00:00:00 +0000</pubDate>
+      <sparkle:version>1</sparkle:version>
+      <sparkle:shortVersionString>1.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <enclosure
+        url="REPLACE_WITH_DOWNLOAD_URL/Slapppy-1.0.dmg"
+        sparkle:edSignature="REPLACE_WITH_SIGNATURE"
+        length="REPLACE_WITH_SIZE"
+        type="application/octet-stream"/>
+    </item>
+  </channel>
+</rss>

@@ -6,9 +6,16 @@
 //
 
 import SwiftUI
+import Sparkle
 
 @main
 struct SlappyApp: App {
+    private let updaterController = SPUStandardUpdaterController(
+        startingUpdater: true,
+        updaterDelegate: nil,
+        userDriverDelegate: nil
+    )
+
     @State private var trackpad        = TrackpadReader()
     @State private var recorder        = PatternRecorder()
     @State private var store           = PatternStore()
