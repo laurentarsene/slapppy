@@ -17,10 +17,11 @@ struct GesturePoint: Codable, Equatable {
 // MARK: - GestureTemplate
 
 struct GestureTemplate: Identifiable, Codable, Equatable {
-    var id:     UUID           = UUID()
-    var name:   String
-    var path:   [GesturePoint] // normalised by DollarOneRecognizer
-    var action: PatternAction  = .none
+    var id:          UUID           = UUID()
+    var name:        String
+    var path:        [GesturePoint] // normalised by DollarOneRecognizer (for recognition)
+    var displayPath: [GesturePoint] = [] // resampled + centered, no rotation (for display)
+    var action:      PatternAction  = .none
 }
 
 // MARK: - GestureStore

@@ -9,6 +9,7 @@ import SwiftUI
 import ServiceManagement
 
 struct ContentView: View {
+    @Environment(AppUpdater.self)       private var updater
     @Environment(TrackpadReader.self)   private var trackpad
     @Environment(PatternRecorder.self)  private var recorder
     @Environment(PatternStore.self)     private var store
@@ -268,7 +269,9 @@ struct ContentView: View {
         case .captured:
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 10) {
-                    gesturePathPreview(gestureRecorder.capturedPoints)
+                    gesturePathPreview(gestureRecorder.capturedDisplayPoints.isEmpty
+                        ? gestureRecorder.capturedPoints
+                        : gestureRecorder.capturedDisplayPoints)
                     Text("\(gestureRecorder.capturedPoints.count) pts capturés")
                         .font(.system(size: 11))
                         .foregroundStyle(.secondary)
@@ -386,7 +389,7 @@ struct ContentView: View {
 
     private func gestureRow(_ template: GestureTemplate) -> some View {
         HStack(spacing: 6) {
-            gesturePathPreview(template.path)
+            gesturePathPreview(template.displayPath.isEmpty ? template.path : template.displayPath)
             Text(template.name)
                 .font(.system(size: 12))
                 .lineLimit(1)
@@ -405,12 +408,11 @@ struct ContentView: View {
     private func gesturePathPreview(_ points: [GesturePoint]) -> some View {
         Canvas { ctx, size in
             guard points.count >= 2 else { return }
-            let s  = Double(min(size.width, size.height)) / 250.0  // squareSize = 250
+            let s  = Double(min(size.width, size.height)) / 250.0 * 0.85
             let cx = Double(size.width)  / 2
             let cy = Double(size.height) / 2
 
             var path = Path()
-            // Y is flipped: screen-space Y increases downward, normalised Y upward
             path.move(to: CGPoint(x: cx + points[0].x * s, y: cy - points[0].y * s))
             for pt in points.dropFirst() {
                 path.addLine(to: CGPoint(x: cx + pt.x * s, y: cy - pt.y * s))
@@ -529,6 +531,10 @@ struct ContentView: View {
             }
 
             HStack {
+                Button("Vérifier les mises à jour") { updater.checkForUpdates() }
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
+                    .buttonStyle(.plain)
                 Spacer()
                 Button("Quitter") { NSApplication.shared.terminate(nil) }
                     .keyboardShortcut("q")

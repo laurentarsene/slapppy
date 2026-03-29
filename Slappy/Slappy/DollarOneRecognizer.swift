@@ -43,6 +43,17 @@ enum DollarOneRecognizer {
         return pts.map { GesturePoint(x: Double($0.x), y: Double($0.y)) }
     }
 
+    /// Convert raw points to a display-only form: resampled, uniformly scaled,
+    /// centered — but NOT rotated and NOT non-uniformly stretched.
+    static func normaliseForDisplay(_ raw: [CGPoint]) -> [GesturePoint] {
+        guard raw.count >= 2 else { return [] }
+        var pts = resample(raw, n: numPoints)
+        guard !pts.isEmpty else { return [] }
+        pts = scaleUniform(pts, size: squareSize)
+        pts = translateTo(pts, target: .zero)
+        return pts.map { GesturePoint(x: Double($0.x), y: Double($0.y)) }
+    }
+
     /// Score a normalised candidate against all stored templates.
     /// Returns the best match and its score, or nil if `templates` is empty.
     static func bestMatch(
@@ -148,6 +159,15 @@ enum DollarOneRecognizer {
         let sw = w > 0 ? CGFloat(size / w) : 1
         let sh = h > 0 ? CGFloat(size / h) : 1
         return pts.map { CGPoint(x: $0.x * sw, y: $0.y * sh) }
+    }
+
+    /// Uniform scale so the largest dimension fits within `size`, preserving aspect ratio.
+    private static func scaleUniform(_ pts: [CGPoint], size: Double) -> [CGPoint] {
+        let xs = pts.map { Double($0.x) }, ys = pts.map { Double($0.y) }
+        let w = (xs.max()! - xs.min()!), h = (ys.max()! - ys.min()!)
+        let maxDim = max(w, h)
+        let s = maxDim > 0 ? CGFloat(size / maxDim) : 1
+        return pts.map { CGPoint(x: $0.x * s, y: $0.y * s) }
     }
 
     /// Translate so the centroid lands exactly at `target`.

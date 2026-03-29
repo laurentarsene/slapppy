@@ -21,14 +21,16 @@ final class GestureRecorder {
 
     enum State { case idle, recording, captured }
 
-    var state:           State          = .idle
-    var capturedPoints:  [GesturePoint] = []   // normalised, ready for storage
+    var state:                State          = .idle
+    var capturedPoints:       [GesturePoint] = []   // normalised, ready for recognition
+    var capturedDisplayPoints:[GesturePoint] = []   // for display only (no rotation/stretch)
 
     // MARK: - Public API
 
     func startRecording() {
-        capturedPoints = []
-        state          = .recording
+        capturedPoints        = []
+        capturedDisplayPoints = []
+        state                 = .recording
     }
 
     /// Called once per completed drag gesture (all points delivered in one batch).
@@ -36,8 +38,9 @@ final class GestureRecorder {
         guard state == .recording else { return }
         let normalised = DollarOneRecognizer.normalise(points)
         if normalised.count >= 5 {
-            capturedPoints = normalised
-            state          = .captured
+            capturedPoints        = normalised
+            capturedDisplayPoints = DollarOneRecognizer.normaliseForDisplay(points)
+            state                 = .captured
         } else {
             discard()
         }
@@ -48,13 +51,16 @@ final class GestureRecorder {
     func build(name: String) -> GestureTemplate? {
         guard state == .captured else { return nil }
         let n = name.trimmingCharacters(in: .whitespaces)
-        let t = GestureTemplate(name: n.isEmpty ? "Geste" : n, path: capturedPoints)
+        let t = GestureTemplate(name: n.isEmpty ? "Geste" : n,
+                                path: capturedPoints,
+                                displayPath: capturedDisplayPoints)
         discard()
         return t
     }
 
     func discard() {
-        capturedPoints = []
-        state          = .idle
+        capturedPoints        = []
+        capturedDisplayPoints = []
+        state                 = .idle
     }
 }

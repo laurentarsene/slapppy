@@ -65,10 +65,15 @@ final class TrackpadReader {
             print("[Slapppy] Tap! \(Int(ms)) ms → intensity \(Int(intensity))")
         }
 
-        // MOVE — collect screen-space points while ⌥ is held (no click required)
+        // MOVE — accumulate relative deltas while ⌥ is held
+        // deltaX/deltaY capture actual finger movement, independent of
+        // cursor speed settings and screen position.
         let onMove: (NSEvent) -> Void = { [weak self] event in
-            guard let self, optionHeld else { return }
-            gesturePoints.append(NSEvent.mouseLocation)
+            guard let self, optionHeld, let last = gesturePoints.last else { return }
+            gesturePoints.append(CGPoint(
+                x: last.x + Double(event.deltaX),
+                y: last.y - Double(event.deltaY)  // deltaY is positive downward in AppKit
+            ))
         }
 
         // FLAGS — detect ⌥ press/release to start/finish gesture capture
@@ -76,9 +81,9 @@ final class TrackpadReader {
             guard let self else { return }
             let nowHeld = event.modifierFlags.contains(.option)
             if nowHeld && !optionHeld {
-                // ⌥ just pressed → start fresh capture
+                // ⌥ just pressed → start fresh capture from origin
                 optionHeld    = true
-                gesturePoints = []
+                gesturePoints = [.zero]
             } else if !nowHeld && optionHeld {
                 // ⌥ just released → evaluate the collected path
                 optionHeld = false
