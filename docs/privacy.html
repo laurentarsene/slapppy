@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Slapppy</title>
+  <meta name="description" content="Slapppy Privacy Policy — what data we collect (almost none) and how we handle it." />
+  <link rel="icon" href="/slapppy-icon.png" type="image/png">
+  <link rel="canonical" href="https://www.slapppy.com/privacy" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f5f5f7;
+      --bg-card:   #ffffff;
+      --fg:        #1d1d1f;
+      --fg-2:      #6e6e73;
+      --fg-3:      #aeaeb2;
+      --accent:    #0071e3;
+      --accent-2:  #0077ed;
+      --border:    rgba(0,0,0,.09);
+      --shadow:    0 2px 20px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.04);
+      --radius:    18px;
+      --font:      'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:      #000;
+        --bg-card: #1c1c1e;
+        --fg:      #f5f5f7;
+        --fg-2:    #98989d;
+        --fg-3:    #48484a;
+        --border:  rgba(255,255,255,.08);
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; inset: 0 0 auto; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 36px; height: 52px;
+      background: color-mix(in srgb, var(--bg) 72%, transparent);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 16px; font-weight: 700; letter-spacing: -.02em;
+      color: var(--fg); text-decoration: none;
+    }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 16px; background: var(--accent);
+      color: #fff; border-radius: 980px;
+      font-size: 13px; font-weight: 600; text-decoration: none;
+      transition: opacity .2s, transform .2s;
+    }
+    .nav-cta:hover { opacity: .88; transform: scale(.98); }
+
+    /* ── CONTENT ── */
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+    main {
+      padding: 100px 0 80px;
+    }
+
+    .page-header {
+      margin-bottom: 56px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .eyebrow {
+      font-size: 12px; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800; letter-spacing: -.03em; line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .page-header .updated {
+      font-size: 13px; color: var(--fg-3);
+    }
+
+    /* Summary card */
+    .summary {
+      background: color-mix(in srgb, var(--accent) 8%, var(--bg-card));
+      border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 48px;
+    }
+    .summary p {
+      font-size: 15px; font-weight: 500; color: var(--fg);
+      line-height: 1.6;
+    }
+    .summary strong { color: var(--accent); }
+
+    /* Sections */
+    .policy-section { margin-bottom: 44px; }
+    .policy-section h2 {
+      font-size: 18px; font-weight: 700; letter-spacing: -.02em;
+      margin-bottom: 12px; color: var(--fg);
+    }
+    .policy-section p {
+      font-size: 14.5px; line-height: 1.7; color: var(--fg-2);
+      margin-bottom: 10px;
+    }
+    .policy-section p:last-child { margin-bottom: 0; }
+    .policy-section ul {
+      padding-left: 20px; margin: 8px 0;
+    }
+    .policy-section ul li {
+      font-size: 14.5px; line-height: 1.7; color: var(--fg-2);
+      margin-bottom: 6px;
+    }
+    .policy-section a { color: var(--accent); text-decoration: none; }
+    .policy-section a:hover { text-decoration: underline; }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 20px;
+      margin-right: 6px; vertical-align: middle;
+    }
+    .tag-green { background: #e6f4ea; color: #1a7f37; }
+    .tag-gray  { background: #f2f2f7; color: #6e6e73; }
+
+    @media (prefers-color-scheme: dark) {
+      .tag-green { background: #0d2e12; color: #3fb950; }
+      .tag-gray  { background: #2c2c2e; color: #98989d; }
+    }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    footer p { font-size: 12px; color: var(--fg-3); }
+    footer a { color: var(--fg-2); text-decoration: none; }
+    footer a:hover { color: var(--fg); }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/slapppy-icon.png" alt="Slapppy" width="22" height="22" style="border-radius:5px">
+    Slapppy
+  </a>
+  <a href="/#download" class="nav-cta">Get Slapppy — €9.99</a>
+</nav>
+
+<main>
+  <div class="container">
+
+    <div class="page-header">
+      <div class="eyebrow">Legal</div>
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: March 29, 2026</p>
+    </div>
+
+    <div class="summary">
+      <p><strong>The short version:</strong> Slapppy stores your patterns and gestures <strong>locally on your Mac only</strong>. We don't collect analytics, don't track usage, and don't have access to anything you type or trigger. The app works entirely offline.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>1. Who we are</h2>
+      <p>Slapppy is developed and distributed by Arsène Laurent, an independent developer. You can reach us at <a href="mailto:hello@slapppy.com">hello@slapppy.com</a>.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>2. What data Slapppy collects</h2>
+      <p><span class="tag tag-green">None</span> Slapppy does <strong>not</strong> collect, transmit, or store any personal data on external servers.</p>
+      <p>Everything you create in Slapppy — patterns, gestures, assigned actions — is stored exclusively in your Mac's local <code>UserDefaults</code> (a sandboxed system storage on your device). This data never leaves your machine.</p>
+      <p>Specifically, we do <strong>not</strong> collect:</p>
+      <ul>
+        <li>What patterns or gestures you record</li>
+        <li>What actions you assign or trigger</li>
+        <li>What text you type via Slapppy</li>
+        <li>Usage statistics or analytics of any kind</li>
+        <li>Crash reports</li>
+        <li>Device identifiers</li>
+        <li>Your name, email, or location</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>3. System permissions</h2>
+      <p>Slapppy requests two macOS permissions. These are used entirely on-device and no data from them is transmitted anywhere.</p>
+      <ul>
+        <li><strong>Input Monitoring</strong> — to detect ⌥ + tap and ⌥ + drag events on your trackpad. Slapppy listens only for modifier key state and mouse movement/click events.</li>
+        <li><strong>Accessibility</strong> — to simulate keyboard events (e.g. F13–F20 virtual keys, text pasting) in response to your patterns. This is required by macOS to post system-level key events.</li>
+      </ul>
+      <p>Slapppy does not read or log the content of your keyboard input, clipboard, or screen.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>4. Automatic update checks</h2>
+      <p><span class="tag tag-gray">Minimal</span> Slapppy uses <a href="https://sparkle-project.org" target="_blank" rel="noopener">Sparkle</a> to check for updates. When checking for updates, Sparkle makes a network request to <code>https://slapppy.com/appcast.xml</code> to retrieve version information.</p>
+      <p>This request may include your IP address (as is standard for any HTTP request) and your current Slapppy version number. No personal identifiers are sent. You can check for updates manually at any time from the app's menu, or skip automatic checks entirely by declining the update prompt.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>5. Purchase &amp; payment</h2>
+      <p>Slapppy is sold through <a href="https://www.lemonsqueezy.com" target="_blank" rel="noopener">Lemon Squeezy</a>. Payment processing, order data, and your email address are handled exclusively by Lemon Squeezy under their own <a href="https://www.lemonsqueezy.com/privacy" target="_blank" rel="noopener">Privacy Policy</a>. We receive only the information necessary to deliver your purchase (order confirmation and download link).</p>
+      <p>Slapppy itself does not require an account or login.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>6. Data storage &amp; deletion</h2>
+      <p>All app data (patterns, gestures) is stored locally in your Mac's <code>UserDefaults</code> under the key <code>com.slapppy.app</code>. You can delete all Slapppy data at any time by uninstalling the app and running:</p>
+      <p><code style="background:var(--bg-card);border:1px solid var(--border);padding:8px 14px;border-radius:8px;display:inline-block;font-size:13px;">defaults delete com.slapppy.app</code></p>
+    </div>
+
+    <div class="policy-section">
+      <h2>7. Third-party services</h2>
+      <p>This website (slapppy.com) is hosted on GitHub Pages. When you visit it, GitHub may collect standard web server logs (IP address, browser type, referring page). See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub's Privacy Statement</a>.</p>
+      <p>The website uses Google Fonts for typography. Google may log font requests. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</p>
+      <p>No advertising trackers, analytics scripts (Google Analytics, Mixpanel, etc.), or session recording tools are used on this website or in the app.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>8. Children's privacy</h2>
+      <p>Slapppy is not directed at children under 13. We do not knowingly collect any information from children.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>9. Changes to this policy</h2>
+      <p>If we make material changes to this policy, we will update the "Last updated" date at the top of this page. Continued use of Slapppy after changes are posted constitutes acceptance of the updated policy.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>10. Contact</h2>
+      <p>Questions about this policy? Email us at <a href="mailto:hello@slapppy.com">hello@slapppy.com</a>.</p>
+      <p>If you are in the European Union and have concerns about your data rights under GDPR, you may also contact your local data protection authority. Given that Slapppy collects no personal data, there is nothing for us to provide, correct, or delete — but we are happy to confirm this in writing upon request.</p>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <p>Made with ♥ by Arsène Laurent · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · <a href="/">slapppy.com</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
   <channel>
     <title>Slapppy</title>
-    <link>https://laurentarsene.github.io/slapppy/appcast.xml</link>
+    <link>https://slapppy.com/appcast.xml</link>
     <description>Slapppy release notes</description>
     <language>en</language>
     <item>

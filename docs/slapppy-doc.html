@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Slapppy — Documentation Technique</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    color: #1d1d1f;
+    background: #fff;
+    padding: 48px 64px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  @media print {
+    body { padding: 0; }
+    .no-break { page-break-inside: avoid; }
+    h1, h2, h3 { page-break-after: avoid; }
+  }
+
+  /* Cover */
+  .cover {
+    text-align: center;
+    padding: 80px 0 60px;
+    border-bottom: 2px solid #0071e3;
+    margin-bottom: 48px;
+  }
+  .cover .logo {
+    width: 80px; height: 80px;
+    border-radius: 18px;
+    display: inline-block;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .cover .logo img { width: 80px; height: 80px; display: block; }
+  .cover h1 { font-size: 32pt; font-weight: 700; letter-spacing: -0.5px; color: #1d1d1f; }
+  .cover .subtitle { font-size: 14pt; color: #6e6e73; margin-top: 8px; }
+  .cover .meta { margin-top: 32px; font-size: 10pt; color: #86868b; }
+  .cover .meta span { margin: 0 12px; }
+
+  /* TOC */
+  .toc { background: #f5f5f7; border-radius: 12px; padding: 28px 32px; margin-bottom: 48px; }
+  .toc h2 { font-size: 13pt; font-weight: 600; margin-bottom: 16px; color: #1d1d1f; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 5px 0; font-size: 10.5pt; color: #1d1d1f; }
+  .toc a { color: #0071e3; text-decoration: none; }
+  .toc .sub { padding-left: 16px; list-style: disc; }
+  .toc .sub li { margin: 3px 0; color: #6e6e73; }
+
+  /* Typography */
+  h1 { font-size: 22pt; font-weight: 700; margin: 40px 0 12px; color: #1d1d1f; border-bottom: 1px solid #e5e5ea; padding-bottom: 8px; }
+  h2 { font-size: 16pt; font-weight: 600; margin: 32px 0 10px; color: #1d1d1f; }
+  h3 { font-size: 12pt; font-weight: 600; margin: 22px 0 8px; color: #1d1d1f; }
+  h4 { font-size: 11pt; font-weight: 600; margin: 16px 0 6px; color: #3a3a3c; }
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 20px; margin-bottom: 10px; }
+  li { margin: 4px 0; }
+
+  /* Code */
+  code {
+    font-family: "SF Mono", "Menlo", monospace;
+    font-size: 9.5pt;
+    background: #f5f5f7;
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: #0a84ff;
+  }
+  pre {
+    background: #1d1d1f;
+    color: #f5f5f7;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 14px 0;
+    overflow: hidden;
+    font-size: 9pt;
+    line-height: 1.5;
+  }
+  pre code {
+    background: none;
+    color: #f5f5f7;
+    padding: 0;
+    font-size: 9pt;
+  }
+  .kw  { color: #ff7ab2; }
+  .fn  { color: #67b7a4; }
+  .st  { color: #fc6a5d; }
+  .cm  { color: #7f8c98; font-style: italic; }
+  .nm  { color: #d0a8ff; }
+
+  /* Badges / pills */
+  .badge {
+    display: inline-block;
+    font-size: 8.5pt;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .badge-blue  { background: #e8f0fe; color: #0071e3; }
+  .badge-green { background: #e6f4ea; color: #1a7f37; }
+  .badge-gray  { background: #f2f2f7; color: #6e6e73; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 10pt; }
+  th { background: #f5f5f7; font-weight: 600; padding: 8px 12px; text-align: left; border-bottom: 2px solid #e5e5ea; }
+  td { padding: 7px 12px; border-bottom: 1px solid #f2f2f7; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  /* Callouts */
+  .callout {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-left: 4px solid;
+  }
+  .callout-blue  { background: #eff6ff; border-color: #0071e3; }
+  .callout-green { background: #f0fdf4; border-color: #22c55e; }
+  .callout-orange{ background: #fff7ed; border-color: #f97316; }
+  .callout p { margin: 0; font-size: 10.5pt; }
+  .callout strong { display: block; margin-bottom: 4px; }
+
+  /* Divider */
+  hr { border: none; border-top: 1px solid #e5e5ea; margin: 36px 0; }
+
+  /* File header */
+  .file-header {
+    background: linear-gradient(135deg, #667eea22, #764ba222);
+    border: 1px solid #e5e5ea;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 20px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .file-icon { font-size: 18pt; }
+  .file-name { font-size: 12pt; font-weight: 700; font-family: "SF Mono", monospace; color: #1d1d1f; }
+  .file-desc { font-size: 10pt; color: #6e6e73; margin-top: 2px; }
+
+  /* Flow diagram */
+  .flow {
+    background: #f5f5f7;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 14px 0;
+    font-family: "SF Mono", monospace;
+    font-size: 9pt;
+    line-height: 2;
+    color: #1d1d1f;
+  }
+  .flow .arrow { color: #0071e3; font-weight: 700; }
+  .flow .label { color: #6e6e73; font-size: 8.5pt; }
+
+  /* Section label */
+  .section-num {
+    display: inline-block;
+    background: #0071e3;
+    color: white;
+    font-size: 9pt;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 22px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #e5e5ea; font-size: 9pt; color: #86868b; text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ COVER -->
+<div class="cover">
+  <div class="logo">
+    <img src="slapppy-icon.png" alt="Slapppy">
+  </div>
+  <h1>Slapppy</h1>
+  <div class="subtitle">Documentation Technique Complète</div>
+  <div class="meta">
+    <span>Version 1.2</span>
+    <span>·</span>
+    <span>macOS 26+</span>
+    <span>·</span>
+    <span>Swift 5.0</span>
+    <span>·</span>
+    <span>Mars 2026</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ TOC -->
+<div class="toc">
+  <h2>Table des matières</h2>
+  <ol>
+    <li><a href="#overview">Vue d'ensemble</a></li>
+    <li><a href="#setup">Setup &amp; développement</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#files">Fichiers source</a>
+      <ul class="sub">
+        <li>SlappyApp.swift — Point d'entrée</li>
+        <li>ContentView.swift — Interface utilisateur</li>
+        <li>Pattern.swift — Modèles de patterns</li>
+        <li>Gesture.swift — Modèles de gestes</li>
+        <li>AccelerometerReader.swift — Détection hardware</li>
+        <li>TrackpadReader.swift — Suivi trackpad</li>
+        <li>PatternRecorder / PatternEngine — Enregistrement &amp; matching</li>
+        <li>GestureRecorder / GestureEngine — Enregistrement &amp; matching</li>
+        <li>DollarOneRecognizer.swift — Algorithme $1</li>
+        <li>ActionExecutor.swift — Exécution des actions</li>
+        <li>AppUpdater.swift — Mises à jour Sparkle</li>
+      </ul>
+    </li>
+    <li><a href="#dataflow">Flux de données</a></li>
+    <li><a href="#persistence">Persistance</a></li>
+    <li><a href="#decisions">Décisions d'architecture</a></li>
+    <li><a href="#release">Release &amp; Déploiement</a></li>
+    <li><a href="#config">Configuration &amp; constantes</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+  </ol>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ 1. OVERVIEW -->
+<h1 id="overview"><span class="section-num">1</span> Vue d'ensemble</h1>
+
+
+<p>Slapppy est une app macOS de barre de menus qui permet d'assigner des actions (raccourcis clavier, texte) à des <strong>patterns de slaps</strong> (séquences rythmiques sur le trackpad) et à des <strong>gestes tracés</strong> (formes dessinées avec ⌥ + drag).</p>
+
+<div class="callout callout-blue">
+  <p><strong>Cas d'usage typique</strong><br>
+  L'utilisateur tape trois fois rapidement sur son MacBook → Slapppy reconnaît le pattern → exécute F13 → déclenche un raccourci Keyboard Maestro qui ouvre Zoom.</p>
+</div>
+
+<h3>Technologies clés</h3>
+<table>
+  <tr><th>Technologie</th><th>Usage</th></tr>
+  <tr><td><code>IOKit / HID</code></td><td>Accès direct à l'accéléromètre Bosch BMI286 (Apple Silicon)</td></tr>
+  <tr><td><code>NSEvent</code> global monitor</td><td>Capture des taps ⌥ et mouvements trackpad</td></tr>
+  <tr><td>CGEvent</td><td>Simulation de frappes clavier au niveau système</td></tr>
+  <tr><td>SwiftUI + Observable</td><td>UI menu bar réactive</td></tr>
+  <tr><td>Sparkle 2.9</td><td>Mises à jour automatiques hors App Store</td></tr>
+  <tr><td>$1 Unistroke Recognizer</td><td>Reconnaissance de gestes invariante en rotation/échelle</td></tr>
+</table>
+
+<h3>Permissions requises</h3>
+<ul>
+  <li><strong>Input Monitoring</strong> — écouter les événements clavier/souris globaux</li>
+  <li><strong>Accessibilité</strong> — poster des CGEvent au niveau système</li>
+</ul>
+<p>L'app est <strong>non-sandboxée</strong> (obligatoire pour IOKit et CGEvent).</p>
+
+<!-- ═══════════════════════════════════════════════════════ 2. SETUP -->
+<h1 id="setup"><span class="section-num">2</span> Setup &amp; développement</h1>
+
+<h2>Prérequis</h2>
+<table>
+  <tr><th>Outil</th><th>Version</th><th>Rôle</th></tr>
+  <tr><td>Xcode</td><td>16+</td><td>Build, debug, gestion des packages SPM</td></tr>
+  <tr><td>macOS</td><td>26+ (Sequoia)</td><td>Cible de déploiement minimum</td></tr>
+  <tr><td>Apple Developer Account</td><td>actif</td><td>Signature Developer ID + notarisation</td></tr>
+  <tr><td>GitHub CLI (<code>gh</code>)</td><td>2.x</td><td>Création des GitHub Releases automatisée</td></tr>
+  <tr><td>Sparkle tools</td><td>2.9.0</td><td><code>sign_update</code> pour signer les DMG (<code>/tmp/sparkle/bin/</code>)</td></tr>
+</table>
+
+<h2>Lancer le projet en développement</h2>
+<pre><code><span class="cm"># 1. Ouvrir le projet</span>
+open Slappy/Slappy.xcodeproj
+
+<span class="cm"># 2. Dans Xcode : Cmd+R pour build &amp; run</span>
+<span class="cm"># L'app apparaît dans la barre de menus</span>
+
+<span class="cm"># 3. Permissions requises au premier lancement :</span>
+<span class="cm">#    Système → Confidentialité → Input Monitoring → ✓ Slapppy</span>
+<span class="cm">#    Système → Confidentialité → Accessibilité    → ✓ Slapppy</span></code></pre>
+
+<div class="callout callout-orange">
+  <p><strong>Note Apple Silicon</strong> — La détection par accéléromètre (<code>AccelerometerReader</code>) ne fonctionne que sur MacBook Apple Silicon (M1/M2/M3/M4). Sur Intel ou simulateur, <code>isAvailable</code> reste <code>false</code> mais l'app reste fonctionnelle via le trackpad.</p>
+</div>
+
+<h2>Structure des dossiers</h2>
+<pre><code>Slappy/
+├── Slappy/                      <span class="cm"># Projet Xcode</span>
+│   ├── Slappy.xcodeproj/
+│   └── Slappy/                  <span class="cm"># Sources Swift</span>
+│       ├── SlappyApp.swift
+│       ├── ContentView.swift
+│       ├── AccelerometerReader.swift
+│       ├── TrackpadReader.swift
+│       ├── Pattern.swift
+│       ├── PatternRecorder.swift
+│       ├── PatternEngine.swift
+│       ├── Gesture.swift
+│       ├── GestureRecorder.swift
+│       ├── GestureEngine.swift
+│       ├── DollarOneRecognizer.swift
+│       ├── ActionExecutor.swift
+│       ├── AppUpdater.swift
+│       ├── Info.plist           <span class="cm"># SUFeedURL, SUPublicEDKey, LSUIElement</span>
+│       └── Assets.xcassets/     <span class="cm"># AppIcon (toutes tailles)</span>
+├── docs/                        <span class="cm"># GitHub Pages (landing page)</span>
+│   ├── index.html
+│   ├── appcast.xml              <span class="cm"># Sparkle feed</span>
+│   ├── og.png
+│   └── slapppy-icon.png
+├── scripts/
+│   ├── release.sh               <span class="cm"># Pipeline build → DMG → notarisation</span>
+│   ├── ship.sh                  <span class="cm"># Commande unique de release</span>
+│   └── ExportOptions.plist      <span class="cm"># Config export Developer ID</span>
+├── .env.local                   <span class="cm"># Credentials (gitignorée)</span>
+└── .gitignore</code></pre>
+
+<h2>Première configuration release</h2>
+<pre><code><span class="cm"># Créer .env.local (une seule fois)</span>
+cat > .env.local &lt;&lt;EOF
+APPLE_ID="arsene.laurent@protonmail.com"
+APP_PASSWORD="xxxx-xxxx-xxxx-xxxx"
+TEAM_ID="MF452AV7JC"
+EOF
+
+<span class="cm"># Vérifier que les Sparkle tools sont disponibles</span>
+ls /tmp/sparkle/bin/sign_update
+<span class="cm"># Si absent : re-télécharger</span>
+curl -L -o /tmp/sparkle.tar.xz \
+  https://github.com/sparkle-project/Sparkle/releases/download/2.9.0/Sparkle-2.9.0.tar.xz
+mkdir -p /tmp/sparkle && tar -xf /tmp/sparkle.tar.xz -C /tmp/sparkle</code></pre>
+
+<!-- ═══════════════════════════════════════════════════════ 3. ARCHITECTURE -->
+<h1 id="architecture"><span class="section-num">3</span> Architecture</h1>
+
+<p>L'app suit une architecture <strong>service + injection d'environnement</strong>. Tous les services sont instanciés dans <code>SlappyApp</code> comme <code>@State</code> et injectés via <code>.environment()</code>.</p>
+
+<pre><code><span class="cm">// SlappyApp.swift — injection de tous les services</span>
+ContentView()
+    .environment(updater)       <span class="cm">// Sparkle</span>
+    .environment(trackpad)      <span class="cm">// Événements trackpad</span>
+    .environment(recorder)      <span class="cm">// Enregistrement patterns</span>
+    .environment(store)         <span class="cm">// Persistance patterns</span>
+    .environment(engine)        <span class="cm">// Matching patterns</span>
+    .environment(gestureRecorder)
+    .environment(gestureStore)
+    .environment(gestureEngine)</code></pre>
+
+<h3>Câblage des callbacks</h3>
+<div class="flow">
+  TrackpadReader.onTap(intensity) <span class="arrow">──►</span> PatternRecorder.handleSlap()<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──►</span> PatternEngine.handleSlap()<br>
+  <br>
+  TrackpadReader.onGesture(pts) <span class="arrow">──►</span> GestureRecorder.handleGesture() <span class="label">(si recording)</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──►</span> GestureEngine.handleGesture() <span class="label">(sinon)</span><br>
+  <br>
+  PatternEngine.onMatch(pattern) <span class="arrow">──►</span> ActionExecutor.execute(action)<br>
+  GestureEngine.onMatch(template) <span class="arrow">──►</span> ActionExecutor.execute(action)
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ 3. FILES -->
+<h1 id="files"><span class="section-num">4</span> Fichiers source</h1>
+
+<!-- SlappyApp -->
+<div class="file-header no-break">
+  <div class="file-icon">🚀</div>
+  <div>
+    <div class="file-name">SlappyApp.swift</div>
+    <div class="file-desc">Point d'entrée — initialisation, injection, lifecycle</div>
+  </div>
+</div>
+<p>Marqué <code>@main</code>. Instancie les 8 services comme <code>@State</code>, les injecte dans le <code>MenuBarExtra</code>, et câble les callbacks au démarrage.</p>
+<ul>
+  <li>Démarre <code>TrackpadReader</code> à l'<code>onAppear</code></li>
+  <li>Arrête <code>TrackpadReader</code> à <code>NSApplication.willTerminateNotification</code></li>
+  <li>Contient la logique de routage : slap → recorder + engine, gesture → recorder ou engine</li>
+</ul>
+
+<!-- ContentView -->
+<div class="file-header no-break">
+  <div class="file-icon">🖥</div>
+  <div>
+    <div class="file-name">ContentView.swift</div>
+    <div class="file-desc">Interface menu bar — deux onglets, enregistrement, liste, footer</div>
+  </div>
+</div>
+<p>Fenêtre de 280pt de large avec deux onglets : <strong>Slaps</strong> et <strong>Gestes</strong>.</p>
+<table>
+  <tr><th>Composant</th><th>Description</th></tr>
+  <tr><td>Header</td><td>Logo, titre, badge d'état (point vert + "⌥ + tap"), compteur</td></tr>
+  <tr><td>Pattern section</td><td>Bouton d'enregistrement, visualisation live des slaps (dots colorés par intensité), liste des patterns avec édition inline</td></tr>
+  <tr><td>Gesture section</td><td>Bouton enregistrement, aperçu Canvas du tracé, liste des gestes</td></tr>
+  <tr><td>Action editor</td><td>Partagé slaps/gestes : sélection F13–F20 ou texte libre</td></tr>
+  <tr><td>Match badge</td><td>Affiché 3 secondes après un match, avec score de confiance</td></tr>
+  <tr><td>Footer</td><td>Toggle démarrage auto, warnings permissions, bouton update, Quitter</td></tr>
+</table>
+<p>La preview des gestes utilise <code>Canvas</code> avec les <code>displayPath</code> (tracé fidèle, sans rotation/déformation).</p>
+
+<!-- Pattern -->
+<div class="file-header no-break">
+  <div class="file-icon">🎵</div>
+  <div>
+    <div class="file-name">Pattern.swift</div>
+    <div class="file-desc">Modèles SlapEvent, Pattern, PatternAction + algorithme de matching</div>
+  </div>
+</div>
+
+<h4>Structures de données</h4>
+<table>
+  <tr><th>Type</th><th>Champs clés</th></tr>
+  <tr><td><code>SlapEvent</code></td><td><code>interval: Double</code> (secondes depuis le slap précédent), <code>intensity: Double</code></td></tr>
+  <tr><td><code>Pattern</code></td><td><code>id, name, slaps: [SlapEvent], action: PatternAction</code></td></tr>
+  <tr><td><code>PatternAction</code></td><td><code>.none</code> / <code>.virtualKey(UInt16)</code> / <code>.typeText(String)</code></td></tr>
+</table>
+
+<h4>PatternMatcher — algorithme de scoring</h4>
+<p>Score sur deux dimensions indépendantes :</p>
+<table>
+  <tr><th>Dimension</th><th>Poids</th><th>Tolérance</th><th>Logique</th></tr>
+  <tr><td>Timing</td><td>60%</td><td>±30%</td><td>Intervalles normalisés → scale-invariant (version rapide = version lente)</td></tr>
+  <tr><td>Intensité</td><td>40%</td><td>±40%</td><td>Normalisé par pic local</td></tr>
+</table>
+<p>Seuil de match : <strong>75%</strong>. La même séquence rythmique jouée vite ou lentement est reconnue.</p>
+
+<!-- Gesture -->
+<div class="file-header no-break">
+  <div class="file-icon">✍️</div>
+  <div>
+    <div class="file-name">Gesture.swift</div>
+    <div class="file-desc">Modèles GesturePoint, GestureTemplate + persistance GestureStore</div>
+  </div>
+</div>
+<pre><code><span class="kw">struct</span> <span class="nm">GestureTemplate</span>: Identifiable, Codable, Equatable {
+    <span class="kw">var</span> id:          UUID
+    <span class="kw">var</span> name:        String
+    <span class="kw">var</span> path:        [GesturePoint]  <span class="cm">// normalisé pour la reconnaissance</span>
+    <span class="kw">var</span> displayPath: [GesturePoint]  <span class="cm">// fidèle pour l'affichage UI</span>
+    <span class="kw">var</span> action:      PatternAction
+}</code></pre>
+<p><code>GestureStore</code> et <code>PatternStore</code> persistant en JSON dans <code>UserDefaults</code>.</p>
+
+<!-- AccelerometerReader -->
+<div class="file-header no-break">
+  <div class="file-icon">📡</div>
+  <div>
+    <div class="file-name">AccelerometerReader.swift</div>
+    <div class="file-desc">Accès direct IOKit à l'accéléromètre Bosch BMI286 (Apple Silicon)</div>
+  </div>
+</div>
+<p>Lit les rapports HID bruts à <strong>1 kHz</strong>. Détecte les slaps par envelope-tracking :</p>
+<div class="flow">
+  Signal IMU (1 kHz) <span class="arrow">──►</span> EMA lente (baseline gravité)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──►</span> Déviation positive = signal - EMA<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──►</span> Noise envelope (bruit ventilateur/bobines)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──►</span> Slap si déviation &gt; envelope + 100 <span class="label">(+ 0.3s réfractaire)</span>
+</div>
+<table>
+  <tr><th>Constante</th><th>Valeur</th><th>Rôle</th></tr>
+  <tr><td><code>kNoiseGate</code></td><td>150.0</td><td>Seuil sous lequel une déviation est classée bruit</td></tr>
+  <tr><td><code>kNoiseEnvelopeDecay</code></td><td>0.999</td><td>Décroissance enveloppe (~700ms demi-vie)</td></tr>
+  <tr><td><code>kSlapMargin</code></td><td>100.0</td><td>Marge au-dessus de l'enveloppe pour déclencher</td></tr>
+  <tr><td><code>kSlapRefractory</code></td><td>0.3s</td><td>Délai minimum entre deux slaps</td></tr>
+  <tr><td><code>kEMAAlpha</code></td><td>0.001</td><td>Constante de temps EMA baseline (~1s)</td></tr>
+  <tr><td><code>kEMAWarmup</code></td><td>500 samples</td><td>Phase de chauffe (~0.5s) avant la détection</td></tr>
+</table>
+
+<!-- TrackpadReader -->
+<div class="file-header no-break">
+  <div class="file-icon">👆</div>
+  <div>
+    <div class="file-name">TrackpadReader.swift</div>
+    <div class="file-desc">Monitor global NSEvent — taps ⌥ et tracés de gestes</div>
+  </div>
+</div>
+<p>Enregistre des monitors globaux et locaux pour <code>[leftMouseDown, leftMouseUp, mouseMoved, flagsChanged]</code>.</p>
+
+<h4>Intensité des taps</h4>
+<p>Dérivée de la durée contact (mouseDown → mouseUp) :</p>
+<pre><code><span class="kw">let</span> intensity = max(<span class="nm">400</span>, min(<span class="nm">1200</span>, <span class="nm">400</span> + ms × <span class="nm">5.3</span>))
+<span class="cm">// tap léger ~20-50ms  → intensity ~400</span>
+<span class="cm">// clic fort ~150-200ms → intensity ~1200</span></code></pre>
+
+<h4>Capture de gestes</h4>
+<p>Accumulation de <code>deltaX</code> / <code>deltaY</code> relatifs (indépendant de la vitesse curseur système) :</p>
+<pre><code><span class="cm">// ⌥ pressé → initialisation à (0,0)</span>
+gesturePoints = [.zero]
+
+<span class="cm">// mouseMoved → accumulation des deltas</span>
+gesturePoints.append(CGPoint(
+    x: last.x + event.deltaX,
+    y: last.y - event.deltaY  <span class="cm">// deltaY positif = vers le bas (AppKit)</span>
+))</code></pre>
+
+<!-- PatternRecorder -->
+<div class="file-header no-break">
+  <div class="file-icon">🔴</div>
+  <div>
+    <div class="file-name">PatternRecorder.swift</div>
+    <div class="file-desc">Machine à états pour l'enregistrement de patterns</div>
+  </div>
+</div>
+<div class="flow">
+  idle <span class="arrow">──startRecording()──►</span> recording<br>
+  recording <span class="arrow">──handleSlap()──►</span> active <span class="label">(reset timer 1.5s)</span><br>
+  active <span class="arrow">──[1.5s silence, ≥2 slaps]──►</span> captured<br>
+  active <span class="arrow">──[1.5s silence, &lt;2 slaps]──►</span> idle <span class="label">(rejeté)</span><br>
+  captured <span class="arrow">──build(name:)──►</span> idle
+</div>
+
+<!-- GestureRecorder -->
+<div class="file-header no-break">
+  <div class="file-icon">✏️</div>
+  <div>
+    <div class="file-name">GestureRecorder.swift</div>
+    <div class="file-desc">Machine à états pour l'enregistrement de gestes</div>
+  </div>
+</div>
+<div class="flow">
+  idle <span class="arrow">──startRecording()──►</span> recording<br>
+  recording <span class="arrow">──handleGesture(≥5pts)──►</span> captured<br>
+  recording <span class="arrow">──handleGesture(&lt;5pts)──►</span> idle <span class="label">(trop court)</span><br>
+  captured <span class="arrow">──build(name:)──►</span> idle
+</div>
+<p>Stocke <strong>deux versions</strong> du tracé : <code>capturedPoints</code> (normalisé pour la reconnaissance) et <code>capturedDisplayPoints</code> (fidèle pour l'affichage).</p>
+
+<!-- DollarOneRecognizer -->
+<div class="file-header no-break">
+  <div class="file-icon">🔬</div>
+  <div>
+    <div class="file-name">DollarOneRecognizer.swift</div>
+    <div class="file-desc">Implémentation Swift du $1 Unistroke Recognizer (Wobbrock et al., UIST 2007)</div>
+  </div>
+</div>
+
+<h4>Pipeline de normalisation (reconnaissance)</h4>
+<ol>
+  <li>Rééchantillonnage à <strong>64 points</strong> équidistants</li>
+  <li>Rotation pour aligner centroïde → premier point à l'angle 0</li>
+  <li>Scale non-uniforme vers une boîte 250×250</li>
+  <li>Translation du centroïde à l'origine</li>
+</ol>
+
+<h4>Pipeline d'affichage (display)</h4>
+<ol>
+  <li>Rééchantillonnage à 64 points</li>
+  <li>Scale <strong>uniforme</strong> (ratio préservé)</li>
+  <li>Translation à l'origine — <em>sans rotation, sans déformation</em></li>
+</ol>
+
+<h4>Matching — golden-section search</h4>
+<p>Recherche de la meilleure rotation dans <strong>±45°</strong> qui minimise la distance moyenne point-à-point entre le candidat et chaque template. Score = <code>1 − bestDist / halfDiagonal</code> ∈ [0,1]. Seuil de match : <strong>80%</strong>.</p>
+
+<!-- ActionExecutor -->
+<div class="file-header no-break">
+  <div class="file-icon">⚡️</div>
+  <div>
+    <div class="file-name">ActionExecutor.swift</div>
+    <div class="file-desc">Exécution d'actions via CGEvent au niveau système</div>
+  </div>
+</div>
+<table>
+  <tr><th>Action</th><th>Mécanisme</th></tr>
+  <tr><td><code>.none</code></td><td>No-op</td></tr>
+  <tr><td><code>.virtualKey(keyCode)</code></td><td>CGEvent keyDown + keyUp → <code>.cghidEventTap</code></td></tr>
+  <tr><td><code>.typeText(text)</code></td><td>Itère les scalaires Unicode, <code>keyboardSetUnicodeString</code> pour chaque caractère</td></tr>
+</table>
+<div class="callout callout-orange">
+  <p><strong>Attention</strong> — Requiert la permission Accessibilité. Les touches virtuelles F13–F20 (keyCodes 105–90) sont invisibles pour l'OS et ne déclenchent que les apps qui les écoutent explicitement (ex : Keyboard Maestro).</p>
+</div>
+
+<!-- AppUpdater -->
+<div class="file-header no-break">
+  <div class="file-icon">🔄</div>
+  <div>
+    <div class="file-name">AppUpdater.swift</div>
+    <div class="file-desc">Wrapper @Observable autour de Sparkle SPUStandardUpdaterController</div>
+  </div>
+</div>
+<p>Initialise Sparkle au démarrage de l'app. Expose <code>checkForUpdates()</code> au bouton manuel dans le footer. L'URL de l'appcast (<code>SUFeedURL</code>) et la clé publique EdDSA (<code>SUPublicEDKey</code>) sont définies dans <code>Info.plist</code>.</p>
+
+<!-- ═══════════════════════════════════════════════════════ 4. DATAFLOW -->
+<h1 id="dataflow"><span class="section-num">5</span> Flux de données</h1>
+
+<h2>Flux Slap → Action</h2>
+<div class="flow">
+  MacBook trackpad <span class="label">(tap ⌥)</span><br>
+  <span class="arrow">  ↓</span><br>
+  AccelerometerReader <span class="label">(IMU 1kHz, envelope-tracking)</span><br>
+  <span class="arrow">  ↓  onSlap(intensity: Double)</span><br>
+  TrackpadReader <span class="label">(durée contact → intensity 400–1200)</span><br>
+  <span class="arrow">  ↓  onTap(intensity)</span><br>
+  PatternEngine.handleSlap() <span class="label">(fenêtre glissante 10 slaps / 10s)</span><br>
+  <span class="arrow">  ↓  PatternMatcher.score() ≥ 75%</span><br>
+  PatternEngine.onMatch(pattern)<br>
+  <span class="arrow">  ↓</span><br>
+  ActionExecutor.execute(pattern.action)<br>
+  <span class="arrow">  ↓</span><br>
+  CGEvent → système macOS
+</div>
+
+<h2>Flux Geste → Action</h2>
+<div class="flow">
+  MacBook trackpad <span class="label">(⌥ + drag)</span><br>
+  <span class="arrow">  ↓</span><br>
+  TrackpadReader <span class="label">(accum. deltaX/deltaY → [CGPoint])</span><br>
+  <span class="arrow">  ↓  onGesture([CGPoint])</span><br>
+  GestureEngine.handleGesture()<br>
+  <span class="arrow">  ↓  DollarOneRecognizer.normalise()</span><br>
+  <span class="arrow">  ↓  bestMatch() golden-section ±45°, seuil 80%</span><br>
+  GestureEngine.onMatch(template)<br>
+  <span class="arrow">  ↓</span><br>
+  ActionExecutor.execute(template.action)<br>
+  <span class="arrow">  ↓</span><br>
+  CGEvent → système macOS
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ 5. PERSISTENCE -->
+<h1 id="persistence"><span class="section-num">6</span> Persistance</h1>
+
+<p>Toutes les données utilisateur sont stockées dans <code>UserDefaults</code> sous forme JSON :</p>
+<table>
+  <tr><th>Clé UserDefaults</th><th>Type</th><th>Contenu</th></tr>
+  <tr><td><code>slappy.patterns</code></td><td><code>[Pattern]</code> JSON</td><td>Patterns de slaps enregistrés</td></tr>
+  <tr><td><code>slappy.gestures</code></td><td><code>[GestureTemplate]</code> JSON</td><td>Templates de gestes enregistrés</td></tr>
+</table>
+
+<div class="callout callout-green">
+  <p><strong>Migration de données</strong> — <code>displayPath</code> a une valeur par défaut <code>[]</code>. Les templates enregistrés avant la v1.2 s'affichent avec l'ancien tracé normalisé (path) et sont automatiquement mis à jour au prochain enregistrement.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ 6. RELEASE -->
+<h1 id="decisions"><span class="section-num">7</span> Décisions d'architecture clés</h1>
+
+<p>Choix techniques structurants du projet, avec leur justification.</p>
+
+<h3>1. Envelope-tracking pour la détection de slaps</h3>
+<p>Le bruit de fond (ventilateur, bobines magnétiques) crée une oscillation permanente de l'accéléromètre. Une simple valeur seuil fixe aurait généré des faux positifs. L'envelope-tracking adapte le seuil dynamiquement à l'environnement courant — fonctionnel aussi bien dans le silence qu'avec un Mac sous charge.</p>
+
+<h3>2. Durée de contact comme proxy d'intensité</h3>
+<p>Force Touch n'est pas disponible sur tous les MacBook et n'est pas accessible par API publique. La durée mouseDown→mouseUp (20–200ms) donne une variation d'intensité fiable sur tout MacBook, sans dépendance hardware spécifique.</p>
+
+<h3>3. Deux chemins de normalisation pour les gestes</h3>
+<p>Le $1 Recognizer normalise en rotation + scale non-uniforme pour maximiser la robustesse de la reconnaissance. Mais ce même traitement déforme visuellement les tracés (un cercle devient carré). Deux versions sont donc stockées : <code>path</code> pour la reconnaissance, <code>displayPath</code> pour l'affichage fidèle.</p>
+
+<h3>4. Deltas relatifs trackpad plutôt que position curseur</h3>
+<p><code>NSEvent.mouseLocation</code> dépend de la vitesse du pointeur (préférences système) et de l'accélération. Les <code>deltaX</code>/<code>deltaY</code> capturent le mouvement réel du doigt, ce qui rend les gestes cohérents quelle que soit la configuration système.</p>
+
+<h3>5. Non-sandboxé par nécessité</h3>
+<p>Trois fonctionnalités requièrent de sortir du sandbox : <strong>IOKit HID</strong> (accéléromètre), <strong>CGEvent au niveau système</strong> (simulation clavier), et <strong>NSEvent global monitor</strong> (écoute d'événements hors app). Distribution hors App Store (Developer ID) uniquement.</p>
+
+<h3>6. Fenêtre glissante avec éviction temporelle</h3>
+<p>Les slaps sont maintenus dans une fenêtre de 10 événements max / 10 secondes. Les slaps "anciens" sont évictés automatiquement pour ne pas contaminer la reconnaissance d'une nouvelle séquence démarrée après une pause.</p>
+
+<h3>7. Cooldown par pattern/geste</h3>
+<p>1.5 secondes de réfractaire par template évite les doubles déclenchements quand la fenêtre glissante contient plusieurs sous-séquences qui matchent le même pattern consécutivement.</p>
+
+<h3>8. Sparkle hors App Store</h3>
+<p>Sans App Store, les mises à jour automatiques nécessitent un framework tiers. Sparkle est le standard de facto pour les apps macOS indépendantes. La signature EdDSA garantit l'intégrité des DMG distribués via GitHub Releases.</p>
+
+<hr>
+
+<h1 id="release"><span class="section-num">8</span> Release &amp; Déploiement</h1>
+
+<h2>Commande unique</h2>
+<pre><code>./scripts/ship.sh 1.3</code></pre>
+
+<h2>Prérequis une seule fois</h2>
+<p>Créer <code>.env.local</code> à la racine du repo (gitignorée) :</p>
+<pre><code>APPLE_ID="arsene.laurent@protonmail.com"
+APP_PASSWORD="xxxx-xxxx-xxxx-xxxx"
+TEAM_ID="XXXXXXXXXX"</code></pre>
+
+<h2>Ce que fait ship.sh</h2>
+<table>
+  <tr><th>Étape</th><th>Outil</th><th>Description</th></tr>
+  <tr><td>1. Bump version</td><td>sed</td><td>Met à jour APP_VERSION et BUILD_NUMBER dans release.sh</td></tr>
+  <tr><td>2. Archive</td><td>xcodebuild archive</td><td>Compile en Release, crée .xcarchive</td></tr>
+  <tr><td>3. Export</td><td>xcodebuild -exportArchive</td><td>Signe avec Developer ID (ExportOptions.plist)</td></tr>
+  <tr><td>4. DMG</td><td>hdiutil</td><td>Crée un DMG UDZO avec symlink /Applications</td></tr>
+  <tr><td>5. Notarisation</td><td>xcrun notarytool</td><td>Soumet à Apple, attend 1–5 min</td></tr>
+  <tr><td>6. Staple</td><td>xcrun stapler</td><td>Attache le ticket de notarisation au DMG</td></tr>
+  <tr><td>7. Appcast</td><td>sign_update (Sparkle)</td><td>Génère la signature EdDSA et met à jour docs/appcast.xml</td></tr>
+  <tr><td>8. GitHub Release</td><td>gh release create</td><td>Crée le tag et upload le DMG</td></tr>
+  <tr><td>9. Git push</td><td>git</td><td>Commit appcast.xml + push → GitHub Pages actif</td></tr>
+</table>
+
+<h2>Architecture de distribution</h2>
+<div class="flow">
+  Achat <span class="arrow">──►</span> LemonSqueezy <span class="arrow">──►</span> Télécharge DMG signé + notarisé<br>
+  <br>
+  Mise à jour <span class="arrow">──►</span> Sparkle vérifie appcast.xml <span class="label">(GitHub Pages)</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──►</span> Propose mise à jour à l'utilisateur<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──►</span> Télécharge DMG depuis GitHub Releases<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">──►</span> Vérifie signature EdDSA (SUPublicEDKey dans Info.plist)
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ 7. CONFIG -->
+<h1 id="config"><span class="section-num">9</span> Configuration &amp; constantes importantes</h1>
+
+<table>
+  <tr><th>Fichier</th><th>Constante</th><th>Valeur</th><th>Impact</th></tr>
+  <tr><td>Pattern.swift</td><td><code>kMinPatternIntensity</code></td><td>250.0</td><td>Seuil minimum pour enregistrer un slap (filtre les faux positifs)</td></tr>
+  <tr><td>Pattern.swift</td><td><code>timingWeight</code></td><td>0.60</td><td>Importance du timing vs intensité dans le matching</td></tr>
+  <tr><td>Pattern.swift</td><td><code>timingTolerance</code></td><td>±30%</td><td>Flexibilité rythmique</td></tr>
+  <tr><td>Pattern.swift</td><td><code>matchThreshold</code></td><td>0.75</td><td>Confiance minimale pour déclencher une action</td></tr>
+  <tr><td>PatternEngine.swift</td><td><code>matchCooldown</code></td><td>1.5s</td><td>Délai anti-déclenchement multiple</td></tr>
+  <tr><td>PatternEngine.swift</td><td><code>maxWindowAge</code></td><td>10.0s</td><td>Ancienneté maximale des slaps dans la fenêtre</td></tr>
+  <tr><td>DollarOneRecognizer.swift</td><td><code>numPoints</code></td><td>64</td><td>Précision de rééchantillonnage</td></tr>
+  <tr><td>DollarOneRecognizer.swift</td><td><code>matchThreshold</code></td><td>0.80</td><td>Confiance minimale geste</td></tr>
+  <tr><td>AccelerometerReader.swift</td><td><code>kSlapRefractory</code></td><td>0.3s</td><td>Intervalle minimum entre slaps détectés</td></tr>
+  <tr><td>TrackpadReader.swift</td><td><code>minGesturePathLength</code></td><td>30.0pt</td><td>Longueur minimale pour enregistrer un geste</td></tr>
+  <tr><td>Info.plist</td><td><code>SUFeedURL</code></td><td>GitHub Pages</td><td>URL de l'appcast Sparkle</td></tr>
+  <tr><td>Info.plist</td><td><code>SUPublicEDKey</code></td><td>clé EdDSA</td><td>Vérification signature des mises à jour</td></tr>
+</table>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════ 10. ROADMAP -->
+<h1 id="roadmap"><span class="section-num">10</span> Roadmap</h1>
+
+<h2>Améliorations identifiées</h2>
+<table>
+  <tr><th>Priorité</th><th>Feature</th><th>Notes</th></tr>
+  <tr>
+    <td><span class="badge badge-blue">Haute</span></td>
+    <td>Privacy Policy</td>
+    <td>Obligatoire légalement pour la vente en UE. Page dédiée sur GitHub Pages.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-blue">Haute</span></td>
+    <td>LemonSqueezy → webhook livraison</td>
+    <td>Vérifier que la livraison automatique du DMG fonctionne après achat.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-gray">Moyenne</span></td>
+    <td>Multitouch raw API</td>
+    <td>Remplacer <code>deltaX/deltaY</code> par les coordonnées brutes du doigt via le framework Multitouch privé. Éliminerait l'accélération résiduelle du pointeur.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-gray">Moyenne</span></td>
+    <td>iCloud sync</td>
+    <td>Synchroniser patterns et gestes entre plusieurs Mac du même utilisateur.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-gray">Moyenne</span></td>
+    <td>Export / import JSON</td>
+    <td>Permettre le partage de bibliothèques de patterns entre utilisateurs.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-gray">Moyenne</span></td>
+    <td>Testimonials landing page</td>
+    <td>Section social proof manquante sur index.html.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-gray">Basse</span></td>
+    <td>Actions étendues</td>
+    <td>Déclencher des scripts shell, URL schemes, AppleScript en plus des touches virtuelles.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-gray">Basse</span></td>
+    <td>Profils par app</td>
+    <td>Différents patterns actifs selon l'app en premier plan (ex: Final Cut vs Xcode).</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-gray">Basse</span></td>
+    <td>Onboarding interactif</td>
+    <td>Guide au premier lancement pour configurer les permissions et enregistrer un premier pattern.</td>
+  </tr>
+</table>
+
+<h2>Non planifié</h2>
+<ul>
+  <li><strong>Windows / Linux</strong> — dépendance IOKit et NSEvent, portage complexe et hors scope.</li>
+  <li><strong>App Store</strong> — incompatible avec les permissions requises (IOKit, CGEvent global).</li>
+  <li><strong>iPad / iPhone</strong> — architecture pensée pour MacBook trackpad physique.</li>
+</ul>
+
+<hr>
+
+<footer>
+  Slapppy — Documentation Technique v1.2 · Mars 2026 · Arsène Laurent · com.slapppy.app
+</footer>
+
+</body>
+</html>
