@@ -62,6 +62,11 @@ echo ""
 sed -i '' "s/^APP_VERSION=.*/APP_VERSION=\"$VERSION\"/" "$RELEASE_SH"
 sed -i '' "s/^BUILD_NUMBER=.*/BUILD_NUMBER=\"$NEW_BUILD\"/" "$RELEASE_SH"
 
+# ── Bump MARKETING_VERSION + CURRENT_PROJECT_VERSION in pbxproj ───
+PBXPROJ="$REPO_ROOT/Slappy/Slappy.xcodeproj/project.pbxproj"
+sed -i '' "s/MARKETING_VERSION = [^;]*/MARKETING_VERSION = $VERSION/" "$PBXPROJ"
+sed -i '' "s/CURRENT_PROJECT_VERSION = [^;]*/CURRENT_PROJECT_VERSION = $NEW_BUILD/" "$PBXPROJ"
+
 # ── Run release.sh (archive, sign, DMG, notarise, staple, appcast) ─
 cd "$REPO_ROOT"
 bash "$RELEASE_SH"
