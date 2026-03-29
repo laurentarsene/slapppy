@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <!--
+    Slapppy — App Icon Source
+    1000×1000 — export to PNG at: 1024, 512, 256, 128, 64, 32, 16
+    macOS rounded corner radius ≈ 220/1000 = 22%
+  -->
+  <rect width="1000" height="1000" rx="220" fill="#0071e3"/>
+
+  <!--
+    Icon content: rhythm bars + hand/trackpad
+    Original paths are in a 22×22 coordinate space.
+    Scale to 750×750 centered in 1000×1000 → translate(125,125) scale(34.09)
+    stroke-width 1.6 × 34.09 ≈ 55px at 1000px output — bold, readable at all sizes
+  -->
+  <g transform="translate(125,125) scale(34.09)" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M8 3v5M11 2v8M14 3v5M17 6v4"/>
+    <path d="M5 10c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v6a6 6 0 0 1-6 6 6 6 0 0 1-6-6v-6Z"/>
+  </g>
+</svg>

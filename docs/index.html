@@ -5,7 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Slapppy — Stop Retyping. Just Tap.</title>
   <meta name="description" content="Slapppy turns your MacBook trackpad into a shortcut engine. Tap a rhythm or draw a gesture — paste saved phrases, trigger shortcuts, never retype the same thing twice." />
+  <link rel="icon" href="/slapppy-icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/slapppy-icon.png">
   <link rel="canonical" href="https://www.slapppy.com" />
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://www.slapppy.com" />
+  <meta property="og:title"       content="Slapppy — Stop Retyping. Just Tap." />
+  <meta property="og:description" content="Turn your MacBook trackpad into a shortcut engine. Tap a rhythm or draw a gesture — paste saved phrases, trigger shortcuts, never retype the same thing twice." />
+  <meta property="og:image"       content="https://www.slapppy.com/og.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Slapppy — Stop Retyping. Just Tap." />
+  <meta name="twitter:description" content="Turn your MacBook trackpad into a shortcut engine. Tap a rhythm or draw a gesture — paste saved phrases, trigger shortcuts, never retype the same thing twice." />
+  <meta name="twitter:image"       content="https://www.slapppy.com/og.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&display=swap" rel="stylesheet" />
@@ -160,6 +173,12 @@
       color: var(--fg);
     }
 
+    .hero-record-hint {
+      font-size: 13px; color: var(--fg-3);
+      margin-top: -10px; margin-bottom: 18px;
+      letter-spacing: .01em;
+    }
+
     /* Trackpad */
     .trackpad {
       background: linear-gradient(180deg, #dcdce0 0%, #c8c8cc 100%);
@@ -257,22 +276,29 @@
       opacity: 0; transition: opacity .2s;
     }
 
+    /* Fixed-height slot — reserves space so nothing below ever shifts */
+    .output-slot {
+      position: relative;
+      width: min(420px, 88vw);
+      height: 178px;      /* tallest output (email-compose) */
+      margin-top: 14px;
+      flex-shrink: 0;
+    }
+
     /* Output bubble */
     .tp-output {
-      display: flex; align-items: center; gap: 12px;
+      position: absolute; top: 0; left: 0; right: 0;
+      display: none; /* shown via JS */
+      align-items: center; gap: 12px;
       padding: 14px 20px;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 14px;
       box-shadow: var(--shadow);
-      width: min(420px, 88vw);
-      margin-top: 14px;
       opacity: 0; transform: translateY(6px);
       transition: opacity .4s, transform .4s;
       min-height: 56px;
     }
-
-    .tp-output.show { opacity: 1; transform: none; }
 
     .tp-output-icon {
       width: 34px; height: 34px; border-radius: 10px;
@@ -293,19 +319,68 @@
 
     /* Email compose output */
     .email-compose {
-      width: min(420px, 88vw);
+      position: absolute; top: 0; left: 0; right: 0;
+      display: none; /* shown via JS */
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
       box-shadow: var(--shadow);
-      margin-top: 14px;
       opacity: 0; transform: translateY(6px);
       transition: opacity .4s, transform .4s;
       text-align: left;
     }
 
-    .email-compose.show { opacity: 1; transform: none; }
+    /* Address form output */
+    .addr-form {
+      position: absolute; top: 0; left: 0; right: 0;
+      display: none; /* shown via JS */
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      opacity: 0; transform: translateY(6px);
+      transition: opacity .4s, transform .4s;
+      text-align: left;
+    }
+
+    .addr-form-header {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 12px;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      font-size: 11px; font-weight: 600; color: var(--fg);
+    }
+
+    .addr-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 5px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+    }
+
+    .addr-row:last-child { border-bottom: none; }
+    .addr-row.double { gap: 12px; }
+
+    .addr-key { color: var(--fg-3); font-weight: 500; width: 52px; flex-shrink: 0; }
+
+    .addr-val {
+      padding: 3px 7px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--accent); font-weight: 600; font-size: 11px;
+      flex: 1; min-height: 20px;
+    }
+
+    .addr-val.sm { flex: 0 0 70px; }
+
+    .addr-val.typing::after {
+      content: '|';
+      color: var(--accent);
+      animation: ec-blink .8s ease-in-out infinite;
+      font-weight: 300; margin-left: 1px;
+    }
 
     .ec-topbar {
       display: flex; align-items: center; gap: 8px;
@@ -349,6 +424,9 @@
     }
 
     @keyframes ec-blink { 0%,45%{opacity:1}50%,100%{opacity:0} }
+
+    /* Hide cursor while nothing has been typed yet */
+    .ec-typed:empty ~ .ec-cursor { opacity: 0; }
 
     /* Hero CTAs */
     .hero-actions {
@@ -809,6 +887,27 @@
     footer a { color: var(--fg-2); text-decoration: none; }
     footer a:hover { color: var(--fg); }
 
+    /* ── FAQ ── */
+    #faq { background: var(--bg); border-top: 1px solid var(--border); }
+    .faq-hdr { text-align: center; margin-bottom: 56px; }
+    .faq-hdr h2 { margin-top: 10px; }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+    }
+
+    .faq-item h3 { font-size: 15px; margin-bottom: 8px; }
+    .faq-item p  { font-size: 14px; }
+
     /* ── REVEAL ── */
     .reveal {
       opacity: 0; transform: translateY(26px);
@@ -836,13 +935,10 @@
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">
-    <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M8 3v5M11 2v8M14 3v5M17 6v4"/>
-      <path d="M5 10c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v6a6 6 0 0 1-6 6 6 6 0 0 1-6-6v-6Z"/>
-    </svg>
+    <img src="/slapppy-icon.png" alt="Slapppy" width="22" height="22" style="border-radius:5px">
     Slapppy
   </a>
-  <a href="#download" class="nav-cta">Try free · €2.99/mo</a>
+  <a href="#download" class="nav-cta">Get Slapppy — €9.99</a>
 </nav>
 
 <!-- ── HERO ── -->
@@ -852,7 +948,7 @@
   <p class="eyebrow hero-eyebrow reveal">Menu bar app · macOS · Works everywhere</p>
   <h1 class="hero-title reveal reveal-d1">Stop typing<br>what you always type.</h1>
   <p class="hero-sub reveal reveal-d2">
-    Your email, your address, your standard replies — Slapppy maps them to a tap on your trackpad so you never retype the same thing twice.
+    Record any tap rhythm or drawn gesture — map it to your email, postal address, sign-off, anything you retype daily. Fires from any app, in a single tap.
   </p>
 
   <!-- Trackpad block -->
@@ -860,6 +956,7 @@
     <div class="hero-tap-instruction">
       Hold <span class="key-chip">⌥</span> and tap a beat on the trackpad.
     </div>
+    <p class="hero-record-hint">Any rhythm. Any gesture. Record yours in seconds.</p>
 
     <div class="trackpad" id="hero-trackpad">
       <div class="tp-cursor" id="hero-cursor" style="left:50%;top:52%"></div>
@@ -869,34 +966,44 @@
       </svg>
     </div>
 
-    <div class="tp-output" id="hero-output">
-      <div class="tp-output-icon" id="hero-output-icon">💬</div>
-      <div>
-        <div class="tp-output-label" id="hero-output-label">Text snippet</div>
-        <div class="tp-output-value" id="hero-output-value"></div>
+    <div class="output-slot">
+      <div class="tp-output" id="hero-output">
+        <div class="tp-output-icon" id="hero-output-icon">💬</div>
+        <div>
+          <div class="tp-output-label" id="hero-output-label">Text snippet</div>
+          <div class="tp-output-value" id="hero-output-value"></div>
+        </div>
       </div>
-    </div>
 
-    <div class="email-compose" id="hero-email-compose">
-      <div class="ec-topbar">
-        <div class="ec-dots"><span class="ecd r"></span><span class="ecd y"></span><span class="ecd g"></span></div>
-        <div class="ec-title">New Message</div>
+      <div class="email-compose" id="hero-email-compose">
+        <div class="ec-topbar">
+          <div class="ec-dots"><span class="ecd r"></span><span class="ecd y"></span><span class="ecd g"></span></div>
+          <div class="ec-title">New Message</div>
+        </div>
+        <div class="ec-field"><span class="ec-key">To</span><span class="ec-val">client@company.com</span></div>
+        <div class="ec-field"><span class="ec-key">Subj</span><span class="ec-val">Re: Q4 proposal</span></div>
+        <div class="ec-body">
+          Looking forward to your feedback.<br><br><span class="ec-typed"></span><span class="ec-cursor">|</span>
+        </div>
       </div>
-      <div class="ec-field"><span class="ec-key">To</span><span class="ec-val">client@company.com</span></div>
-      <div class="ec-field"><span class="ec-key">Subj</span><span class="ec-val">Re: Q4 proposal</span></div>
-      <div class="ec-body">
-        Looking forward to your feedback.<br><br><span class="ec-typed">Best regards,<br>Arsène</span><span class="ec-cursor">|</span>
+
+      <div class="addr-form" id="hero-addr-form">
+        <div class="addr-form-header">📦 Shipping address — auto-filled</div>
+        <div class="addr-row"><span class="addr-key">Name</span><span class="addr-val" data-val="Arsène Laurent"></span></div>
+        <div class="addr-row"><span class="addr-key">Street</span><span class="addr-val" data-val="12 rue de la Paix"></span></div>
+        <div class="addr-row"><span class="addr-key">City</span><span class="addr-val" data-val="Paris"></span><span class="addr-key" style="width:auto;padding-left:10px">ZIP</span><span class="addr-val sm" data-val="75001"></span></div>
+        <div class="addr-row"><span class="addr-key">Country</span><span class="addr-val" data-val="France"></span></div>
       </div>
     </div>
   </div>
 
   <div class="hero-actions reveal reveal-d3">
     <a href="https://slapppy.lemonsqueezy.com/checkout/buy/1c36ec5c-88a2-4b07-a0f4-276a1327b871" class="btn-primary">
-      Start free — 14 days
+      Buy once — €9.99
     </a>
     <a href="#context" class="btn-secondary">See how it works</a>
   </div>
-  <p class="hero-fine reveal reveal-d3">14-day free trial · then €2.99/month · cancel anytime · macOS 26+</p>
+  <p class="hero-fine reveal reveal-d3">One-time purchase · 30-day money-back guarantee · macOS 26+</p>
 </section>
 
 <!-- ── CONTEXT (Mac frame) ── -->
@@ -987,8 +1094,8 @@
                     <div class="prb" style="height:5px"></div>
                     <div class="prb" style="height:9px"></div>
                   </div>
-                  <div class="popup-row-name">Mute mic</div>
-                  <div class="popup-tag tag-k">⌘⇧M</div>
+                  <div class="popup-row-name">My Zoom link</div>
+                  <div class="popup-tag tag-t">Text</div>
                 </div>
 
                 <div class="popup-row">
@@ -1019,7 +1126,7 @@
         </div>
       </div>
 
-      <p class="reveal" style="font-size:14px;color:var(--fg-3);max-width:360px;text-align:center">
+      <p id="context-note" class="reveal" style="font-size:14px;color:var(--fg-3);max-width:360px;text-align:center">
         Hold ⌥ from any app and tap your rhythm or draw a gesture. Slapppy recognizes it in real time.
       </p>
     </div>
@@ -1061,12 +1168,12 @@
 
         <div class="demo-item" id="di2" style="--di-color:#ff9f0a">
           <div class="demo-item-top">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#ff9f0a 13%,transparent)">💬</div>
-            <div class="demo-item-label">Quick reply</div>
+            <div class="demo-item-icon" style="background:color-mix(in srgb,#ff9f0a 13%,transparent)">📦</div>
+            <div class="demo-item-label">Postal address</div>
           </div>
-          <div class="demo-item-hint">⌥ + slow · quick quick</div>
+          <div class="demo-item-hint">⌥ + slow · quick quick quick</div>
           <div class="demo-item-result" id="dr2" style="background:color-mix(in srgb,#ff9f0a 10%,transparent);color:#ff9f0a">
-            💬 I'll get back to you by EOD!
+            📦 Address form filled instantly
           </div>
         </div>
       </div>
@@ -1079,23 +1186,33 @@
             <path id="demo-gesture-path" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d=""/>
           </svg>
         </div>
-        <div class="tp-output" id="demo-output">
-          <div class="tp-output-icon" id="demo-output-icon">💬</div>
-          <div>
-            <div class="tp-output-label" id="demo-output-label">Text snippet</div>
-            <div class="tp-output-value" id="demo-output-value"></div>
+        <div class="output-slot">
+          <div class="tp-output" id="demo-output">
+            <div class="tp-output-icon" id="demo-output-icon">💬</div>
+            <div>
+              <div class="tp-output-label" id="demo-output-label">Text snippet</div>
+              <div class="tp-output-value" id="demo-output-value"></div>
+            </div>
           </div>
-        </div>
 
-        <div class="email-compose" id="demo-email-compose">
-          <div class="ec-topbar">
-            <div class="ec-dots"><span class="ecd r"></span><span class="ecd y"></span><span class="ecd g"></span></div>
-            <div class="ec-title">New Message</div>
+          <div class="email-compose" id="demo-email-compose">
+            <div class="ec-topbar">
+              <div class="ec-dots"><span class="ecd r"></span><span class="ecd y"></span><span class="ecd g"></span></div>
+              <div class="ec-title">New Message</div>
+            </div>
+            <div class="ec-field"><span class="ec-key">To</span><span class="ec-val">client@company.com</span></div>
+            <div class="ec-field"><span class="ec-key">Subj</span><span class="ec-val">Re: Q4 proposal</span></div>
+            <div class="ec-body">
+              Looking forward to your feedback.<br><br><span class="ec-typed"></span><span class="ec-cursor">|</span>
+            </div>
           </div>
-          <div class="ec-field"><span class="ec-key">To</span><span class="ec-val">client@company.com</span></div>
-          <div class="ec-field"><span class="ec-key">Subj</span><span class="ec-val">Re: Q4 proposal</span></div>
-          <div class="ec-body">
-            Looking forward to your feedback.<br><br><span class="ec-typed">Best regards,<br>Arsène</span><span class="ec-cursor">|</span>
+
+          <div class="addr-form" id="demo-addr-form">
+            <div class="addr-form-header">📦 Shipping address — auto-filled</div>
+            <div class="addr-row"><span class="addr-key">Name</span><span class="addr-val" data-val="Arsène Laurent"></span></div>
+            <div class="addr-row"><span class="addr-key">Street</span><span class="addr-val" data-val="12 rue de la Paix"></span></div>
+            <div class="addr-row"><span class="addr-key">City</span><span class="addr-val" data-val="Paris"></span><span class="addr-key" style="width:auto;padding-left:10px">ZIP</span><span class="addr-val sm" data-val="75001"></span></div>
+            <div class="addr-row"><span class="addr-key">Country</span><span class="addr-val" data-val="France"></span></div>
           </div>
         </div>
       </div>
@@ -1210,21 +1327,57 @@
   </div>
 </section>
 
+<!-- ── FAQ ── -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-hdr reveal">
+      <p class="eyebrow">FAQ</p>
+      <h2>Quick answers.</h2>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item reveal">
+        <h3>Does it work in every app?</h3>
+        <p>Yes. Slapppy is system-level — it works in any app on your Mac: browsers, editors, Slack, email clients, Notion, terminals, everything.</p>
+      </div>
+      <div class="faq-item reveal reveal-d1">
+        <h3>Does it need an internet connection?</h3>
+        <p>No. All recognition runs entirely on your Mac. Your patterns and text snippets never leave your device.</p>
+      </div>
+      <div class="faq-item reveal reveal-d2">
+        <h3>How do I trigger a pattern?</h3>
+        <p>Hold ⌥ (Option) from any app, then tap your rhythm or draw your gesture on the trackpad. Slapppy fires the mapped action instantly.</p>
+      </div>
+      <div class="faq-item reveal">
+        <h3>Is there a Windows version?</h3>
+        <p>Not yet — Slapppy uses macOS-exclusive trackpad APIs that don't exist on other platforms. MacBook only for now.</p>
+      </div>
+      <div class="faq-item reveal reveal-d1">
+        <h3>What happens if I cancel?</h3>
+        <p>Your patterns are saved locally, so you keep everything. You just won't be able to trigger them until you resubscribe.</p>
+      </div>
+      <div class="faq-item reveal reveal-d2">
+        <h3>How long does setup take?</h3>
+        <p>Under 60 seconds. Open Slapppy from the menu bar, tap "Record", perform your rhythm or gesture, assign your text — done.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ── PRICING ── -->
 <section id="download">
   <div class="container" style="display:flex;justify-content:center">
     <div class="dl-card reveal">
       <div class="dl-icon">👆</div>
       <span class="version-badge">v1.0 · macOS 26+</span>
-      <h2>Start free.<br>Stay if you love it.</h2>
+      <h2>Buy once.<br>Use forever.</h2>
       <div class="price-wrap">
         <div class="price-row">
           <span class="price-cur">€</span>
-          <span class="price-num">2.99</span>
-          <span class="price-mo">/month</span>
+          <span class="price-num">9.99</span>
+          <span class="price-mo"> once</span>
         </div>
-        <span class="price-trial">✦ 14-day free trial — no card needed</span>
-        <span class="price-note">Cancel anytime from your account</span>
+        <span class="price-trial">✦ 30-day money-back guarantee</span>
+        <span class="price-note">One-time payment · no subscription ever</span>
       </div>
       <ul class="feat-list">
         <li>Unlimited tap patterns &amp; drawn gestures</li>
@@ -1235,9 +1388,9 @@
       </ul>
       <a href="https://slapppy.lemonsqueezy.com/checkout/buy/1c36ec5c-88a2-4b07-a0f4-276a1327b871"
          class="btn-primary" style="font-size:15px;width:100%;justify-content:center">
-        Start 14-day free trial
+        Buy Slapppy — €9.99
       </a>
-      <p class="refund">Not happy after trying? Reply to your receipt for a full refund.</p>
+      <p class="refund">30 days to try it. Not for you? Reply to your receipt for a full refund, no questions asked.</p>
     </div>
   </div>
 </section>
@@ -1245,11 +1398,383 @@
 <!-- ── FOOTER ── -->
 <footer>
   <div class="container">
-    <p>Made with ♥ by Arsène Laurent · <a href="mailto:REPLACE_WITH_YOUR_EMAIL">Contact</a> · macOS only</p>
+    <p>Made with ♥ by Arsène Laurent · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · macOS only</p>
   </div>
 </footer>
 
 <script>
+/* ── i18n ── */
+const LANG = (() => {
+  const langs = navigator.languages || [navigator.language || 'en'];
+  for (const l of langs) {
+    const c = l.split('-')[0].toLowerCase();
+    if (['fr', 'zh', 'hi', 'es'].includes(c)) return c;
+  }
+  return 'en';
+})();
+
+const T = {
+  fr: {
+    navCta: 'Acheter — 9,99&nbsp;€',
+    heroEyebrow: 'App menu bar · macOS · Partout',
+    heroH1: 'Arrêtez de retaper<br>toujours la même chose.',
+    heroSub: 'Enregistrez n\'importe quel rythme ou geste — associez-le à votre email, adresse, signature, tout ce que vous retapez au quotidien. Se déclenche depuis n\'importe quelle app.',
+    heroTap: 'Maintenez <span class="key-chip">⌥</span> et tapotez un rythme sur le trackpad.',
+    heroHint: 'N\'importe quel rythme. N\'importe quel geste. Le vôtre en quelques secondes.',
+    heroBtnPrimary: 'Acheter — 9,99&nbsp;€',
+    heroBtnSecondary: 'Voir comment ça marche',
+    heroFine: 'Achat unique · 30 jours satisfait ou remboursé · macOS 26+',
+    signOff: 'Cordialement,\nArsène',
+    ecBodyStatic: 'Dans l\'attente de votre retour.',
+    contextEyebrow: 'L\'app',
+    contextH2: 'Elle vit discrètement<br>dans votre barre de menu.',
+    contextP: 'Un clic ouvre votre bibliothèque de patterns. Maintenez ⌥ et déclenchez n\'importe quel pattern depuis n\'importe quelle app — navigateur, éditeur, Slack, partout.',
+    contextNote: 'Maintenez ⌥ depuis n\'importe quelle app et tapez votre rythme ou dessinez un geste. Slapppy le reconnaît en temps réel.',
+    featEyebrow: 'Trois démos',
+    featH2: 'Tapotez un rythme. Dessinez une forme.<br>Regardez-le s\'exécuter.',
+    featP: 'Chaque pattern ou geste déclenche exactement ce dont vous avez besoin — une phrase sauvegardée ou n\'importe quelle action clavier.',
+    demo0Label: 'Signature email',
+    demo0Hint: '⌥ + vite-vite · pause · vite-vite',
+    demo0Result: '✉️ Cordialement, Arsène — tapé',
+    demo1Label: 'Dessiner un geste @',
+    demo1Hint: '⌥ + tracer un @ avec le curseur',
+    demo1Result: '✉️ arsene@protonmail.com',
+    demo2Label: 'Adresse postale',
+    demo2Hint: '⌥ + lent · vite vite vite',
+    demo2Result: '📦 Formulaire rempli instantanément',
+    schEyebrow: 'Sous le capot',
+    schH2: 'Deux entrées.<br>Des possibilités infinies.',
+    schP: 'Tapotez un rythme ou dessinez une forme — Slapppy la reconnaît et déclenche exactement ce que vous lui avez associé.',
+    howEyebrow: 'Prêt en 60 secondes',
+    howH2: 'Enregistrez une fois. Utilisez pour toujours.',
+    step0H3: 'Enregistrez votre entrée',
+    step0P: 'Ouvrez Slapppy depuis la barre de menu. Maintenez ⌥ et tapotez un rythme ou dessinez un geste sur le trackpad. Slapppy le capture.',
+    step1H3: 'Associez une sortie',
+    step1P: 'Choisissez ce qui se déclenche — un texte que vous en avez assez de retaper, ou un raccourci clavier pour n\'importe quelle app.',
+    step2H3: 'Utilisez partout',
+    step2P: 'Depuis n\'importe quelle app, maintenez ⌥ et déclenchez votre input. Slapppy exécute la bonne action à chaque fois, silencieusement, en arrière-plan.',
+    faqEyebrow: 'FAQ',
+    faqH2: 'Réponses rapides.',
+    faq0Q: 'Ça marche dans toutes les apps ?',
+    faq0A: 'Oui. Slapppy est au niveau système — il fonctionne dans n\'importe quelle app sur votre Mac : navigateurs, éditeurs, Slack, clients email, Notion, terminaux, tout.',
+    faq1Q: 'Une connexion internet est-elle nécessaire ?',
+    faq1A: 'Non. Toute la reconnaissance s\'effectue localement sur votre Mac. Vos patterns et extraits de texte ne quittent jamais votre appareil.',
+    faq2Q: 'Comment déclencher un pattern ?',
+    faq2A: 'Maintenez ⌥ (Option) depuis n\'importe quelle app, puis tapotez votre rythme ou dessinez votre geste sur le trackpad. Slapppy déclenche l\'action mappée instantanément.',
+    faq3Q: 'Version Windows disponible ?',
+    faq3A: 'Pas encore — Slapppy utilise des APIs trackpad exclusives à macOS qui n\'existent pas sur d\'autres plateformes. MacBook uniquement pour l\'instant.',
+    faq4Q: 'Que se passe-t-il si j\'annule ?',
+    faq4A: 'Vos patterns sont sauvegardés localement, vous conservez donc tout. Vous ne pourrez simplement plus les déclencher jusqu\'à ce que vous vous réabonniez.',
+    faq5Q: 'Combien de temps prend la configuration ?',
+    faq5A: 'Moins de 60 secondes. Ouvrez Slapppy depuis la barre de menu, cliquez sur « Enregistrer », effectuez votre rythme ou geste, assignez votre texte — c\'est fait.',
+    dlH2: 'Achetez une fois.<br>Utilisez pour toujours.',
+    priceTrial: '✦ 30 jours satisfait ou remboursé',
+    priceNote: 'Paiement unique · aucun abonnement',
+    feat0: 'Patterns et gestes illimités',
+    feat1: 'Extraits de texte — coller n\'importe quoi dans n\'importe quelle app',
+    feat2: 'Raccourcis clavier, touches F, déclencheurs d\'app',
+    feat3: 'Fonctionne entièrement sur votre Mac — aucun cloud, aucune donnée envoyée',
+    feat4: '2 Mo · s\'installe en quelques secondes',
+    dlCta: 'Acheter Slapppy — 9,99&nbsp;€',
+    dlRefund: '30 jours pour l\'essayer. Pas convaincu ? Répondez à votre reçu pour un remboursement complet, sans questions.',
+    footer: 'Fait avec ♥ par Arsène Laurent · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · macOS uniquement',
+    addrHeader: '📦 Adresse de livraison — remplie auto.',
+    addrKeys: ['Nom', 'Rue', 'Ville', 'CP', 'Pays'],
+  },
+  es: {
+    navCta: 'Comprar — 9,99&nbsp;€',
+    heroEyebrow: 'App de barra de menú · macOS · En cualquier app',
+    heroH1: 'Para de escribir<br>lo que siempre escribes.',
+    heroSub: 'Graba cualquier ritmo o gesto — asígnalo a tu email, dirección, firma, todo lo que reescribes a diario. Se activa desde cualquier app, con un solo toque.',
+    heroTap: 'Mantén <span class="key-chip">⌥</span> y toca un ritmo en el trackpad.',
+    heroHint: 'Cualquier ritmo. Cualquier gesto. Graba el tuyo en segundos.',
+    heroBtnPrimary: 'Comprar — 9,99&nbsp;€',
+    heroBtnSecondary: 'Ver cómo funciona',
+    heroFine: 'Pago único · 30 días de garantía de devolución · macOS 26+',
+    signOff: 'Atentamente,\nArsène',
+    ecBodyStatic: 'Quedo a la espera de sus comentarios.',
+    contextEyebrow: 'La app',
+    contextH2: 'Vive silenciosamente<br>en tu barra de menú.',
+    contextP: 'Un clic abre tu biblioteca de patrones. Mantén ⌥ y activa cualquier patrón desde cualquier app — navegador, editor, Slack, en cualquier lugar.',
+    contextNote: 'Mantén ⌥ desde cualquier app y toca tu ritmo o dibuja un gesto. Slapppy lo reconoce en tiempo real.',
+    featEyebrow: 'Tres demos',
+    featH2: 'Toca un ritmo. Dibuja una forma.<br>Mira cómo se ejecuta.',
+    featP: 'Cada patrón o gesto activa exactamente lo que necesitas — una frase guardada o cualquier acción de teclado.',
+    demo0Label: 'Firma de email',
+    demo0Hint: '⌥ + rápido-rápido · pausa · rápido-rápido',
+    demo0Result: '✉️ Atentamente, Arsène — escrito',
+    demo1Label: 'Dibujar un gesto @',
+    demo1Hint: '⌥ + trazar un @ con el cursor',
+    demo1Result: '✉️ arsene@protonmail.com',
+    demo2Label: 'Dirección postal',
+    demo2Hint: '⌥ + lento · rápido rápido rápido',
+    demo2Result: '📦 Formulario rellenado al instante',
+    schEyebrow: 'Bajo el capó',
+    schH2: 'Dos entradas.<br>Infinitas posibilidades.',
+    schP: 'Toca un ritmo o dibuja una forma — Slapppy lo detecta y ejecuta exactamente lo que le asignaste.',
+    howEyebrow: 'Listo en 60 segundos',
+    howH2: 'Graba una vez. Usa para siempre.',
+    step0H3: 'Graba tu entrada',
+    step0P: 'Abre Slapppy desde la barra de menú. Mantén ⌥ y toca un ritmo o dibuja un gesto en el trackpad. Slapppy lo captura.',
+    step1H3: 'Asigna una salida',
+    step1P: 'Elige qué se activa — un texto que estás cansado de reescribir, o un atajo de teclado para cualquier app.',
+    step2H3: 'Úsalo en cualquier lugar',
+    step2P: 'Desde cualquier app, mantén ⌥ y activa tu entrada. Slapppy ejecuta la acción correcta cada vez, silenciosamente, en segundo plano.',
+    faqEyebrow: 'FAQ',
+    faqH2: 'Respuestas rápidas.',
+    faq0Q: '¿Funciona en todas las apps?',
+    faq0A: 'Sí. Slapppy actúa a nivel del sistema — funciona en cualquier app de tu Mac: navegadores, editores, Slack, clientes de email, Notion, terminales, todo.',
+    faq1Q: '¿Necesita conexión a internet?',
+    faq1A: 'No. Todo el reconocimiento se ejecuta localmente en tu Mac. Tus patrones y fragmentos de texto nunca salen de tu dispositivo.',
+    faq2Q: '¿Cómo activo un patrón?',
+    faq2A: 'Mantén ⌥ (Option) desde cualquier app, luego toca tu ritmo o dibuja tu gesto en el trackpad. Slapppy activa la acción mapeada al instante.',
+    faq3Q: '¿Hay versión para Windows?',
+    faq3A: 'Todavía no — Slapppy usa APIs de trackpad exclusivas de macOS que no existen en otras plataformas. Solo MacBook por ahora.',
+    faq4Q: '¿Qué pasa si cancelo?',
+    faq4A: 'Tus patrones se guardan localmente, así que conservas todo. Simplemente no podrás activarlos hasta que vuelvas a suscribirte.',
+    faq5Q: '¿Cuánto tarda la configuración?',
+    faq5A: 'Menos de 60 segundos. Abre Slapppy desde la barra de menú, pulsa «Grabar», realiza tu ritmo o gesto, asigna tu texto — listo.',
+    dlH2: 'Compra una vez.<br>Usa para siempre.',
+    priceTrial: '✦ 30 días de garantía de devolución',
+    priceNote: 'Pago único · sin suscripción nunca',
+    feat0: 'Patrones de toque y gestos ilimitados',
+    feat1: 'Fragmentos de texto — pega cualquier cosa en cualquier app',
+    feat2: 'Atajos de teclado, teclas F, activadores de apps',
+    feat3: 'Se ejecuta completamente en tu Mac — sin nube, sin datos enviados',
+    feat4: '2 MB · se instala en segundos',
+    dlCta: 'Comprar Slapppy — 9,99&nbsp;€',
+    dlRefund: '30 días para probarlo. ¿No es para ti? Responde a tu recibo para un reembolso completo, sin preguntas.',
+    footer: 'Hecho con ♥ por Arsène Laurent · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · solo macOS',
+    addrHeader: '📦 Dirección de envío — rellenada auto.',
+    addrKeys: ['Nombre', 'Calle', 'Ciudad', 'CP', 'País'],
+  },
+  zh: {
+    navCta: '购买 — €9.99',
+    heroEyebrow: '菜单栏应用 · macOS · 随处可用',
+    heroH1: '告别重复输入，<br>一触即达。',
+    heroSub: '录制任意点击节奏或手势——映射到邮件签名、邮政地址、常用回复，任何需要反复输入的内容。在任意应用中一键触发。',
+    heroTap: '按住 <span class="key-chip">⌥</span>，在触控板上点击节奏。',
+    heroHint: '任意节奏。任意手势。几秒内录制属于你的专属操作。',
+    heroBtnPrimary: '购买 — €9.99',
+    heroBtnSecondary: '了解工作原理',
+    heroFine: '一次性付款 · 30 天退款保障 · macOS 26+',
+    signOff: '此致,\nArsène',
+    ecBodyStatic: '期待您的反馈。',
+    contextEyebrow: '关于应用',
+    contextH2: '它静静地<br>驻留在菜单栏中。',
+    contextP: '点击一次即可打开快捷库。按住 ⌥ 键，从任意应用触发任意快捷操作——浏览器、编辑器、Slack，无处不在。',
+    contextNote: '在任意应用中按住 ⌥，轻拍节奏或绘制手势。Slapppy 实时识别。',
+    featEyebrow: '三个演示',
+    featH2: '敲击节奏，绘制形状，<br>即刻触发。',
+    featP: '每个节奏或手势精确映射到你需要的内容——已保存的短语或任意键盘操作。',
+    demo0Label: '邮件签名',
+    demo0Hint: '⌥ + 快-快 · 停顿 · 快-快',
+    demo0Result: '✉️ 此致，Arsène — 已输入',
+    demo1Label: '绘制 @ 手势',
+    demo1Hint: '⌥ + 用光标描绘 @',
+    demo1Result: '✉️ arsene@protonmail.com',
+    demo2Label: '邮寄地址',
+    demo2Hint: '⌥ + 慢 · 快 快 快',
+    demo2Result: '📦 表单瞬间填写完毕',
+    schEyebrow: '工作原理',
+    schH2: '两种输入方式，<br>无限输出可能。',
+    schP: '轻拍节奏或绘制手势——Slapppy 识别并精确触发你映射的操作。',
+    howEyebrow: '60 秒内完成设置',
+    howH2: '录制一次，永久使用。',
+    step0H3: '录制你的输入',
+    step0P: '从菜单栏打开 Slapppy，按住 ⌥ 在触控板上轻拍节奏或绘制手势，Slapppy 会将其捕获。',
+    step1H3: '分配输出内容',
+    step1P: '选择触发内容——你厌倦了反复输入的文本片段，或用于任意应用的键盘快捷键。',
+    step2H3: '随处使用',
+    step2P: '在任意应用中，按住 ⌥ 触发你的操作。Slapppy 每次都能无声地在后台正确执行。',
+    faqEyebrow: '常见问题',
+    faqH2: '快速解答。',
+    faq0Q: '它在每个应用中都能使用吗？',
+    faq0A: '是的。Slapppy 在系统层面运行——可在 Mac 上任意应用中使用：浏览器、编辑器、Slack、邮件客户端、Notion、终端等。',
+    faq1Q: '需要网络连接吗？',
+    faq1A: '不需要。所有识别均在你的 Mac 本地运行，你的快捷模式和文本片段永远不会离开你的设备。',
+    faq2Q: '如何触发快捷模式？',
+    faq2A: '在任意应用中按住 ⌥（Option 键），然后在触控板上轻拍节奏或绘制手势，Slapppy 即刻触发对应操作。',
+    faq3Q: '有 Windows 版本吗？',
+    faq3A: '暂时没有——Slapppy 使用 macOS 专属的触控板 API，这些 API 在其他平台上不存在。目前仅支持 MacBook。',
+    faq4Q: '取消订阅后会怎样？',
+    faq4A: '你的快捷模式保存在本地，你可以保留所有内容，但在重新订阅之前将无法触发它们。',
+    faq5Q: '设置需要多长时间？',
+    faq5A: '不到 60 秒。从菜单栏打开 Slapppy，点击「录制」，执行节奏或手势，分配文本——完成。',
+    dlH2: '一次购买，<br>永久使用。',
+    priceTrial: '✦ 30 天退款保障',
+    priceNote: '一次性付款 · 永不订阅',
+    feat0: '无限点击模式和手势',
+    feat1: '文本片段——在任意应用中粘贴任意内容',
+    feat2: '键盘快捷键、功能键、应用触发器',
+    feat3: '完全在你的 Mac 上运行——无云端，不发送数据',
+    feat4: '仅 2 MB · 秒速安装',
+    dlCta: '购买 Slapppy — €9.99',
+    dlRefund: '30 天体验期。不满意？回复收据邮件即可获得全额退款，无需任何理由。',
+    footer: '由 Arsène Laurent 用 ♥ 制作 · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · 仅限 macOS',
+    addrHeader: '📦 收货地址 — 自动填写',
+    addrKeys: ['姓名', '街道', '城市', '邮编', '国家'],
+  },
+  hi: {
+    navCta: 'खरीदें — €9.99',
+    heroEyebrow: 'मेनू बार ऐप · macOS · हर जगह',
+    heroH1: 'एक ही चीज़ बार-बार<br>टाइप करना बंद करें।',
+    heroSub: 'कोई भी टैप रिदम या जेस्चर रिकॉर्ड करें — इसे अपनी ईमेल, पता, साइन-ऑफ, रोज़ दोहराई जाने वाली किसी भी चीज़ से जोड़ें। किसी भी ऐप से एक टैप में फ़ायर होता है।',
+    heroTap: '<span class="key-chip">⌥</span> दबाए रखें और ट्रैकपैड पर रिदम टैप करें।',
+    heroHint: 'कोई भी रिदम। कोई भी जेस्चर। सेकंडों में अपना खुद का रिकॉर्ड करें।',
+    heroBtnPrimary: 'खरीदें — €9.99',
+    heroBtnSecondary: 'देखें कैसे काम करता है',
+    heroFine: 'एकमुश्त भुगतान · 30 दिन मनी-बैक गारंटी · macOS 26+',
+    signOff: 'सादर,\nArsène',
+    ecBodyStatic: 'आपकी प्रतिक्रिया की प्रतीक्षा में।',
+    contextEyebrow: 'ऐप के बारे में',
+    contextH2: 'यह चुपचाप<br>आपके मेनू बार में रहता है।',
+    contextP: 'एक क्लिक से आपकी पैटर्न लाइब्रेरी खुल जाती है। ⌥ दबाएं और किसी भी ऐप से कोई भी पैटर्न ट्रिगर करें — ब्राउज़र, एडिटर, Slack, हर जगह।',
+    contextNote: 'किसी भी ऐप से ⌥ दबाएं और रिदम टैप करें या जेस्चर बनाएं। Slapppy इसे रियल-टाइम में पहचानता है।',
+    featEyebrow: 'तीन डेमो',
+    featH2: 'रिदम टैप करें। आकार बनाएं।<br>इसे काम करते देखें।',
+    featP: 'हर पैटर्न या जेस्चर ठीक वही ट्रिगर करता है जो आपको चाहिए — एक सेव किया गया वाक्यांश या कोई भी कीबोर्ड एक्शन।',
+    demo0Label: 'ईमेल साइन-ऑफ',
+    demo0Hint: '⌥ + जल्दी-जल्दी · रुकें · जल्दी-जल्दी',
+    demo0Result: '✉️ सादर, Arsène — टाइप हुआ',
+    demo1Label: '@ जेस्चर बनाएं',
+    demo1Hint: '⌥ + कर्सर से @ बनाएं',
+    demo1Result: '✉️ arsene@protonmail.com',
+    demo2Label: 'पोस्टल पता',
+    demo2Hint: '⌥ + धीमा · जल्दी जल्दी जल्दी',
+    demo2Result: '📦 फ़ॉर्म तुरंत भरा',
+    schEyebrow: 'अंदर की बात',
+    schH2: 'दो रास्ते अंदर,<br>अनगिनत रास्ते बाहर।',
+    schP: 'एक रिदम टैप करें या आकार बनाएं — Slapppy इसे पहचानता है और ठीक वही करता है जो आपने मैप किया।',
+    howEyebrow: '60 सेकंड में सेटअप',
+    howH2: 'एक बार रिकॉर्ड करें। हमेशा के लिए इस्तेमाल करें।',
+    step0H3: 'अपना इनपुट रिकॉर्ड करें',
+    step0P: 'मेनू बार से Slapppy खोलें। ⌥ दबाएं और ट्रैकपैड पर रिदम टैप करें या जेस्चर बनाएं। Slapppy इसे कैप्चर कर लेता है।',
+    step1H3: 'आउटपुट असाइन करें',
+    step1P: 'चुनें क्या ट्रिगर हो — वह टेक्स्ट जिसे आप बार-बार टाइप करके थक गए हैं, या किसी भी ऐप के लिए कीबोर्ड शॉर्टकट।',
+    step2H3: 'कहीं भी इस्तेमाल करें',
+    step2P: 'किसी भी ऐप से ⌥ दबाएं और अपना इनपुट ट्रिगर करें। Slapppy हर बार सही एक्शन को चुपचाप, बैकग्राउंड में फ़ायर करता है।',
+    faqEyebrow: 'अक्सर पूछे जाने वाले सवाल',
+    faqH2: 'त्वरित जवाब।',
+    faq0Q: 'क्या यह हर ऐप में काम करता है?',
+    faq0A: 'हाँ। Slapppy सिस्टम-लेवल पर काम करता है — यह आपके Mac की हर ऐप में काम करता है: ब्राउज़र, एडिटर, Slack, ईमेल क्लाइंट, Notion, टर्मिनल, सब कुछ।',
+    faq1Q: 'क्या इंटरनेट कनेक्शन ज़रूरी है?',
+    faq1A: 'नहीं। सभी पहचान आपके Mac पर लोकली होती है। आपके पैटर्न और टेक्स्ट स्निपेट कभी भी आपके डिवाइस से बाहर नहीं जाते।',
+    faq2Q: 'पैटर्न कैसे ट्रिगर करें?',
+    faq2A: 'किसी भी ऐप से ⌥ (Option) दबाए रखें, फिर ट्रैकपैड पर रिदम टैप करें या जेस्चर बनाएं। Slapppy मैप की गई एक्शन तुरंत फ़ायर करता है।',
+    faq3Q: 'क्या Windows वर्शन है?',
+    faq3A: 'अभी नहीं — Slapppy macOS-एक्सक्लूसिव ट्रैकपैड API का उपयोग करता है जो अन्य प्लेटफ़ॉर्म पर मौजूद नहीं हैं। अभी के लिए सिर्फ MacBook।',
+    faq4Q: 'अगर मैं कैंसल करूं तो क्या होगा?',
+    faq4A: 'आपके पैटर्न लोकली सेव हैं, इसलिए आप सब कुछ रखते हैं। बस जब तक आप फिर से सब्सक्राइब नहीं करते, आप उन्हें ट्रिगर नहीं कर पाएंगे।',
+    faq5Q: 'सेटअप में कितना समय लगता है?',
+    faq5A: '60 सेकंड से कम। मेनू बार से Slapppy खोलें, «रिकॉर्ड» दबाएं, अपना रिदम या जेस्चर करें, टेक्स्ट असाइन करें — हो गया।',
+    dlH2: 'एक बार खरीदें।<br>हमेशा के लिए इस्तेमाल करें।',
+    priceTrial: '✦ 30 दिन मनी-बैक गारंटी',
+    priceNote: 'एकमुश्त भुगतान · कोई सब्सक्रिप्शन नहीं',
+    feat0: 'अनलिमिटेड टैप पैटर्न और जेस्चर',
+    feat1: 'टेक्स्ट स्निपेट — किसी भी ऐप में कुछ भी पेस्ट करें',
+    feat2: 'कीबोर्ड शॉर्टकट, F-keys, ऐप ट्रिगर',
+    feat3: 'पूरी तरह आपके Mac पर चलता है — कोई क्लाउड नहीं, कोई डेटा नहीं भेजा जाता',
+    feat4: '2 MB · सेकंडों में इंस्टॉल',
+    dlCta: 'Slapppy खरीदें — €9.99',
+    dlRefund: '30 दिन आज़माएं। पसंद न आए? बिना किसी सवाल के पूरा रिफंड के लिए अपनी रसीद का जवाब दें।',
+    footer: 'Arsène Laurent द्वारा ♥ के साथ बनाया गया · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · केवल macOS',
+    addrHeader: '📦 शिपिंग पता — स्वतः भरा',
+    addrKeys: ['नाम', 'सड़क', 'शहर', 'PIN', 'देश'],
+  },
+};
+
+const SIGN_OFF = (T[LANG] || {}).signOff || 'Best regards,\nArsène';
+
+(function applyLang() {
+  const t = T[LANG]; if (!t) return;
+
+  function s(sel, key) {
+    const el = document.querySelector(sel);
+    if (el && t[key] != null) el.innerHTML = t[key];
+  }
+
+  // Nav
+  s('.nav-cta', 'navCta');
+  // Hero
+  s('#hero .hero-eyebrow',              'heroEyebrow');
+  s('#hero .hero-title',                'heroH1');
+  s('#hero .hero-sub',                  'heroSub');
+  s('#hero .hero-tap-instruction',      'heroTap');
+  s('#hero .hero-record-hint',          'heroHint');
+  s('#hero .hero-actions .btn-primary', 'heroBtnPrimary');
+  s('#hero .hero-actions .btn-secondary','heroBtnSecondary');
+  s('#hero .hero-fine',                 'heroFine');
+  // Context
+  s('#context .context-header .eyebrow','contextEyebrow');
+  s('#context .context-header h2',      'contextH2');
+  s('#context .context-header p',       'contextP');
+  s('#context-note',                    'contextNote');
+  // Features
+  s('#features .features-hdr .eyebrow','featEyebrow');
+  s('#features .features-hdr h2',      'featH2');
+  s('#features .features-hdr p',       'featP');
+  s('#di0 .demo-item-label',           'demo0Label');
+  s('#di0 .demo-item-hint',            'demo0Hint');
+  s('#dr0',                            'demo0Result');
+  s('#di1 .demo-item-label',           'demo1Label');
+  s('#di1 .demo-item-hint',            'demo1Hint');
+  s('#dr1',                            'demo1Result');
+  s('#di2 .demo-item-label',           'demo2Label');
+  s('#di2 .demo-item-hint',            'demo2Hint');
+  s('#dr2',                            'demo2Result');
+  // Email compose static body (preserve ec-typed + ec-cursor spans)
+  if (t.ecBodyStatic) {
+    document.querySelectorAll('.ec-body').forEach(ecBody => {
+      const ecTyped  = ecBody.querySelector('.ec-typed');
+      const ecCursor = ecBody.querySelector('.ec-cursor');
+      ecBody.innerHTML = t.ecBodyStatic + '<br><br>';
+      if (ecTyped)  ecBody.appendChild(ecTyped);
+      if (ecCursor) ecBody.appendChild(ecCursor);
+    });
+  }
+  // Schematic
+  s('#schematic .sch-hdr .eyebrow', 'schEyebrow');
+  s('#schematic .sch-hdr h2',       'schH2');
+  s('#schematic .sch-hdr p',        'schP');
+  // How it works
+  s('#how .how-hdr .eyebrow', 'howEyebrow');
+  s('#how .how-hdr h2',       'howH2');
+  document.querySelectorAll('#how .step').forEach((step, i) => {
+    const h3 = step.querySelector('h3'), p = step.querySelector('p');
+    if (h3 && t['step'+i+'H3']) h3.innerHTML = t['step'+i+'H3'];
+    if (p  && t['step'+i+'P'])  p.innerHTML  = t['step'+i+'P'];
+  });
+  // FAQ
+  s('#faq .faq-hdr .eyebrow', 'faqEyebrow');
+  s('#faq .faq-hdr h2',       'faqH2');
+  document.querySelectorAll('#faq .faq-item').forEach((item, i) => {
+    const h3 = item.querySelector('h3'), p = item.querySelector('p');
+    if (h3 && t['faq'+i+'Q']) h3.innerHTML = t['faq'+i+'Q'];
+    if (p  && t['faq'+i+'A']) p.innerHTML  = t['faq'+i+'A'];
+  });
+  // Pricing
+  s('#download .dl-card h2',  'dlH2');
+  s('#download .price-trial', 'priceTrial');
+  s('#download .price-note',  'priceNote');
+  document.querySelectorAll('#download .feat-list li').forEach((li, i) => {
+    if (t['feat'+i]) li.innerHTML = t['feat'+i];
+  });
+  s('#download .btn-primary', 'dlCta');
+  s('#download .refund',      'dlRefund');
+  // Footer
+  s('footer p', 'footer');
+  // Addr form header + key labels
+  if (t.addrHeader) {
+    document.querySelectorAll('.addr-form-header').forEach(el => { el.innerHTML = t.addrHeader; });
+  }
+  if (t.addrKeys) {
+    // Each addr-form has 5 .addr-key elements (Name, Street, City, ZIP, Country)
+    const allKeys = document.querySelectorAll('.addr-key');
+    allKeys.forEach((el, i) => { el.textContent = t.addrKeys[i % 5]; });
+  }
+})();
+
 /* ── Scroll reveal ── */
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
@@ -1258,6 +1783,34 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
 /* ── Core animation helpers ── */
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function typeField(el, text, speed) {
+  el.textContent = '';
+  el.classList.add('typing');
+  for (const ch of text) {
+    el.textContent += ch;
+    await sleep(speed);
+  }
+  el.classList.remove('typing');
+}
+
+async function typeHtml(el, text, speed) {
+  let html = '';
+  el.innerHTML = '';
+  for (const ch of text) {
+    html += ch === '\n' ? '<br>' : ch;
+    el.innerHTML = html;
+    await sleep(speed);
+  }
+}
+
+async function fillAddrForm(formEl) {
+  const fields = formEl.querySelectorAll('.addr-val[data-val]');
+  for (const field of fields) {
+    await sleep(90);
+    await typeField(field, field.dataset.val, 26);
+  }
+}
 
 function makeTap(ripplesEl, x, y, color) {
   /* Flash dot */
@@ -1292,6 +1845,7 @@ function makeAnimator(ids) {
   const outLabel    = document.getElementById(ids.outputLabel);
   const outValue    = document.getElementById(ids.outputValue);
   const emailCompose = document.getElementById(ids.emailCompose);
+  const addrForm    = ids.addrForm ? document.getElementById(ids.addrForm) : null;
 
   async function tap(x, y, color) {
     cursor.style.left = x + '%';
@@ -1320,17 +1874,24 @@ function makeAnimator(ids) {
     const pts = demo.points;
     const segMs = Math.round(demo.gestureMs / (pts.length - 1));
 
-    /* build SVG path */
-    const d = 'M ' + pts.map(p => p[0] + ' ' + p[1]).join(' L ');
-    let len = 0;
-    for (let i = 1; i < pts.length; i++) {
-      const dx = pts[i][0] - pts[i-1][0], dy = pts[i][1] - pts[i-1][1];
-      len += Math.sqrt(dx*dx + dy*dy);
+    /* Catmull-Rom → cubic bezier for smooth curves through all waypoints */
+    let d = `M ${pts[0][0]} ${pts[0][1]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(0, i - 1)];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = pts[Math.min(pts.length - 1, i + 2)];
+      const cp1x = (p1[0] + (p2[0] - p0[0]) / 6).toFixed(2);
+      const cp1y = (p1[1] + (p2[1] - p0[1]) / 6).toFixed(2);
+      const cp2x = (p2[0] - (p3[0] - p1[0]) / 6).toFixed(2);
+      const cp2y = (p2[1] - (p3[1] - p1[1]) / 6).toFixed(2);
+      d += ` C ${cp1x} ${cp1y} ${cp2x} ${cp2y} ${p2[0]} ${p2[1]}`;
     }
 
     gpath.setAttribute('d', d);
     gpath.setAttribute('stroke', demo.color);
     gpath.style.transition = 'none';
+    const len = gpath.getTotalLength(); /* accurate length for bezier path */
     gpath.style.strokeDasharray = len;
     gpath.style.strokeDashoffset = len;
     gsvg.style.opacity = '1';
@@ -1355,14 +1916,31 @@ function makeAnimator(ids) {
     await sleep(200);
   }
 
+  function showEl(el, displayVal) {
+    el.style.display = displayVal;
+    void el.offsetWidth; // force reflow so transition fires
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  }
+
   async function showOutput(demo) {
     if (demo.outputType === 'email-compose') {
-      emailCompose.classList.add('show');
+      const ecTyped = emailCompose.querySelector('.ec-typed');
+      if (ecTyped) ecTyped.innerHTML = '';
+      showEl(emailCompose, 'block');
+      await sleep(280);
+      if (ecTyped) await typeHtml(ecTyped, SIGN_OFF, 32);
+    } else if (demo.outputType === 'addr-form') {
+      // reset fields before showing
+      addrForm.querySelectorAll('.addr-val').forEach(el => { el.textContent = ''; el.classList.remove('typing'); });
+      showEl(addrForm, 'block');
+      await sleep(280); // let the card fade in before typing starts
+      await fillAddrForm(addrForm);
     } else {
       outIcon.textContent  = demo.outputIcon;
       outLabel.textContent = demo.outputLabel;
       outValue.textContent = demo.outputValue;
-      outEl.classList.add('show');
+      showEl(outEl, 'flex');
     }
   }
 
@@ -1371,8 +1949,20 @@ function makeAnimator(ids) {
     gsvg.style.opacity   = '0';
     gpath.style.transition = 'none';
     gpath.style.strokeDashoffset = gpath.style.strokeDasharray || '0';
-    outEl.classList.remove('show');
-    emailCompose.classList.remove('show');
+    outEl.style.opacity = '0';
+    outEl.style.transform = 'translateY(6px)';
+    emailCompose.style.opacity = '0';
+    emailCompose.style.transform = 'translateY(6px)';
+    if (addrForm) { addrForm.style.opacity = '0'; addrForm.style.transform = 'translateY(6px)'; }
+    await sleep(420);
+    outEl.style.display = 'none';
+    emailCompose.style.display = 'none';
+    const ecTyped = emailCompose ? emailCompose.querySelector('.ec-typed') : null;
+    if (ecTyped) ecTyped.innerHTML = '';
+    if (addrForm) {
+      addrForm.style.display = 'none';
+      addrForm.querySelectorAll('.addr-val').forEach(el => { el.textContent = ''; el.classList.remove('typing'); });
+    }
   }
 
   return { runTaps, runGesture, showOutput, hideAll };
@@ -1393,12 +1983,13 @@ const DEMOS = [
   },
   {
     type: 'gesture',
-    // @ symbol: inner circle CCW + outer wrap
+    // @ symbol: 16-point inner circle (every 22.5°) + outer arc hook
     points: [
-      [65,50],[58,37],[50,33],[42,37],[36,50],[42,63],[50,67],[58,63],[64,51],
-      [64,32],[50,23],[32,30],[22,50],[28,68],[46,76]
+      [67,50],[66,56],[62,62],[57,66],[50,67],[44,66],[38,62],[34,57],
+      [33,50],[34,44],[38,38],[44,34],[50,33],[57,34],[62,38],[66,44],
+      [67,50],[69,42],[65,30],[50,24],[34,28],[24,44],[22,57],[27,70],[41,76]
     ],
-    gestureMs: 1600,
+    gestureMs: 2000,
     color: '#0071e3',
     outputType: 'normal',
     outputIcon: '✉️', outputLabel: 'Email address typed', outputValue: 'arsene@protonmail.com',
@@ -1407,12 +1998,12 @@ const DEMOS = [
     type: 'taps',
     taps: [
       { x:50, y:52, t:0    },
-      { x:50, y:52, t:1000 },
-      { x:50, y:52, t:1300 },
+      { x:50, y:52, t:900  },
+      { x:50, y:52, t:1200 },
+      { x:50, y:52, t:1500 },
     ],
     color: '#ff9f0a',
-    outputType: 'normal',
-    outputIcon: '💬', outputLabel: 'Quick reply pasted', outputValue: "I'll get back to you by EOD!",
+    outputType: 'addr-form',
   },
 ];
 
@@ -1424,6 +2015,7 @@ const DEMOS = [
     output: 'hero-output', outputIcon: 'hero-output-icon',
     outputLabel: 'hero-output-label', outputValue: 'hero-output-value',
     emailCompose: 'hero-email-compose',
+    addrForm: 'hero-addr-form',
   });
 
   async function run(idx) {
@@ -1449,6 +2041,7 @@ const DEMOS = [
     output: 'demo-output', outputIcon: 'demo-output-icon',
     outputLabel: 'demo-output-label', outputValue: 'demo-output-value',
     emailCompose: 'demo-email-compose',
+    addrForm: 'demo-addr-form',
   });
 
   function setActive(idx) {
