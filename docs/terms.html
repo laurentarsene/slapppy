@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms &amp; Conditions — Slapppy</title>
+  <meta name="description" content="Slapppy Terms and Conditions — your rights and responsibilities when using Slapppy." />
+  <link rel="icon" href="/slapppy-icon.png" type="image/png">
+  <link rel="canonical" href="https://www.slapppy.com/terms" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f5f5f7;
+      --bg-card:   #ffffff;
+      --fg:        #1d1d1f;
+      --fg-2:      #6e6e73;
+      --fg-3:      #aeaeb2;
+      --accent:    #0071e3;
+      --accent-2:  #0077ed;
+      --border:    rgba(0,0,0,.09);
+      --shadow:    0 2px 20px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.04);
+      --radius:    18px;
+      --font:      'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:      #000;
+        --bg-card: #1c1c1e;
+        --fg:      #f5f5f7;
+        --fg-2:    #98989d;
+        --fg-3:    #48484a;
+        --border:  rgba(255,255,255,.08);
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; inset: 0 0 auto; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 36px; height: 52px;
+      background: color-mix(in srgb, var(--bg) 72%, transparent);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 16px; font-weight: 700; letter-spacing: -.02em;
+      color: var(--fg); text-decoration: none;
+    }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 16px; background: var(--accent);
+      color: #fff; border-radius: 980px;
+      font-size: 13px; font-weight: 600; text-decoration: none;
+      transition: opacity .2s, transform .2s;
+    }
+    .nav-cta:hover { opacity: .88; transform: scale(.98); }
+
+    /* ── CONTENT ── */
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+    main { padding: 100px 0 80px; }
+
+    .page-header {
+      margin-bottom: 56px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .eyebrow {
+      font-size: 12px; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800; letter-spacing: -.03em; line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .page-header .updated { font-size: 13px; color: var(--fg-3); }
+
+    .summary {
+      background: color-mix(in srgb, var(--accent) 8%, var(--bg-card));
+      border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 48px;
+    }
+    .summary p { font-size: 15px; font-weight: 500; color: var(--fg); line-height: 1.6; }
+    .summary strong { color: var(--accent); }
+
+    .policy-section { margin-bottom: 44px; }
+    .policy-section h2 {
+      font-size: 18px; font-weight: 700; letter-spacing: -.02em;
+      margin-bottom: 12px; color: var(--fg);
+    }
+    .policy-section p {
+      font-size: 14.5px; line-height: 1.7; color: var(--fg-2);
+      margin-bottom: 10px;
+    }
+    .policy-section p:last-child { margin-bottom: 0; }
+    .policy-section ul { padding-left: 20px; margin: 8px 0; }
+    .policy-section ul li {
+      font-size: 14.5px; line-height: 1.7; color: var(--fg-2);
+      margin-bottom: 6px;
+    }
+    .policy-section a { color: var(--accent); text-decoration: none; }
+    .policy-section a:hover { text-decoration: underline; }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    footer p { font-size: 12px; color: var(--fg-3); line-height: 2; }
+    footer a { color: var(--fg-2); text-decoration: none; }
+    footer a:hover { color: var(--fg); }
+
+    @media (max-width: 600px) { nav { padding: 0 18px; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/slapppy-icon.png" alt="Slapppy" width="22" height="22" style="border-radius:5px">
+    Slapppy
+  </a>
+  <a href="/#download" class="nav-cta">Get Slapppy — €9.99</a>
+</nav>
+
+<main>
+  <div class="container">
+
+    <div class="page-header">
+      <div class="eyebrow">Legal</div>
+      <h1>Terms &amp; Conditions</h1>
+      <p class="updated">Last updated: March 30, 2026</p>
+    </div>
+
+    <div class="summary">
+      <p><strong>The short version:</strong> You buy a <strong>perpetual license</strong> to use Slapppy on your personal Macs. Don't redistribute it. The software is provided as-is — we're not liable for indirect damages. That's about it.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>1. Acceptance of terms</h2>
+      <p>By downloading, installing, or using Slapppy, you agree to be bound by these Terms and Conditions. If you do not agree, do not use the software.</p>
+      <p>These terms are between you and Arsène Laurent, the independent developer behind Slapppy ("we", "us", "our").</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>2. License grant</h2>
+      <p>Upon purchase, you are granted a <strong>personal, non-exclusive, non-transferable, perpetual license</strong> to install and use Slapppy on any Mac computers that you personally own or control.</p>
+      <p>This license is for one individual user. You may not share your license with others or use it in a commercial or enterprise context without explicit written permission.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>3. Restrictions</h2>
+      <p>You may not:</p>
+      <ul>
+        <li>Redistribute, sell, sublicense, or transfer Slapppy or your license to any third party</li>
+        <li>Reverse engineer, decompile, or disassemble the application except as permitted by applicable law</li>
+        <li>Use Slapppy to develop a competing product</li>
+        <li>Remove or alter any copyright or proprietary notices</li>
+      </ul>
+    </div>
+
+    <div class="policy-section">
+      <h2>4. Updates</h2>
+      <p>Your license includes access to future updates distributed through Slapppy's built-in updater (Sparkle). Updates are provided at our discretion and are not guaranteed. We reserve the right to change, suspend, or discontinue any aspect of the software at any time.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>5. Intellectual property</h2>
+      <p>Slapppy and all associated assets, code, and documentation are the intellectual property of Arsène Laurent. These Terms do not transfer any ownership rights to you. All rights not explicitly granted are reserved.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>6. Disclaimer of warranties</h2>
+      <p>Slapppy is provided <strong>"as is"</strong> without warranty of any kind, express or implied, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
+      <p>We do not warrant that the software will be error-free, uninterrupted, or compatible with all hardware or macOS versions. You use Slapppy at your own risk.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>7. Limitation of liability</h2>
+      <p>To the maximum extent permitted by applicable law, Arsène Laurent shall not be liable for any indirect, incidental, special, consequential, or punitive damages — including loss of data, profits, or goodwill — arising from your use of or inability to use Slapppy, even if advised of the possibility of such damages.</p>
+      <p>Our total liability to you for any claim related to Slapppy shall not exceed the amount you paid for your license.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>8. Governing law</h2>
+      <p>These Terms are governed by and construed in accordance with the laws of France. Any disputes shall be subject to the exclusive jurisdiction of the courts of France, without prejudice to any mandatory consumer protection rights you may have under your local law.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>9. Changes to these terms</h2>
+      <p>We may update these Terms from time to time. Material changes will be indicated by an updated "Last updated" date. Continued use of Slapppy after changes are posted constitutes your acceptance of the revised terms.</p>
+    </div>
+
+    <div class="policy-section">
+      <h2>10. Contact</h2>
+      <p>Questions about these terms? Email us at <a href="mailto:hello@slapppy.com">hello@slapppy.com</a>.</p>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <p>Made with ♥ by Arsène Laurent · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · <a href="/">slapppy.com</a></p>
+    <p style="margin-top:8px"><a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms &amp; Conditions</a> · <a href="/refund">Refund Policy</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
