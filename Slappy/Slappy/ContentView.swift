@@ -29,10 +29,7 @@ struct ContentView: View {
         VStack(alignment: .leading, spacing: 0) {
             header
             Divider()
-            ScrollView {
-                mainContent
-            }
-            .frame(maxHeight: 460)
+            mainContent
             Divider()
             footer
         }
