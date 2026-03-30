@@ -2230,6 +2230,23 @@ const DEMOS = [
   },
 ];
 
+/* ── Hero-only demos (keep addr-form for the hero visual) ── */
+const HERO_DEMOS = [
+  DEMOS[0],
+  DEMOS[1],
+  {
+    type: 'taps',
+    taps: [
+      { x:50, y:52, t:0    },
+      { x:50, y:52, t:900  },
+      { x:50, y:52, t:1200 },
+      { x:50, y:52, t:1500 },
+    ],
+    color: '#ff9f0a',
+    outputType: 'addr-form',
+  },
+];
+
 /* ── Hero trackpad (starts on page load) ── */
 (function heroTrackpad() {
   const anim = makeAnimator({
@@ -2242,7 +2259,7 @@ const DEMOS = [
   });
 
   async function run(idx) {
-    const demo = DEMOS[idx % DEMOS.length];
+    const demo = HERO_DEMOS[idx % HERO_DEMOS.length];
     if (demo.type === 'taps')    await anim.runTaps(demo);
     else                          await anim.runGesture(demo);
     await anim.showOutput(demo);
