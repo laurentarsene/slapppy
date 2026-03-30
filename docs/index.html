@@ -102,6 +102,10 @@
     }
 
     .nav-logo svg { width: 19px; height: 19px; color: var(--accent); }
+    .nav-logo img { flex-shrink: 0; }
+    @media (prefers-color-scheme: dark) {
+      .nav-logo img { filter: invert(1); }
+    }
 
     .nav-cta {
       display: inline-flex; align-items: center; gap: 6px;

@@ -52,6 +52,8 @@
       -webkit-backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid var(--border);
     }
+    .nav-logo img { flex-shrink: 0; }
+    @media (prefers-color-scheme: dark) { .nav-logo img { filter: invert(1); } }
     .nav-logo {
       display: flex; align-items: center; gap: 8px;
       font-size: 16px; font-weight: 700; letter-spacing: -.02em;
