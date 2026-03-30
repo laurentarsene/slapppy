@@ -27,8 +27,8 @@ set -euo pipefail
 # ── Config ────────────────────────────────────────────────────────
 SCHEME="Slappy"
 PROJECT="Slappy/Slappy.xcodeproj"
-APP_VERSION="2"
-BUILD_NUMBER="14"
+APP_VERSION="2.1"
+BUILD_NUMBER="15"
 BUILD_DIR="build"
 ARCHIVE_PATH="$BUILD_DIR/Slapppy.xcarchive"
 EXPORT_PATH="$BUILD_DIR/export"
