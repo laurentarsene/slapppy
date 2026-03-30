@@ -11,7 +11,7 @@ struct ActivationView: View {
             VStack(spacing: 6) {
                 Image(systemName: "key.fill")
                     .font(.system(size: 28))
-                    .foregroundStyle(.accent)
+                    .foregroundStyle(Color.accentColor)
                 Text("Activate Slapppy")
                     .font(.headline)
                 Text("Enter your license key from the\npurchase confirmation email.")
