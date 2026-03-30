@@ -1355,19 +1355,19 @@
   <div class="container">
     <div class="mouse-compat-card reveal">
       <svg width="152" height="76" viewBox="0 0 152 76" fill="none" aria-hidden="true" style="flex-shrink:0">
-        <!-- Mouse: top-down view -->
-        <rect x="2" y="3" width="48" height="70" rx="24" stroke="var(--fg-3)" stroke-width="1.8"/>
-        <line x1="26" y1="3" x2="26" y2="38" stroke="var(--fg-3)" stroke-width="1.4"/>
-        <rect x="19" y="11" width="14" height="18" rx="7" stroke="var(--fg-3)" stroke-width="1.4"/>
-        <!-- Left button ⌥ highlight -->
-        <path d="M2 28 Q2 3 26 3 L26 38 Q14 38 2 28Z" fill="var(--accent)" fill-opacity="0.13" stroke="none"/>
-        <text x="12" y="23" font-size="9" font-weight="600" fill="var(--accent)" fill-opacity="0.55" font-family="system-ui,sans-serif">⌥</text>
-        <!-- Movement trail: dashed path -->
-        <path d="M55 56 C68 56 74 30 90 22 C102 16 120 17 137 13"
-              stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 3.5" stroke-linecap="round" fill-opacity="0.7"/>
-        <!-- Cursor arrow at trail end -->
-        <path d="M137 13 L131 25 L134 23 L135.5 30 L138 29 L136.5 22 L140 24 Z"
-              fill="var(--accent)" fill-opacity="0.8"/>
+        <!-- Mouse body -->
+        <rect x="4" y="4" width="44" height="68" rx="22" stroke="var(--fg-3)" stroke-width="1.8"/>
+        <!-- Center split (L/R buttons) -->
+        <line x1="26" y1="4" x2="26" y2="38" stroke="var(--fg-3)" stroke-width="1.4"/>
+        <!-- Scroll wheel -->
+        <rect x="20" y="14" width="12" height="16" rx="6" stroke="var(--fg-3)" stroke-width="1.4"/>
+        <!-- Left button highlight -->
+        <path d="M4 30 Q4 4 26 4 L26 38 Q15 38 4 30Z" fill="var(--accent)" fill-opacity="0.12" stroke="none"/>
+        <!-- Movement trail -->
+        <path d="M54 58 C66 56 74 30 90 22 C104 15 120 14 134 10"
+              stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 3.5" stroke-linecap="round"/>
+        <!-- Arrowhead (pointing upper-right, matching trail direction) -->
+        <path d="M143 7 L129 11 L135 21 Z" fill="var(--accent)" fill-opacity="0.85"/>
       </svg>
       <div>
         <div class="mouse-compat-eyebrow">Also works with</div>
