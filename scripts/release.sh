@@ -94,17 +94,28 @@ echo ""
 echo "▶ 3/6  Creating DMG..."
 rm -f "$DMG_PATH"
 
-STAGING=$(mktemp -d)
-cp -R "$APP_PATH" "$STAGING/"
-ln -s /Applications "$STAGING/Applications"
+if ! command -v create-dmg &>/dev/null; then
+  echo "❌  create-dmg not found. Run: brew install create-dmg"
+  exit 1
+fi
 
-hdiutil create \
-  -volname "Slapppy $APP_VERSION" \
-  -srcfolder "$STAGING" \
-  -ov -format UDZO \
-  "$DMG_PATH" > /dev/null
+DMG_BG="scripts/dmg-background.png"
+if [[ ! -f "$DMG_BG" ]]; then
+  echo "   Generating DMG background image..."
+  swift scripts/make-dmg-bg.swift "$DMG_BG"
+fi
 
-rm -rf "$STAGING"
+create-dmg \
+  --volname "Slapppy $APP_VERSION" \
+  --background "$DMG_BG" \
+  --window-size 660 400 \
+  --icon-size 100 \
+  --icon "Slappy.app" 165 185 \
+  --app-drop-link 495 185 \
+  --hide-extension "Slappy.app" \
+  "$DMG_PATH" \
+  "$APP_PATH"
+
 echo "   DMG: $DMG_PATH ($(du -sh "$DMG_PATH" | cut -f1))"
 
 # ── 4. Notarise ───────────────────────────────────────────────────
