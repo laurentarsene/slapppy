@@ -3,7 +3,7 @@ import Security
 
 // ── Polar config ───────────────────────────────────────────────────────
 // Find your Organization ID: polar.sh/dashboard → Settings → General
-private let kPolarOrgID = "YOUR_POLAR_ORGANIZATION_ID"
+private let kPolarOrgID = "badb06de-a844-4215-a143-bca8cb721a09"
 // ──────────────────────────────────────────────────────────────────────
 
 @Observable
