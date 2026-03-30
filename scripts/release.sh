@@ -74,6 +74,8 @@ xcodebuild archive \
   -archivePath "$ARCHIVE_PATH" \
   -destination "generic/platform=macOS" \
   CODE_SIGN_STYLE=Automatic \
+  MARKETING_VERSION="$APP_VERSION" \
+  CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
   2>&1 | grep -E "^(Build|error:|warning: |✓|▶)" || true
 
 echo "   Archive: $ARCHIVE_PATH"
