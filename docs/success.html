@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You're in — Slapppy</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="/slapppy-icon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..900;1,14..32,300..900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #f5f5f7;
+      --bg-card: #ffffff;
+      --fg:      #1d1d1f;
+      --fg-2:    #6e6e73;
+      --fg-3:    #aeaeb2;
+      --accent:  #0071e3;
+      --green:   #34c759;
+      --border:  rgba(0,0,0,.09);
+      --font:    'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:      #000;
+        --bg-card: #1c1c1e;
+        --fg:      #f5f5f7;
+        --fg-2:    #98989d;
+        --fg-3:    #48484a;
+        --border:  rgba(255,255,255,.08);
+      }
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; inset: 0 0 auto; z-index: 100;
+      display: flex; align-items: center; padding: 0 36px; height: 52px;
+      background: color-mix(in srgb, var(--bg) 72%, transparent);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 16px; font-weight: 700; letter-spacing: -.02em;
+      color: var(--fg); text-decoration: none;
+    }
+
+    /* ── MAIN ── */
+    main {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 24px 40px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 56px 52px;
+      max-width: 520px; width: 100%;
+      text-align: center;
+      box-shadow: 0 2px 40px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
+    }
+
+    /* Checkmark animation */
+    .check-wrap {
+      width: 72px; height: 72px;
+      background: color-mix(in srgb, var(--green) 12%, transparent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+      animation: pop .4s cubic-bezier(.175,.885,.32,1.275) both;
+    }
+    @keyframes pop {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .check-wrap svg { width: 34px; height: 34px; }
+    .check-wrap svg path {
+      stroke: var(--green); stroke-width: 2.5;
+      stroke-linecap: round; stroke-linejoin: round;
+      fill: none;
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      animation: draw .4s .3s ease forwards;
+    }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+
+    h1 {
+      font-size: 28px; font-weight: 800; letter-spacing: -.03em;
+      line-height: 1.15; margin-bottom: 12px;
+    }
+    .subtitle {
+      font-size: 15px; color: var(--fg-2); line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    /* Steps */
+    .steps {
+      background: color-mix(in srgb, var(--accent) 5%, var(--bg));
+      border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+      border-radius: 16px;
+      padding: 24px 28px;
+      text-align: left;
+      margin-bottom: 32px;
+    }
+    .steps-title {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: var(--accent); margin-bottom: 16px;
+    }
+    .step {
+      display: flex; align-items: flex-start; gap: 12px;
+      margin-bottom: 14px;
+    }
+    .step:last-child { margin-bottom: 0; }
+    .step-num {
+      flex-shrink: 0;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+    }
+    .step-text {
+      font-size: 13.5px; color: var(--fg-2); line-height: 1.55;
+    }
+    .step-text strong { color: var(--fg); }
+
+    /* Email highlight */
+    .email-hint {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: color-mix(in srgb, var(--green) 10%, transparent);
+      border: 1px solid color-mix(in srgb, var(--green) 25%, transparent);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 13px; color: var(--fg-2);
+      margin-bottom: 32px;
+      width: 100%;
+      justify-content: center;
+    }
+    .email-hint strong { color: var(--fg); }
+
+    .btn-home {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 22px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 980px;
+      font-size: 13px; font-weight: 600; color: var(--fg-2);
+      text-decoration: none;
+      transition: color .15s, border-color .15s;
+    }
+    .btn-home:hover { color: var(--fg); border-color: var(--fg-3); }
+
+    .support-note {
+      margin-top: 24px;
+      font-size: 12px; color: var(--fg-3);
+    }
+    .support-note a { color: var(--fg-2); text-decoration: none; }
+    .support-note a:hover { color: var(--fg); }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 18px; }
+      .card { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="/slapppy-icon.png" alt="Slapppy" width="22" height="22" style="border-radius:5px">
+    Slapppy
+  </a>
+</nav>
+
+<main>
+  <div class="card">
+
+    <div class="check-wrap">
+      <svg viewBox="0 0 24 24">
+        <path d="M5 12.5l5 5 9-9"/>
+      </svg>
+    </div>
+
+    <h1>You're all set!</h1>
+    <p class="subtitle">Your purchase is confirmed. Here's what happens next.</p>
+
+    <div class="email-hint">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--green);flex-shrink:0"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      <span>Check your inbox — <strong>your download link is in your receipt</strong></span>
+    </div>
+
+    <div class="steps">
+      <p class="steps-title">Get started in 3 steps</p>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Open the email from Polar</strong> — it contains your personal download link for Slapppy.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Download Slapppy.dmg</strong> — open it and drag Slapppy to your Applications folder.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Launch Slapppy</strong> — it appears in your menu bar. Grant Input Monitoring &amp; Accessibility when prompted, and you're ready.</div>
+      </div>
+    </div>
+
+    <a href="/" class="btn-home">← Back to slapppy.com</a>
+
+    <p class="support-note">
+      Didn't receive the email? Check your spam folder or contact us at <a href="mailto:hello@slapppy.com">hello@slapppy.com</a>
+    </p>
+
+  </div>
+</main>
+
+</body>
+</html>
