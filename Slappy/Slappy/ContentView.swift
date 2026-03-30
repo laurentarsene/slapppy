@@ -490,12 +490,27 @@ struct ContentView: View {
             let cx = Double(size.width)  / 2
             let cy = Double(size.height) / 2
 
-            var path = Path()
-            path.move(to: CGPoint(x: cx + points[0].x * s, y: cy - points[0].y * s))
-            for pt in points.dropFirst() {
-                path.addLine(to: CGPoint(x: cx + pt.x * s, y: cy - pt.y * s))
+            func pt(_ p: GesturePoint) -> CGPoint {
+                CGPoint(x: cx + p.x * s, y: cy - p.y * s)
             }
+
+            // Stroke
+            var path = Path()
+            path.move(to: pt(points[0]))
+            for p in points.dropFirst() { path.addLine(to: pt(p)) }
             ctx.stroke(path, with: .color(Color.accentColor), lineWidth: 1.5)
+
+            // Start — filled circle (shows where the gesture begins)
+            let start = pt(points[0])
+            var startDot = Path()
+            startDot.addEllipse(in: CGRect(x: start.x - 2.5, y: start.y - 2.5, width: 5, height: 5))
+            ctx.fill(startDot, with: .color(Color.accentColor))
+
+            // End — ring (shows where the gesture ends)
+            let end = pt(points[points.count - 1])
+            var endDot = Path()
+            endDot.addEllipse(in: CGRect(x: end.x - 2.5, y: end.y - 2.5, width: 5, height: 5))
+            ctx.stroke(endDot, with: .color(Color.accentColor), lineWidth: 1.2)
         }
         .frame(width: 36, height: 36)
         .background(.quaternary, in: RoundedRectangle(cornerRadius: 5))
