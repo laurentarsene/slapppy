@@ -100,6 +100,7 @@
     margin-left: 6px;
     vertical-align: middle;
   }
+  .badge-red   { background: #fde8e8; color: #c0392b; }
   .badge-blue  { background: #e8f0fe; color: #0071e3; }
   .badge-green { background: #e6f4ea; color: #1a7f37; }
   .badge-gray  { background: #f2f2f7; color: #6e6e73; }
@@ -716,67 +717,113 @@ TEAM_ID="XXXXXXXXXX"</code></pre>
 <!-- ═══════════════════════════════════════════════════════ 10. ROADMAP -->
 <h1 id="roadmap"><span class="section-num">10</span> Roadmap</h1>
 
-<h2>Améliorations identifiées</h2>
+<h2>Déjà livré ✓</h2>
+<table>
+  <tr><th>Version</th><th>Feature</th><th>Notes</th></tr>
+  <tr>
+    <td><span class="badge badge-green">v1.0</span></td>
+    <td>Privacy Policy &amp; mentions légales</td>
+    <td>Pages <code>privacy.html</code>, <code>terms.html</code>, <code>refund.html</code> publiées sur GitHub Pages.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-green">v1.8</span></td>
+    <td>Compatibilité souris</td>
+    <td>Détection tap/gesture sur souris USB/BT via <code>deltaX/deltaY</code> IOKit. Landing page mise à jour avec diagrammes animés.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-green">v1.9</span></td>
+    <td>Activation licence Polar</td>
+    <td><code>LicenseManager</code> + <code>ActivationView</code>. Clé stockée en Keychain, vérifiée via API Polar. 2 activations max par licence.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-green">v1.9</span></td>
+    <td>Pipeline release robuste</td>
+    <td>Suppression des artefacts stale avant build, détection d'échec xcodebuild, version forcée via <code>MARKETING_VERSION</code>. Fix boucle infinie Sparkle.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-green">v1.9</span></td>
+    <td>DMG customisé</td>
+    <td>Fond sombre avec "Drag to Applications", généré via <code>make-dmg-bg.swift</code> + <code>create-dmg</code>.</td>
+  </tr>
+</table>
+
+<h2>À venir</h2>
 <table>
   <tr><th>Priorité</th><th>Feature</th><th>Notes</th></tr>
   <tr>
-    <td><span class="badge badge-blue">Haute</span></td>
-    <td>Privacy Policy</td>
-    <td>Obligatoire légalement pour la vente en UE. Page dédiée sur GitHub Pages.</td>
+    <td><span class="badge badge-red">Critique</span></td>
+    <td>Release notes dans Sparkle</td>
+    <td>L'<code>appcast.xml</code> ne contient pas de balise <code>&lt;sparkle:releaseNotesLink&gt;</code>. La dialog de mise à jour affiche un contenu vide. Ajouter une page HTML de changelog hébergée sur GitHub Pages.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-red">Critique</span></td>
+    <td>Onboarding au premier lancement</td>
+    <td>Aucun guide utilisateur : la fenêtre des permissions s'ouvre sans explication. Ajouter une séquence d'onboarding (autorisation Accessibility → Tap enregistré → test).</td>
   </tr>
   <tr>
     <td><span class="badge badge-blue">Haute</span></td>
-    <td>Polar → webhook livraison</td>
-    <td>Vérifier que la livraison automatique du DMG fonctionne après achat.</td>
+    <td>Suite de tests</td>
+    <td>Zéro test actuellement. Risque de régression silencieuse. Priorité : tests unitaires sur <code>PatternMatcher</code>, <code>GestureDetector</code>, <code>LicenseManager</code>.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-blue">Haute</span></td>
+    <td>Support Unicode non-BMP</td>
+    <td>Caractères > U+FFFF (emoji, symboles rares) non gérés par <code>CGEvent.keyDown</code>. Implémenter via <code>CGEventKeyboardSetUnicodeString</code> avec UTF-16 surrogate pairs.</td>
+  </tr>
+  <tr>
+    <td><span class="badge badge-blue">Haute</span></td>
+    <td>Testimonials landing page</td>
+    <td>Section social proof absente sur <code>index.html</code>. Dès les premiers retours utilisateurs, ajouter 2–3 citations avec photo/pseudo.</td>
   </tr>
   <tr>
     <td><span class="badge badge-gray">Moyenne</span></td>
-    <td>Multitouch raw API</td>
-    <td>Remplacer <code>deltaX/deltaY</code> par les coordonnées brutes du doigt via le framework Multitouch privé. Éliminerait l'accélération résiduelle du pointeur.</td>
+    <td>Profils par application</td>
+    <td>Patterns différents selon l'app active en premier plan (ex : Final Cut Pro vs Xcode vs Terminal). Via <code>NSWorkspace.didActivateApplicationNotification</code>.</td>
   </tr>
   <tr>
     <td><span class="badge badge-gray">Moyenne</span></td>
-    <td>iCloud sync</td>
-    <td>Synchroniser patterns et gestes entre plusieurs Mac du même utilisateur.</td>
+    <td>Actions étendues</td>
+    <td>Au-delà des touches virtuelles : déclencher scripts shell, URL schemes (<code>raycast://</code>, <code>shortcuts://</code>), AppleScript. Ouvre le marché "power user".</td>
   </tr>
   <tr>
     <td><span class="badge badge-gray">Moyenne</span></td>
     <td>Export / import JSON</td>
-    <td>Permettre le partage de bibliothèques de patterns entre utilisateurs.</td>
+    <td>Partage de bibliothèques de patterns entre utilisateurs. Format simple : tableau d'objets <code>{name, type, sequence, action}</code>.</td>
   </tr>
   <tr>
     <td><span class="badge badge-gray">Moyenne</span></td>
-    <td>Testimonials landing page</td>
-    <td>Section social proof manquante sur index.html.</td>
+    <td>Crash reporting</td>
+    <td>Aucune visibilité sur les crashs en production. Intégrer Sentry SDK (léger, gratuit jusqu'à 5k events/mois) ou <code>MetricKit</code> natif.</td>
   </tr>
   <tr>
     <td><span class="badge badge-gray">Basse</span></td>
-    <td>Actions étendues</td>
-    <td>Déclencher des scripts shell, URL schemes, AppleScript en plus des touches virtuelles.</td>
+    <td>Multitouch raw API</td>
+    <td>Remplacer <code>deltaX/deltaY</code> par les coordonnées brutes du doigt via le framework Multitouch privé. Éliminerait l'accélération résiduelle du pointeur.</td>
   </tr>
   <tr>
     <td><span class="badge badge-gray">Basse</span></td>
-    <td>Profils par app</td>
-    <td>Différents patterns actifs selon l'app en premier plan (ex: Final Cut vs Xcode).</td>
+    <td>iCloud sync</td>
+    <td>Synchroniser patterns et gestes entre plusieurs Mac du même utilisateur via <code>NSUbiquitousKeyValueStore</code> ou CloudKit.</td>
   </tr>
   <tr>
     <td><span class="badge badge-gray">Basse</span></td>
-    <td>Onboarding interactif</td>
-    <td>Guide au premier lancement pour configurer les permissions et enregistrer un premier pattern.</td>
+    <td>Déduplication de patterns</td>
+    <td>L'UI ne détecte pas les patterns en doublon. Ajouter une validation à l'enregistrement pour prévenir les conflits silencieux.</td>
   </tr>
 </table>
 
-<h2>Non planifié</h2>
+<h2>Hors scope</h2>
 <ul>
   <li><strong>Windows / Linux</strong> — dépendance IOKit et NSEvent, portage complexe et hors scope.</li>
-  <li><strong>App Store</strong> — incompatible avec les permissions requises (IOKit, CGEvent global).</li>
-  <li><strong>iPad / iPhone</strong> — architecture pensée pour MacBook trackpad physique.</li>
+  <li><strong>App Store</strong> — incompatible avec les permissions requises (IOKit, CGEvent global tap).</li>
+  <li><strong>iPad / iPhone</strong> — architecture conçue pour MacBook trackpad physique.</li>
+  <li><strong>Sandboxing</strong> — <code>CGEventTap</code> global requiert des entitlements refusés par le sandbox App Store.</li>
 </ul>
 
 <hr>
 
 <footer>
-  Slapppy — Documentation Technique v1.2 · Mars 2026 · Arsène Laurent · com.slapppy.app
+  Slapppy — Documentation Technique v1.9 · Mars 2026 · Arsène Laurent · com.slapppy.app
 </footer>
 
 </body>

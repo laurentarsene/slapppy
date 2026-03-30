@@ -1017,6 +1017,25 @@
       .step:not(:last-child)::after { display: none; }
       .dl-card { padding: 40px 24px; }
     }
+
+    /* ── Use Cases ── */
+    #usecases { padding: 96px 0; }
+    .uc-hdr { text-align: center; margin-bottom: 48px; }
+    .uc-hdr h2 { font-size: clamp(28px,4vw,42px); font-weight: 700; letter-spacing: -.02em; line-height: 1.15; margin-bottom: 14px; }
+    .uc-hdr p { font-size: 17px; color: var(--fg-2); max-width: 480px; margin: 0 auto; }
+    .uc-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 800px; margin: 0 auto; }
+    .uc-pill {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 980px; padding: 9px 18px;
+      font-size: 14px; color: var(--fg-2); line-height: 1.4;
+      cursor: default; transition: border-color .2s, color .2s, background .2s;
+    }
+    .uc-pill:hover { border-color: var(--accent); color: var(--fg); }
+    .uc-pill.fun {
+      border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+      background: color-mix(in srgb, var(--accent) 7%, var(--bg-card));
+      color: var(--fg);
+    }
   </style>
 </head>
 <body>
@@ -1235,12 +1254,12 @@
       <div class="demo-list">
         <div class="demo-item" id="di0" style="--di-color:#34c759">
           <div class="demo-item-top">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#34c759 13%,transparent)">✉️</div>
-            <div class="demo-item-label">Email sign-off</div>
+            <div class="demo-item-icon" style="background:color-mix(in srgb,#34c759 13%,transparent)">💬</div>
+            <div class="demo-item-label">Quick reply</div>
           </div>
           <div class="demo-item-hint">⌥ + quick-quick · pause · quick-quick</div>
           <div class="demo-item-result" id="dr0" style="background:color-mix(in srgb,#34c759 10%,transparent);color:#34c759">
-            ✉️ Best regards, Arsène — typed
+            💬 Quick reply — typed
           </div>
         </div>
 
@@ -1257,12 +1276,12 @@
 
         <div class="demo-item" id="di2" style="--di-color:#ff9f0a">
           <div class="demo-item-top">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#ff9f0a 13%,transparent)">📦</div>
-            <div class="demo-item-label">Postal address</div>
+            <div class="demo-item-icon" style="background:color-mix(in srgb,#ff9f0a 13%,transparent)">😅</div>
+            <div class="demo-item-label">"Didn't see your msg"</div>
           </div>
           <div class="demo-item-hint">⌥ + slow · quick quick quick</div>
           <div class="demo-item-result" id="dr2" style="background:color-mix(in srgb,#ff9f0a 10%,transparent);color:#ff9f0a">
-            📦 Address form filled instantly
+            😅 sent in one tap
           </div>
         </div>
       </div>
@@ -1477,6 +1496,32 @@
   </div>
 </section>
 
+    <!-- ── USE CASES ── -->
+    <section id="usecases">
+      <div class="container">
+        <div class="uc-hdr reveal">
+          <p class="eyebrow">Use cases</p>
+          <h2>Everything you type<br>on autopilot.</h2>
+          <p>If you've typed it twice, that's already one time too many.</p>
+        </div>
+        <div class="uc-pills reveal">
+          <span class="uc-pill fun">😅 "J'avais pas vu le message sorry"</span>
+          <span class="uc-pill fun">💬 "Je regarde ça et reviens vers toi"</span>
+          <span class="uc-pill fun">👌 "Pas de souci !"</span>
+          <span class="uc-pill fun">🚶 "Je suis en route"</span>
+          <span class="uc-pill">📧 Email address</span>
+          <span class="uc-pill">📞 Phone number</span>
+          <span class="uc-pill">🔗 Zoom / Meet link</span>
+          <span class="uc-pill">📦 Postal address</span>
+          <span class="uc-pill">🎵 Skip song → F9</span>
+          <span class="uc-pill">🔇 Mute volume → F10</span>
+          <span class="uc-pill">📸 Screenshot selection</span>
+          <span class="uc-pill">💻 console.log()</span>
+          <span class="uc-pill">🔧 git commit -m ""</span>
+        </div>
+      </div>
+    </section>
+
 <!-- ── FAQ ── -->
 <section id="faq">
   <div class="container">
@@ -1585,7 +1630,7 @@ const T = {
     heroBtnPrimary: 'Acheter — 9,99&nbsp;€',
     heroBtnSecondary: 'Voir comment ça marche',
     heroFine: 'Achat unique · 30 jours satisfait ou remboursé · macOS 26+',
-    signOff: 'Cordialement,\nArsène',
+    signOff: 'Je regarde ça et reviens vers toi 👀',
     ecBodyStatic: 'Dans l\'attente de votre retour.',
     contextEyebrow: 'L\'app',
     contextH2: 'Elle vit discrètement<br>dans votre barre de menu.',
@@ -1594,15 +1639,15 @@ const T = {
     featEyebrow: 'Trois démos',
     featH2: 'Tapotez un rythme. Dessinez une forme.<br>Regardez-le s\'exécuter.',
     featP: 'Chaque pattern ou geste déclenche exactement ce dont vous avez besoin — une phrase sauvegardée ou n\'importe quelle action clavier.',
-    demo0Label: 'Signature email',
+    demo0Label: 'Réponse en un tap',
     demo0Hint: '⌥ + vite-vite · pause · vite-vite',
-    demo0Result: '✉️ Cordialement, Arsène — tapé',
+    demo0Result: '💬 tapé instantanément',
     demo1Label: 'Dessiner un geste @',
     demo1Hint: '⌥ + tracer un @ avec le curseur',
     demo1Result: '✉️ arsene@protonmail.com',
-    demo2Label: 'Adresse postale',
+    demo2Label: '"J\'avais pas vu"',
     demo2Hint: '⌥ + lent · vite vite vite',
-    demo2Result: '📦 Formulaire rempli instantanément',
+    demo2Result: '😅 envoyé en un tap',
     schEyebrow: 'Sous le capot',
     schH2: 'Deux entrées.<br>Des possibilités infinies.',
     schP: 'Tapotez un rythme ou dessinez une forme — Slapppy la reconnaît et déclenche exactement ce que vous lui avez associé.',
@@ -1641,6 +1686,9 @@ const T = {
     footer: 'Fait avec ♥ par Arsène Laurent · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · macOS uniquement · <a href="/privacy">Politique de confidentialité</a>',
     addrHeader: '📦 Adresse de livraison — remplie auto.',
     addrKeys: ['Nom', 'Rue', 'Ville', 'CP', 'Pays'],
+    ucEyebrow: 'Idées d\'utilisation',
+    ucH2: 'Tout ce que vous tapez<br>sans réfléchir.',
+    ucP: 'Si vous l\'avez déjà écrit deux fois, c\'est une fois de trop.',
   },
   es: {
     navCta: 'Comprar — 9,99&nbsp;€',
@@ -1652,7 +1700,7 @@ const T = {
     heroBtnPrimary: 'Comprar — 9,99&nbsp;€',
     heroBtnSecondary: 'Ver cómo funciona',
     heroFine: 'Pago único · 30 días de garantía de devolución · macOS 26+',
-    signOff: 'Atentamente,\nArsène',
+    signOff: 'Ahora lo miro y te digo',
     ecBodyStatic: 'Quedo a la espera de sus comentarios.',
     contextEyebrow: 'La app',
     contextH2: 'Vive silenciosamente<br>en tu barra de menú.',
@@ -1661,15 +1709,15 @@ const T = {
     featEyebrow: 'Tres demos',
     featH2: 'Toca un ritmo. Dibuja una forma.<br>Mira cómo se ejecuta.',
     featP: 'Cada patrón o gesto activa exactamente lo que necesitas — una frase guardada o cualquier acción de teclado.',
-    demo0Label: 'Firma de email',
+    demo0Label: 'Respuesta rápida',
     demo0Hint: '⌥ + rápido-rápido · pausa · rápido-rápido',
-    demo0Result: '✉️ Atentamente, Arsène — escrito',
+    demo0Result: '💬 escrito al instante',
     demo1Label: 'Dibujar un gesto @',
     demo1Hint: '⌥ + trazar un @ con el cursor',
     demo1Result: '✉️ arsene@protonmail.com',
-    demo2Label: 'Dirección postal',
+    demo2Label: '"No vi tu mensaje, perdón"',
     demo2Hint: '⌥ + lento · rápido rápido rápido',
-    demo2Result: '📦 Formulario rellenado al instante',
+    demo2Result: '😅 enviado al instante',
     schEyebrow: 'Bajo el capó',
     schH2: 'Dos entradas.<br>Infinitas posibilidades.',
     schP: 'Toca un ritmo o dibuja una forma — Slapppy lo detecta y ejecuta exactamente lo que le asignaste.',
@@ -1708,6 +1756,9 @@ const T = {
     footer: 'Hecho con ♥ por Arsène Laurent · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · solo macOS · <a href="/privacy">Política de privacidad</a>',
     addrHeader: '📦 Dirección de envío — rellenada auto.',
     addrKeys: ['Nombre', 'Calle', 'Ciudad', 'CP', 'País'],
+    ucEyebrow: 'Casos de uso',
+    ucH2: 'Todo lo que escribes<br>sin pensar.',
+    ucP: 'Si lo has escrito dos veces, ya es una de más.',
   },
   zh: {
     navCta: '购买 — €9.99',
@@ -1719,7 +1770,7 @@ const T = {
     heroBtnPrimary: '购买 — €9.99',
     heroBtnSecondary: '了解工作原理',
     heroFine: '一次性付款 · 30 天退款保障 · macOS 26+',
-    signOff: '此致,\nArsène',
+    signOff: '我看一下，马上回复你',
     ecBodyStatic: '期待您的反馈。',
     contextEyebrow: '关于应用',
     contextH2: '它静静地<br>驻留在菜单栏中。',
@@ -1728,15 +1779,15 @@ const T = {
     featEyebrow: '三个演示',
     featH2: '敲击节奏，绘制形状，<br>即刻触发。',
     featP: '每个节奏或手势精确映射到你需要的内容——已保存的短语或任意键盘操作。',
-    demo0Label: '邮件签名',
+    demo0Label: '快速回复',
     demo0Hint: '⌥ + 快-快 · 停顿 · 快-快',
-    demo0Result: '✉️ 此致，Arsène — 已输入',
+    demo0Result: '💬 瞬间输入',
     demo1Label: '绘制 @ 手势',
     demo1Hint: '⌥ + 用光标描绘 @',
     demo1Result: '✉️ arsene@protonmail.com',
-    demo2Label: '邮寄地址',
+    demo2Label: '"刚才没看到消息"',
     demo2Hint: '⌥ + 慢 · 快 快 快',
-    demo2Result: '📦 表单瞬间填写完毕',
+    demo2Result: '😅 一键发送',
     schEyebrow: '工作原理',
     schH2: '两种输入方式，<br>无限输出可能。',
     schP: '轻拍节奏或绘制手势——Slapppy 识别并精确触发你映射的操作。',
@@ -1775,6 +1826,9 @@ const T = {
     footer: '由 Arsène Laurent 用 ♥ 制作 · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · 仅限 macOS · <a href="/privacy">隐私政策</a>',
     addrHeader: '📦 收货地址 — 自动填写',
     addrKeys: ['姓名', '街道', '城市', '邮编', '国家'],
+    ucEyebrow: '使用场景',
+    ucH2: '那些你无数次<br>重复输入的内容',
+    ucP: '如果你已经输入过两次，那一次就太多了。',
   },
   hi: {
     navCta: 'खरीदें — €9.99',
@@ -1786,7 +1840,7 @@ const T = {
     heroBtnPrimary: 'खरीदें — €9.99',
     heroBtnSecondary: 'देखें कैसे काम करता है',
     heroFine: 'एकमुश्त भुगतान · 30 दिन मनी-बैक गारंटी · macOS 26+',
-    signOff: 'सादर,\nArsène',
+    signOff: 'देखता हूं और बताता हूं',
     ecBodyStatic: 'आपकी प्रतिक्रिया की प्रतीक्षा में।',
     contextEyebrow: 'ऐप के बारे में',
     contextH2: 'यह चुपचाप<br>आपके मेनू बार में रहता है।',
@@ -1795,15 +1849,15 @@ const T = {
     featEyebrow: 'तीन डेमो',
     featH2: 'रिदम टैप करें। आकार बनाएं।<br>इसे काम करते देखें।',
     featP: 'हर पैटर्न या जेस्चर ठीक वही ट्रिगर करता है जो आपको चाहिए — एक सेव किया गया वाक्यांश या कोई भी कीबोर्ड एक्शन।',
-    demo0Label: 'ईमेल साइन-ऑफ',
+    demo0Label: 'त्वरित जवाब',
     demo0Hint: '⌥ + जल्दी-जल्दी · रुकें · जल्दी-जल्दी',
-    demo0Result: '✉️ सादर, Arsène — टाइप हुआ',
+    demo0Result: '💬 तुरंत टाइप',
     demo1Label: '@ जेस्चर बनाएं',
     demo1Hint: '⌥ + कर्सर से @ बनाएं',
     demo1Result: '✉️ arsene@protonmail.com',
-    demo2Label: 'पोस्टल पता',
+    demo2Label: '"मैसेज नहीं देखा था"',
     demo2Hint: '⌥ + धीमा · जल्दी जल्दी जल्दी',
-    demo2Result: '📦 फ़ॉर्म तुरंत भरा',
+    demo2Result: '😅 एक टैप में भेजा',
     schEyebrow: 'अंदर की बात',
     schH2: 'दो रास्ते अंदर,<br>अनगिनत रास्ते बाहर।',
     schP: 'एक रिदम टैप करें या आकार बनाएं — Slapppy इसे पहचानता है और ठीक वही करता है जो आपने मैप किया।',
@@ -1842,10 +1896,13 @@ const T = {
     footer: 'Arsène Laurent द्वारा ♥ के साथ बनाया गया · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · केवल macOS · <a href="/privacy">गोपनीयता नीति</a>',
     addrHeader: '📦 शिपिंग पता — स्वतः भरा',
     addrKeys: ['नाम', 'सड़क', 'शहर', 'PIN', 'देश'],
+    ucEyebrow: 'उपयोग के उदाहरण',
+    ucH2: 'जो आप रोज़<br>बिना सोचे टाइप करते हैं',
+    ucP: 'अगर दो बार टाइप किया है, तो एक बार ज़्यादा था।',
   },
 };
 
-const SIGN_OFF = (T[LANG] || {}).signOff || 'Best regards,\nArsène';
+const SIGN_OFF = (T[LANG] || {}).signOff || "I'll get back to you on this";
 
 (function applyLang() {
   const t = T[LANG]; if (!t) return;
@@ -1906,6 +1963,10 @@ const SIGN_OFF = (T[LANG] || {}).signOff || 'Best regards,\nArsène';
     if (h3 && t['step'+i+'H3']) h3.innerHTML = t['step'+i+'H3'];
     if (p  && t['step'+i+'P'])  p.innerHTML  = t['step'+i+'P'];
   });
+  // Use cases
+  s('#usecases .uc-hdr .eyebrow', 'ucEyebrow');
+  s('#usecases .uc-hdr h2',       'ucH2');
+  s('#usecases .uc-hdr p',        'ucP');
   // FAQ
   s('#faq .faq-hdr .eyebrow', 'faqEyebrow');
   s('#faq .faq-hdr h2',       'faqH2');
@@ -2164,7 +2225,8 @@ const DEMOS = [
       { x:50, y:52, t:1500 },
     ],
     color: '#ff9f0a',
-    outputType: 'addr-form',
+    outputType: 'normal',
+    outputIcon: '😅', outputLabel: 'Message sent', outputValue: "J'avais pas vu le message sorry",
   },
 ];
 
