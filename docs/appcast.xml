@@ -6,15 +6,15 @@
     <description>Slapppy release notes</description>
     <language>en</language>
     <item>
-      <title>Version 1.3.1</title>
-      <pubDate>Sun, 29 Mar 2026 20:52:15 +0000</pubDate>
-      <sparkle:version>4</sparkle:version>
-      <sparkle:shortVersionString>1.3.1</sparkle:shortVersionString>
+      <title>Version 1.4</title>
+      <pubDate>Mon, 30 Mar 2026 12:17:56 +0000</pubDate>
+      <sparkle:version>5</sparkle:version>
+      <sparkle:shortVersionString>1.4</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
       <enclosure
-        url="https://github.com/laurentarsene/slapppy/releases/download/v1.3.1/Slapppy-1.3.1.dmg"
-        sparkle:edSignature="W0fGTPXTYwROD/Mdxc/V/0v/UaeUmCzd6SpLPY7V0NEYrK10145gA2YdnIGJeCgq0LuKQGKQuzKKqyBzaJ3ODQ=="
-        length="1753424"
+        url="https://github.com/laurentarsene/slapppy/releases/download/v1.4/Slapppy-1.4.dmg"
+        sparkle:edSignature="W8VVwM71drUvKOaFsFjhmDCTGtCgE555O0gsO5sGe7a4/O68Euh1QFjjPP3385xxomQxpghLUDSIm4Zd/FRVAw=="
+        length="1807980"
         type="application/octet-stream"/>
     </item>
   </channel>
