@@ -24,7 +24,7 @@ enum DollarOneRecognizer {
 
     static let numPoints:      Int    = 64
     static let squareSize:     Double = 250.0
-    static let matchThreshold: Double = 0.80
+    static var matchThreshold: Double = 0.80  // overridden by SettingsStore
 
     private static let halfDiag:       Double = 0.5 * sqrt(2) * squareSize
     private static let angleRange:     Double = .pi / 4        // ±45°

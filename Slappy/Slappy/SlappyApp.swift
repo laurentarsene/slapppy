@@ -17,9 +17,11 @@ struct SlappyApp: App {
     @State private var gestureRecorder = GestureRecorder()
     @State private var gestureStore    = GestureStore()
     @State private var gestureEngine   = GestureEngine()
+    @State private var settings        = SettingsStore()
+    @State private var menuIcon        = "hand.tap.fill"
 
     var body: some Scene {
-        MenuBarExtra("Slapppy", systemImage: "hand.tap.fill") {
+        MenuBarExtra {
             ContentView()
                 .environment(updater)
                 .environment(trackpad)
@@ -29,7 +31,11 @@ struct SlappyApp: App {
                 .environment(gestureRecorder)
                 .environment(gestureStore)
                 .environment(gestureEngine)
+                .environment(settings)
                 .onAppear {
+                    engine.settings        = settings
+                    gestureEngine.settings = settings
+                    trackpad.settings      = settings
                     trackpad.start()
 
                     trackpad.onTap = { [self] intensity in
@@ -45,11 +51,13 @@ struct SlappyApp: App {
                         }
                     }
 
-                    engine.onMatch = { pattern in
+                    engine.onMatch = { [self] pattern in
+                        flashIcon()
                         ActionExecutor.execute(pattern.action)
                     }
 
-                    gestureEngine.onMatch = { template in
+                    gestureEngine.onMatch = { [self] template in
+                        flashIcon()
                         ActionExecutor.execute(template.action)
                     }
                 }
@@ -57,7 +65,17 @@ struct SlappyApp: App {
                     for: NSApplication.willTerminateNotification)) { _ in
                     trackpad.stop()
                 }
+        } label: {
+            Image(systemName: menuIcon)
+                .symbolRenderingMode(.hierarchical)
         }
         .menuBarExtraStyle(.window)
+    }
+
+    private func flashIcon() {
+        menuIcon = "checkmark.circle.fill"
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            menuIcon = "hand.tap.fill"
+        }
     }
 }

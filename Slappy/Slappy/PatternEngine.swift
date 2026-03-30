@@ -25,13 +25,14 @@ final class PatternEngine {
     /// Step 6 will wire this to CGEvent / text-injection action execution.
     var onMatch: ((Pattern) -> Void)?
 
+    @ObservationIgnored var settings: SettingsStore?
+
     @ObservationIgnored private var window: [(date: Date, event: SlapEvent)] = []
     @ObservationIgnored private var lastMatchTimes: [UUID: CFAbsoluteTime]  = [:]
     @ObservationIgnored private var currentMatchID: UUID = UUID()
 
     private let maxWindowAge:  TimeInterval = 10.0  // evict slaps older than this
     private let maxWindowSize: Int          = 10    // safety cap on window size
-    private let matchCooldown: TimeInterval = 1.5   // seconds before same pattern can re-fire
 
     // MARK: - Public
 
@@ -69,7 +70,8 @@ final class PatternEngine {
 
             // Per-pattern cooldown — prevents re-triggering on overlapping windows
             let lastFired = lastMatchTimes[pattern.id] ?? 0
-            guard absNow - lastFired > matchCooldown else { continue }
+            let cooldown  = settings?.matchCooldown ?? 1.5
+            guard absNow - lastFired > cooldown else { continue }
 
             lastMatchTimes[pattern.id] = absNow
             lastMatchedPattern = pattern

@@ -120,10 +120,10 @@ enum PatternMatcher {
 
     static let timingWeight:        Double = 0.60  // timing is primary
     static let intensityWeight:     Double = 0.40  // duration-based intensity
-    static let timingTolerance:     Double = 0.30  // ±30% on normalised intervals
+    static var timingTolerance:     Double = 0.30  // ±30% on normalised intervals (overridden by SettingsStore)
     static let intensityTolerance:  Double = 0.40  // looser: contact-time intensity is noisier than impact
     static let intensityExponent:   Double = 1.0   // linear — duration gives enough separation without squaring
-    static let matchThreshold:      Double = 0.75
+    static var matchThreshold:      Double = 0.75  // overridden by SettingsStore
 
     /// Returns a similarity score in [0, 1].
     /// Returns 0 immediately if slap counts differ.

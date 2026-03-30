@@ -30,15 +30,14 @@ final class TrackpadReader {
     var tapCount:    Int  = 0
     var lastTapDate: Date = .distantPast
 
+    @ObservationIgnored var settings: SettingsStore?
+
     @ObservationIgnored private var tapDownDate:     Date?     = nil
     @ObservationIgnored private var optionHeld:      Bool      = false
     @ObservationIgnored private var gesturePoints:   [CGPoint] = []
     @ObservationIgnored private var globalMonitor:   Any?
     @ObservationIgnored private var localMonitor:    Any?
     @ObservationIgnored private var permissionTimer: Timer?
-
-    /// Minimum screen-space path length (pts) to classify a ⌥+move as a gesture.
-    private let minGesturePathLength: Double = 30.0
 
     // MARK: - Lifecycle
 
@@ -92,7 +91,8 @@ final class TrackpadReader {
                 let pathLen = zip(captured, captured.dropFirst()).reduce(0.0) {
                     $0 + hypot(Double($1.1.x - $1.0.x), Double($1.1.y - $1.0.y))
                 }
-                if pathLen >= minGesturePathLength {
+                let minLen = settings?.minGesturePathLength ?? 30.0
+                if pathLen >= minLen {
                     onGesture?(captured)
                     print("[Slapppy] Gesture! \(captured.count) pts, path=\(Int(pathLen))pt")
                 }

@@ -22,10 +22,10 @@ final class GestureEngine {
     /// Called on the main thread on every successful match.
     var onMatch: ((GestureTemplate) -> Void)?
 
+    @ObservationIgnored var settings: SettingsStore?
+
     @ObservationIgnored private var lastMatchTimes: [UUID: CFAbsoluteTime] = [:]
     @ObservationIgnored private var currentMatchID: UUID = UUID()
-
-    private let matchCooldown: TimeInterval = 1.5
 
     // MARK: - Public
 
@@ -45,9 +45,10 @@ final class GestureEngine {
             return
         }
 
-        let absNow   = CFAbsoluteTimeGetCurrent()
+        let absNow    = CFAbsoluteTimeGetCurrent()
         let lastFired = lastMatchTimes[template.id] ?? 0
-        guard absNow - lastFired > matchCooldown else { return }
+        let cooldown  = settings?.matchCooldown ?? 1.5
+        guard absNow - lastFired > cooldown else { return }
 
         lastMatchTimes[template.id] = absNow
         lastMatchedTemplate = template

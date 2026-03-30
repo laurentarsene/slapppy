@@ -17,8 +17,9 @@ struct ContentView: View {
     @Environment(GestureRecorder.self)  private var gestureRecorder
     @Environment(GestureStore.self)     private var gestureStore
     @Environment(GestureEngine.self)    private var gestureEngine
+    @Environment(SettingsStore.self)    private var settings
 
-    @State private var mode               = 0       // 0 = Slaps, 1 = Gestes
+    @State private var mode               = 0       // 0 = Slaps, 1 = Gestes, 2 = Réglages
     @State private var newPatternName     = ""
     @State private var editingPatternID:  UUID? = nil
     @State private var newGestureName     = ""
@@ -28,7 +29,10 @@ struct ContentView: View {
         VStack(alignment: .leading, spacing: 0) {
             header
             Divider()
-            mainContent
+            ScrollView {
+                mainContent
+            }
+            .frame(maxHeight: 460)
             Divider()
             footer
         }
@@ -85,6 +89,7 @@ struct ContentView: View {
             Picker("", selection: $mode) {
                 Label("Slaps", systemImage: "hand.tap.fill").tag(0)
                 Label("Gestes", systemImage: "scribble").tag(1)
+                Image(systemName: "gearshape").tag(2)
             }
             .pickerStyle(.segmented)
             .labelsHidden()
@@ -94,8 +99,10 @@ struct ContentView: View {
 
             if mode == 0 {
                 slapsContent
-            } else {
+            } else if mode == 1 {
                 gesturesContent
+            } else {
+                settingsContent
             }
 
             // Match feedback — always visible regardless of active tab
@@ -151,6 +158,74 @@ struct ContentView: View {
                     .padding(.horizontal, 14)
                     .padding(.vertical, 10)
             }
+        }
+    }
+
+    // MARK: - Settings tab
+
+    @ViewBuilder
+    private var settingsContent: some View {
+        @Bindable var s = settings
+        VStack(alignment: .leading, spacing: 0) {
+            settingsGroup("Patterns") {
+                settingRow("Seuil de match", value: $s.patternThreshold, in: 0.50...1.0,
+                           display: "\(Int(s.patternThreshold * 100))%")
+                    .help("Score de similarité minimum pour déclencher l'action. Plus bas = plus permissif, mais plus de faux positifs.")
+                settingRow("Tolérance timing", value: $s.timingTolerance, in: 0.10...0.60,
+                           display: "±\(Int(s.timingTolerance * 100))%")
+                    .help("Variation autorisée sur les intervalles entre slaps. À 30 %, un écart de ±30 % sur le rythme est accepté.")
+            }
+            Divider()
+            settingsGroup("Gestes") {
+                settingRow("Seuil de match", value: $s.gestureThreshold, in: 0.50...1.0,
+                           display: "\(Int(s.gestureThreshold * 100))%")
+                    .help("Score de ressemblance minimum. La vitesse, la taille et l'orientation sont ignorées — seule la forme compte.")
+                settingRow("Longueur min", value: $s.minGesturePathLength, in: 10.0...100.0,
+                           display: "\(Int(s.minGesturePathLength)) pt")
+                    .help("Déplacement minimum (en points écran) pour qu'un tracé soit traité comme un geste, et non comme un simple clic.")
+            }
+            Divider()
+            settingsGroup("Général") {
+                settingRow("Délai anti-double", value: $s.matchCooldown, in: 0.5...3.0,
+                           display: String(format: "%.1f s", s.matchCooldown))
+                    .help("Délai après un match avant que le même pattern ou geste puisse se déclencher à nouveau. Évite les répétitions involontaires.")
+            }
+            Divider()
+            Button("Réinitialiser les réglages") { settings.reset() }
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
+                .buttonStyle(.plain)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+        }
+    }
+
+    @ViewBuilder
+    private func settingsGroup<C: View>(_ title: String, @ViewBuilder content: () -> C) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(.secondary)
+                .textCase(.uppercase)
+            content()
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+    }
+
+    private func settingRow(_ label: String, value: Binding<Double>,
+                            in range: ClosedRange<Double>, display: String) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            HStack {
+                Text(label)
+                    .font(.system(size: 11))
+                Spacer()
+                Text(display)
+                    .font(.system(size: 11, design: .monospaced))
+                    .foregroundStyle(.secondary)
+            }
+            Slider(value: value, in: range)
+                .controlSize(.small)
         }
     }
 
@@ -255,6 +330,9 @@ struct ContentView: View {
                 Text("Maintiens ⌥ et bouge la souris")
                     .font(.system(size: 10))
                     .foregroundStyle(.tertiary)
+                Text("Forme uniquement — vitesse, taille et orientation ignorées")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.tertiary)
             }
 
         case .recording:
@@ -321,7 +399,7 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     patternRow(pattern)
                     if editingPatternID == pattern.id {
-                        actionEditor(
+                        ActionEditorView(
                             name: Binding(
                                 get: { store.patterns.first { $0.id == pattern.id }?.name ?? "" },
                                 set: { store.rename(id: pattern.id, to: $0) }
@@ -369,7 +447,7 @@ struct ContentView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     gestureRow(template)
                     if editingGestureID == template.id {
-                        actionEditor(
+                        ActionEditorView(
                             name: Binding(
                                 get: { gestureStore.templates.first { $0.id == template.id }?.name ?? "" },
                                 set: { gestureStore.rename(id: template.id, to: $0) }
@@ -421,64 +499,6 @@ struct ContentView: View {
         }
         .frame(width: 36, height: 36)
         .background(.quaternary, in: RoundedRectangle(cornerRadius: 5))
-    }
-
-    // MARK: - Shared action editor (used for both patterns and gestures)
-
-    private func actionEditor(
-        name: Binding<String>,
-        action: PatternAction,
-        setAction: @escaping (PatternAction) -> Void
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            TextField("Nom", text: name)
-                .textFieldStyle(.roundedBorder)
-                .font(.system(size: 11))
-
-            Picker("", selection: Binding(
-                get: { actionTag(action) },
-                set: { tag in
-                    switch tag {
-                    case 1: setAction(action.isVirtualKey ? action : .virtualKey(keyCode: 105))
-                    case 2: setAction(action.isTypeText  ? action : .typeText(""))
-                    default: setAction(.none)
-                    }
-                }
-            )) {
-                Text("—").tag(0)
-                Text("Touche").tag(1)
-                Text("Texte").tag(2)
-            }
-            .pickerStyle(.segmented)
-            .labelsHidden()
-
-            switch action {
-            case .virtualKey(let keyCode):
-                Picker("", selection: Binding(
-                    get: { keyCode },
-                    set: { setAction(.virtualKey(keyCode: $0)) }
-                )) {
-                    ForEach(fKeys, id: \.code) { k in
-                        Text(k.label).tag(k.code)
-                    }
-                }
-                .labelsHidden()
-
-            case .typeText(let text):
-                TextField("Texte à écrire", text: Binding(
-                    get: { text },
-                    set: { setAction(.typeText($0)) }
-                ))
-                .textFieldStyle(.roundedBorder)
-                .font(.system(size: 11))
-
-            case .none:
-                EmptyView()
-            }
-        }
-        .font(.system(size: 11))
-        .padding(8)
-        .background(.quaternary, in: RoundedRectangle(cornerRadius: 6))
     }
 
     // MARK: - Row button helpers
@@ -571,21 +591,6 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - F-key table + helpers
-
-    private let fKeys: [(label: String, code: UInt16)] = [
-        ("F13", 105), ("F14", 107), ("F15", 113),
-        ("F16", 106), ("F17", 64),  ("F18", 79),
-        ("F19", 80),  ("F20", 90)
-    ]
-
-    private func actionTag(_ action: PatternAction) -> Int {
-        switch action {
-        case .none:       return 0
-        case .virtualKey: return 1
-        case .typeText:   return 2
-        }
-    }
 }
 
 // MARK: - PatternAction helpers
@@ -593,4 +598,144 @@ struct ContentView: View {
 private extension PatternAction {
     var isVirtualKey: Bool { if case .virtualKey = self { return true }; return false }
     var isTypeText:   Bool { if case .typeText   = self { return true }; return false }
+}
+
+// MARK: - ActionEditorView
+
+/// Inline editor for renaming a pattern/gesture and assigning an action.
+/// Name and typeText fields buffer their values locally and only commit
+/// to the store on Enter or focus loss. A ✓ button appears when the
+/// buffer differs from the saved value.
+private struct ActionEditorView: View {
+
+    let name:      Binding<String>
+    let action:    PatternAction
+    let setAction: (PatternAction) -> Void
+
+    @State private var nameBuffer: String
+    @State private var textBuffer: String
+    @FocusState private var nameFocused: Bool
+    @FocusState private var textFocused: Bool
+
+    private let fKeys: [(label: String, code: UInt16)] = [
+        ("F13", 105), ("F14", 107), ("F15", 113),
+        ("F16", 106), ("F17", 64),  ("F18", 79),
+        ("F19", 80),  ("F20", 90)
+    ]
+
+    init(name: Binding<String>, action: PatternAction,
+         setAction: @escaping (PatternAction) -> Void) {
+        self.name      = name
+        self.action    = action
+        self.setAction = setAction
+        _nameBuffer    = State(initialValue: name.wrappedValue)
+        if case .typeText(let t) = action {
+            _textBuffer = State(initialValue: t)
+        } else {
+            _textBuffer = State(initialValue: "")
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+
+            // Name — saves on Enter or focus loss
+            HStack(spacing: 4) {
+                TextField("Nom", text: $nameBuffer)
+                    .textFieldStyle(.roundedBorder)
+                    .font(.system(size: 11))
+                    .focused($nameFocused)
+                    .onSubmit { commitName() }
+                    .onChange(of: nameFocused) { _, focused in
+                        if !focused { commitName() }
+                    }
+                if nameBuffer != name.wrappedValue {
+                    Button { commitName() } label: {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 10, weight: .bold))
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.mini)
+                }
+            }
+
+            // Action type picker
+            Picker("", selection: Binding(
+                get: { actionTag },
+                set: { tag in
+                    switch tag {
+                    case 1: setAction(action.isVirtualKey ? action : .virtualKey(keyCode: 105))
+                    case 2: setAction(action.isTypeText  ? action : .typeText(textBuffer))
+                    default: setAction(.none)
+                    }
+                }
+            )) {
+                Text("—").tag(0)
+                Text("Touche").tag(1)
+                Text("Texte").tag(2)
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+
+            // Action-specific field
+            switch action {
+            case .virtualKey(let keyCode):
+                Picker("", selection: Binding(
+                    get: { keyCode },
+                    set: { setAction(.virtualKey(keyCode: $0)) }
+                )) {
+                    ForEach(fKeys, id: \.code) { k in Text(k.label).tag(k.code) }
+                }
+                .labelsHidden()
+
+            case .typeText(let saved):
+                HStack(spacing: 4) {
+                    TextField("Texte à écrire", text: $textBuffer)
+                        .textFieldStyle(.roundedBorder)
+                        .font(.system(size: 11))
+                        .focused($textFocused)
+                        .onSubmit { commitText() }
+                        .onChange(of: textFocused) { _, focused in
+                            if !focused { commitText() }
+                        }
+                    if textBuffer != saved {
+                        Button { commitText() } label: {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 10, weight: .bold))
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.mini)
+                    }
+                }
+
+            case .none:
+                EmptyView()
+            }
+        }
+        .font(.system(size: 11))
+        .padding(8)
+        .background(.quaternary, in: RoundedRectangle(cornerRadius: 6))
+        .onChange(of: name.wrappedValue) { _, newName in
+            if !nameFocused { nameBuffer = newName }
+        }
+        .onChange(of: action) { _, newAction in
+            if case .typeText(let t) = newAction, !textFocused { textBuffer = t }
+        }
+    }
+
+    private var actionTag: Int {
+        switch action {
+        case .none:       return 0
+        case .virtualKey: return 1
+        case .typeText:   return 2
+        }
+    }
+
+    private func commitName() {
+        name.wrappedValue = nameBuffer.trimmingCharacters(in: .whitespaces)
+    }
+
+    private func commitText() {
+        setAction(.typeText(textBuffer))
+    }
 }
