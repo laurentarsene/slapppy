@@ -27,8 +27,8 @@ set -euo pipefail
 # ── Config ────────────────────────────────────────────────────────
 SCHEME="Slappy"
 PROJECT="Slappy/Slappy.xcodeproj"
-APP_VERSION="1.9"
-BUILD_NUMBER="11"
+APP_VERSION="2"
+BUILD_NUMBER="14"
 BUILD_DIR="build"
 ARCHIVE_PATH="$BUILD_DIR/Slapppy.xcarchive"
 EXPORT_PATH="$BUILD_DIR/export"
@@ -145,13 +145,41 @@ echo ""
 echo "▶ 5/6  Stapling notarisation ticket..."
 xcrun stapler staple "$DMG_PATH"
 
-# ── 6. Update appcast.xml ─────────────────────────────────────────
+# ── 6. Update appcast.xml + release notes ────────────────────────
 echo ""
-echo "▶ 6/6  Updating appcast.xml..."
+echo "▶ 6/6  Updating appcast.xml and release notes..."
 
 DMG_SIZE=$(stat -f%z "$DMG_PATH")
 ED_SIGNATURE=$("$SIGN_UPDATE" "$DMG_PATH" | grep -o 'sparkle:edSignature="[^"]*"' | cut -d'"' -f2)
 PUB_DATE=$(date -u "+%a, %d %b %Y %H:%M:%S +0000")
+RELEASE_NOTES_PATH="docs/release-notes/$APP_VERSION.html"
+
+# Create release notes file if it doesn't exist yet
+if [[ ! -f "$RELEASE_NOTES_PATH" ]]; then
+  mkdir -p "docs/release-notes"
+  cat > "$RELEASE_NOTES_PATH" <<RNEOF
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<style>
+  body { font-family: -apple-system, sans-serif; font-size: 13px; line-height: 1.5; margin: 16px 20px; color: #1d1d1f; background: transparent; }
+  h2   { font-size: 15px; font-weight: 600; margin: 0 0 10px; }
+  ul   { margin: 0; padding-left: 18px; }
+  li   { margin: 5px 0; }
+  @media (prefers-color-scheme: dark) { body, h2 { color: #f5f5f7; } }
+</style>
+</head>
+<body>
+<h2>Version $APP_VERSION</h2>
+<ul>
+  <li><!-- Add release notes here --></li>
+</ul>
+</body>
+</html>
+RNEOF
+  echo "   Release notes created: $RELEASE_NOTES_PATH (edit before pushing)"
+fi
 
 cat > "$APPCAST_PATH" <<EOF
 <?xml version="1.0" encoding="utf-8"?>
@@ -167,6 +195,7 @@ cat > "$APPCAST_PATH" <<EOF
       <sparkle:version>$BUILD_NUMBER</sparkle:version>
       <sparkle:shortVersionString>$APP_VERSION</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://slapppy.com/release-notes/$APP_VERSION.html</sparkle:releaseNotesLink>
       <enclosure
         url="$DOWNLOAD_BASE_URL/$DMG_NAME"
         sparkle:edSignature="$ED_SIGNATURE"
