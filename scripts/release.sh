@@ -63,10 +63,13 @@ if [[ ! -f "$SIGN_UPDATE" ]]; then
 fi
 
 mkdir -p "$BUILD_DIR"
+# Remove stale build artefacts so failures can never silently reuse old files
+rm -rf "$ARCHIVE_PATH" "$EXPORT_PATH"
 
 # ── 1. Archive ────────────────────────────────────────────────────
 echo ""
 echo "▶ 1/6  Archiving..."
+ARCHIVE_LOG=$(mktemp)
 xcodebuild archive \
   -project "$PROJECT" \
   -scheme "$SCHEME" \
@@ -76,20 +79,27 @@ xcodebuild archive \
   CODE_SIGN_STYLE=Automatic \
   MARKETING_VERSION="$APP_VERSION" \
   CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
-  2>&1 | grep -E "^(Build|error:|warning: |✓|▶)" || true
+  2>&1 | tee "$ARCHIVE_LOG" | grep -E "^(Build|error:|warning: |✓|▶)" || true
+if ! grep -q "ARCHIVE SUCCEEDED\|BUILD SUCCEEDED" "$ARCHIVE_LOG"; then
+  echo "❌  Archive failed. Full log: $ARCHIVE_LOG"; exit 1
+fi
 
 echo "   Archive: $ARCHIVE_PATH"
 
 # ── 2. Export (Developer ID) ──────────────────────────────────────
 echo ""
 echo "▶ 2/6  Exporting with Developer ID signing..."
+EXPORT_LOG=$(mktemp)
 xcodebuild -exportArchive \
   -archivePath "$ARCHIVE_PATH" \
   -exportPath "$EXPORT_PATH" \
   -exportOptionsPlist "scripts/ExportOptions.plist" \
-  2>&1 | grep -E "^(error:|warning: |✓)" || true
+  2>&1 | tee "$EXPORT_LOG" | grep -E "^(error:|warning: |✓)" || true
+if [[ ! -d "$APP_PATH" ]]; then
+  echo "❌  Export failed — $APP_PATH not found. Full log: $EXPORT_LOG"; exit 1
+fi
 
-echo "   App: $APP_PATH"
+echo "   App: $APP_PATH ($(defaults read "$APP_PATH/Contents/Info" CFBundleShortVersionString) build $(defaults read "$APP_PATH/Contents/Info" CFBundleVersion))"
 
 # ── 3. Create DMG ─────────────────────────────────────────────────
 echo ""
