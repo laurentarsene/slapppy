@@ -590,10 +590,22 @@ struct ContentView: View {
                         y: cy - (p.y - midY) * scale)
             }
 
-            // Stroke
+            // Stroke — Catmull-Rom spline so curves stay smooth regardless of drawing speed
             var path = Path()
-            path.move(to: pt(points[0]))
-            for p in points.dropFirst() { path.addLine(to: pt(p)) }
+            let screenPts = points.map { pt($0) }
+            let n = screenPts.count
+            path.move(to: screenPts[0])
+            for i in 1..<n {
+                let p0 = screenPts[max(0, i - 2)]
+                let p1 = screenPts[i - 1]
+                let p2 = screenPts[i]
+                let p3 = screenPts[min(n - 1, i + 1)]
+                let cp1 = CGPoint(x: p1.x + (p2.x - p0.x) / 6.0,
+                                  y: p1.y + (p2.y - p0.y) / 6.0)
+                let cp2 = CGPoint(x: p2.x - (p3.x - p1.x) / 6.0,
+                                  y: p2.y - (p3.y - p1.y) / 6.0)
+                path.addCurve(to: p2, control1: cp1, control2: cp2)
+            }
             ctx.stroke(path, with: .color(Color.accentColor), lineWidth: side > 42 ? 2.0 : 1.5)
 
             // Start — filled circle
