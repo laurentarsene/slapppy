@@ -21,26 +21,36 @@ struct SlappyApp: App {
     @State private var settings        = SettingsStore()
     @State private var menuIcon        = "hand.tap.fill"
     @State private var enginesStarted  = false
+    @AppStorage("onboardingDone") private var onboardingDone = false
+
+    private var shouldShowOnboarding: Bool {
+        !onboardingDone && store.patterns.isEmpty && gestureStore.templates.isEmpty
+    }
 
     var body: some Scene {
         MenuBarExtra {
             if license.isActivated {
-                ContentView()
-                    .environment(updater)
-                    .environment(trackpad)
-                    .environment(recorder)
-                    .environment(store)
-                    .environment(engine)
-                    .environment(gestureRecorder)
-                    .environment(gestureStore)
-                    .environment(gestureEngine)
-                    .environment(settings)
-                    .environment(license)
-                    .onAppear { startEngines() }
-                    .onReceive(NotificationCenter.default.publisher(
-                        for: NSApplication.willTerminateNotification)) { _ in
-                        trackpad.stop()
-                    }
+                if shouldShowOnboarding {
+                    OnboardingView { onboardingDone = true }
+                        .environment(trackpad)
+                } else {
+                    ContentView()
+                        .environment(updater)
+                        .environment(trackpad)
+                        .environment(recorder)
+                        .environment(store)
+                        .environment(engine)
+                        .environment(gestureRecorder)
+                        .environment(gestureStore)
+                        .environment(gestureEngine)
+                        .environment(settings)
+                        .environment(license)
+                        .onAppear { startEngines() }
+                        .onReceive(NotificationCenter.default.publisher(
+                            for: NSApplication.willTerminateNotification)) { _ in
+                            trackpad.stop()
+                        }
+                }
             } else {
                 ActivationView()
                     .environment(license)

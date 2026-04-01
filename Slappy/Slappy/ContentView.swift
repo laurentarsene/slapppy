@@ -5,6 +5,7 @@
 //  Created by Arsène Laurent on 28/03/2026.
 //
 
+import AppKit
 import SwiftUI
 import ServiceManagement
 
@@ -24,6 +25,8 @@ struct ContentView: View {
     @State private var editingPatternID:  UUID? = nil
     @State private var newGestureName     = ""
     @State private var editingGestureID:  UUID? = nil
+    @State private var showResetAlert           = false
+    @State private var tapDisplayIntensity:     Double = 0
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -33,7 +36,7 @@ struct ContentView: View {
             Divider()
             footer
         }
-        .frame(width: 280)
+        .frame(width: 360)
     }
 
     // MARK: - Header
@@ -41,21 +44,21 @@ struct ContentView: View {
     private var header: some View {
         HStack(spacing: 8) {
             Image(systemName: "hand.tap.fill")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.system(size: 15, weight: .semibold))
                 .foregroundStyle(Color.accentColor)
             Text("Slapppy")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.system(size: 15, weight: .semibold))
             Spacer()
             statusBadge
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
     }
 
     private var statusBadge: some View {
         HStack(spacing: 5) {
             Circle()
-                .frame(width: 6, height: 6)
+                .frame(width: 7, height: 7)
                 .foregroundStyle(trackpad.isListening ? Color.green : Color.secondary)
             Group {
                 if !trackpad.isListening {
@@ -66,12 +69,12 @@ struct ContentView: View {
                     Text("⌥ + tap")
                 }
             }
-            .font(.system(size: 11))
+            .font(.system(size: 12))
             .foregroundStyle(.secondary)
             .animation(.easeInOut(duration: 0.15), value: mode)
             if mode == 0, trackpad.tapCount > 0 {
                 Text("· \(trackpad.tapCount)")
-                    .font(.system(size: 11, design: .monospaced))
+                    .font(.system(size: 12, design: .monospaced))
                     .foregroundStyle(.tertiary)
             }
         }
@@ -90,9 +93,9 @@ struct ContentView: View {
             }
             .pickerStyle(.segmented)
             .labelsHidden()
-            .padding(.horizontal, 14)
-            .padding(.top, 12)
-            .padding(.bottom, 4)
+            .padding(.horizontal, 16)
+            .padding(.top, 14)
+            .padding(.bottom, 6)
 
             if mode == 0 {
                 slapsContent
@@ -107,16 +110,16 @@ struct ContentView: View {
                 Divider()
                 matchBadge(name: match.name, score: engine.lastMatchScore,
                            icon: "checkmark.circle.fill")
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
                     .transition(.opacity.combined(with: .push(from: .bottom)))
             }
             if let match = gestureEngine.lastMatchedTemplate {
                 Divider()
                 matchBadge(name: match.name, score: gestureEngine.lastMatchScore,
                            icon: "scribble.variable")
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
                     .transition(.opacity.combined(with: .push(from: .bottom)))
             }
         }
@@ -129,14 +132,14 @@ struct ContentView: View {
     private var slapsContent: some View {
         VStack(alignment: .leading, spacing: 0) {
             recorderSection
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
 
             if !store.patterns.isEmpty {
                 Divider()
                 patternList
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
             }
         }
     }
@@ -146,14 +149,14 @@ struct ContentView: View {
     private var gesturesContent: some View {
         VStack(alignment: .leading, spacing: 0) {
             gestureRecorderSection
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
 
             if !gestureStore.templates.isEmpty {
                 Divider()
                 gestureList
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
             }
         }
     }
@@ -171,6 +174,7 @@ struct ContentView: View {
                 settingRow("Tolérance timing", value: $s.timingTolerance, in: 0.10...0.60,
                            display: "±\(Int(s.timingTolerance * 100))%")
                     .help("Variation autorisée sur les intervalles entre slaps. À 30 %, un écart de ±30 % sur le rythme est accepté.")
+                tapMeter
             }
             Divider()
             settingsGroup("Gestes") {
@@ -188,41 +192,106 @@ struct ContentView: View {
                     .help("Délai après un match avant que le même pattern ou geste puisse se déclencher à nouveau. Évite les répétitions involontaires.")
             }
             Divider()
-            Button("Réinitialiser les réglages") { settings.reset() }
-                .font(.system(size: 11))
+            if showResetAlert {
+                HStack(spacing: 8) {
+                    Text("Réinitialiser ?")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Button("Annuler") { showResetAlert = false }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                    Button("Confirmer") { settings.reset(); showResetAlert = false }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.small)
+                        .tint(.red)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .transition(.opacity.combined(with: .push(from: .bottom)))
+            } else {
+                Button("Réinitialiser les réglages") {
+                    withAnimation(.easeInOut(duration: 0.15)) { showResetAlert = true }
+                }
+                .font(.system(size: 12))
                 .foregroundStyle(.secondary)
                 .buttonStyle(.plain)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+            }
         }
+        .animation(.easeInOut(duration: 0.15), value: showResetAlert)
     }
 
     @ViewBuilder
     private func settingsGroup<C: View>(_ title: String, @ViewBuilder content: () -> C) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             Text(title)
-                .font(.system(size: 10, weight: .semibold))
+                .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(.secondary)
                 .textCase(.uppercase)
             content()
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
     }
 
     private func settingRow(_ label: String, value: Binding<Double>,
                             in range: ClosedRange<Double>, display: String) -> some View {
-        VStack(alignment: .leading, spacing: 3) {
+        VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text(label)
-                    .font(.system(size: 11))
+                    .font(.system(size: 12))
                 Spacer()
                 Text(display)
-                    .font(.system(size: 11, design: .monospaced))
+                    .font(.system(size: 12, design: .monospaced))
                     .foregroundStyle(.secondary)
             }
             Slider(value: value, in: range)
                 .controlSize(.small)
+        }
+    }
+
+    // MARK: - Live tap meter
+
+    private var tapMeter: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            HStack {
+                Text("Frappe live")
+                    .font(.system(size: 12))
+                Spacer()
+                if trackpad.lastTapIntensity > 0 {
+                    Text("\(Int(trackpad.lastTapIntensity))")
+                        .font(.system(size: 12, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                        .contentTransition(.numericText())
+                }
+            }
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 3).fill(.quaternary).frame(height: 6)
+                    let norm = min(1, max(0, (tapDisplayIntensity - 400) / 800))
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(Color.accentColor)
+                        .frame(width: geo.size.width * norm, height: 6)
+                }
+            }
+            .frame(height: 6)
+            Text("Maintiens ⌥ et frappe le trackpad")
+                .font(.system(size: 11))
+                .foregroundStyle(.tertiary)
+        }
+        .onChange(of: trackpad.tapCount) { _, _ in
+            // Montée instantanée
+            withAnimation(.spring(response: 0.08, dampingFraction: 0.7)) {
+                tapDisplayIntensity = trackpad.lastTapIntensity
+            }
+            // Descente progressive après 200 ms
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                withAnimation(.easeOut(duration: 0.9)) {
+                    tapDisplayIntensity = 0
+                }
+            }
         }
     }
 
@@ -232,12 +301,12 @@ struct ContentView: View {
         HStack(spacing: 8) {
             Image(systemName: icon)
                 .foregroundStyle(.green)
-                .font(.system(size: 13))
+                .font(.system(size: 14))
             Text(name)
-                .font(.system(size: 12, weight: .medium))
+                .font(.system(size: 13, weight: .medium))
             Spacer()
             Text("\(Int(score * 100))%")
-                .font(.system(size: 11, design: .monospaced))
+                .font(.system(size: 12, design: .monospaced))
                 .foregroundStyle(.secondary)
         }
     }
@@ -253,7 +322,7 @@ struct ContentView: View {
                 recorder.startRecording()
             } label: {
                 Label("Enregistrer un pattern", systemImage: "plus.circle")
-                    .font(.system(size: 12, weight: .medium))
+                    .font(.system(size: 13, weight: .medium))
             }
             .buttonStyle(.plain)
             .foregroundStyle(Color.accentColor)
@@ -261,7 +330,7 @@ struct ContentView: View {
         case .recording:
             HStack {
                 Label("Tape ton pattern…", systemImage: "record.circle")
-                    .font(.system(size: 12))
+                    .font(.system(size: 13))
                     .foregroundStyle(.red)
                 Spacer()
                 cancelButton { recorder.discard() }
@@ -278,24 +347,24 @@ struct ContentView: View {
             }
 
         case .captured:
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 8) {
                     slapDots(recorder.slapEvents, color: Color.accentColor)
                     Text("\(recorder.slapCount) slaps")
-                        .font(.system(size: 11))
+                        .font(.system(size: 12))
                         .foregroundStyle(.secondary)
                 }
                 HStack(spacing: 6) {
                     TextField("Nom du pattern", text: $newPatternName)
                         .textFieldStyle(.roundedBorder)
-                        .font(.system(size: 12))
+                        .font(.system(size: 13))
                         .onSubmit { savePattern() }
                     Button("Sauver", action: savePattern)
                         .buttonStyle(.borderedProminent)
                         .controlSize(.small)
                 }
                 Button("Annuler") { recorder.discard(); newPatternName = "" }
-                    .font(.system(size: 11))
+                    .font(.system(size: 12))
                     .buttonStyle(.plain)
                     .foregroundStyle(.secondary)
             }
@@ -314,54 +383,52 @@ struct ContentView: View {
         switch gestureRecorder.state {
 
         case .idle:
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 5) {
                 Button {
                     gestureRecorder.startRecording()
                 } label: {
                     Label("Enregistrer un geste", systemImage: "plus.circle")
-                        .font(.system(size: 12, weight: .medium))
+                        .font(.system(size: 13, weight: .medium))
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(Color.accentColor)
 
                 Text("Maintiens ⌥ et bouge la souris")
-                    .font(.system(size: 10))
+                    .font(.system(size: 11))
                     .foregroundStyle(.tertiary)
                 Text("Forme uniquement — vitesse, taille et orientation ignorées")
-                    .font(.system(size: 10))
+                    .font(.system(size: 11))
                     .foregroundStyle(.tertiary)
             }
 
         case .recording:
             HStack {
                 Label("Maintiens ⌥ et dessine…", systemImage: "record.circle")
-                    .font(.system(size: 12))
+                    .font(.system(size: 13))
                     .foregroundStyle(.red)
                 Spacer()
                 cancelButton { gestureRecorder.discard() }
             }
 
         case .captured:
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 10) {
-                    gesturePathPreview(gestureRecorder.capturedDisplayPoints.isEmpty
-                        ? gestureRecorder.capturedPoints
-                        : gestureRecorder.capturedDisplayPoints)
-                    Text("\(gestureRecorder.capturedPoints.count) pts capturés")
-                        .font(.system(size: 11))
-                        .foregroundStyle(.secondary)
-                }
+            VStack(alignment: .leading, spacing: 10) {
+                gesturePathPreview(gestureRecorder.capturedDisplayPoints.isEmpty
+                    ? gestureRecorder.capturedPoints
+                    : gestureRecorder.capturedDisplayPoints, side: 100)
+                Text("\(gestureRecorder.capturedPoints.count) pts capturés")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.tertiary)
                 HStack(spacing: 6) {
                     TextField("Nom du geste", text: $newGestureName)
                         .textFieldStyle(.roundedBorder)
-                        .font(.system(size: 12))
+                        .font(.system(size: 13))
                         .onSubmit { saveGesture() }
                     Button("Sauver", action: saveGesture)
                         .buttonStyle(.borderedProminent)
                         .controlSize(.small)
                 }
                 Button("Annuler") { gestureRecorder.discard(); newGestureName = "" }
-                    .font(.system(size: 11))
+                    .font(.system(size: 12))
                     .buttonStyle(.plain)
                     .foregroundStyle(.secondary)
             }
@@ -377,7 +444,7 @@ struct ContentView: View {
 
     private func cancelButton(action: @escaping () -> Void) -> some View {
         Button("Annuler", action: action)
-            .font(.system(size: 11))
+            .font(.system(size: 12))
             .buttonStyle(.plain)
             .foregroundStyle(.secondary)
     }
@@ -387,10 +454,10 @@ struct ContentView: View {
     private var patternList: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Patterns")
-                .font(.system(size: 10, weight: .semibold))
+                .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(.secondary)
                 .textCase(.uppercase)
-                .padding(.bottom, 6)
+                .padding(.bottom, 8)
 
             ForEach(store.patterns) { pattern in
                 VStack(alignment: .leading, spacing: 0) {
@@ -402,7 +469,8 @@ struct ContentView: View {
                                 set: { store.rename(id: pattern.id, to: $0) }
                             ),
                             action: store.patterns.first { $0.id == pattern.id }?.action ?? .none,
-                            setAction: { store.setAction($0, forID: pattern.id) }
+                            setAction: { store.setAction($0, forID: pattern.id) },
+                            onDismiss: { withAnimation(.easeInOut(duration: 0.18)) { editingPatternID = nil } }
                         )
                         .padding(.top, 6)
                         .padding(.bottom, 4)
@@ -418,16 +486,25 @@ struct ContentView: View {
         HStack(spacing: 6) {
             slapDots(pattern.slaps, color: .secondary)
             Text(pattern.name)
-                .font(.system(size: 12))
+                .font(.system(size: 13))
                 .lineLimit(1)
             Spacer()
-            if pattern.action != .none {
-                Circle().frame(width: 5, height: 5).foregroundStyle(Color.accentColor)
+            if let label = actionSummary(pattern.action) {
+                HStack(spacing: 4) {
+                    if let icon = actionIcon(pattern.action) {
+                        Image(nsImage: icon).resizable().frame(width: 14, height: 14)
+                    }
+                    Text(label)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.tertiary)
+                        .lineLimit(1)
+                }
+                .frame(maxWidth: 100, alignment: .trailing)
             }
             editToggle(id: pattern.id, binding: $editingPatternID)
             deleteButton { store.remove(id: pattern.id); if editingPatternID == pattern.id { editingPatternID = nil } }
         }
-        .padding(.vertical, 3)
+        .padding(.vertical, 5)
     }
 
     // MARK: - Gesture list
@@ -435,10 +512,10 @@ struct ContentView: View {
     private var gestureList: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Gestes")
-                .font(.system(size: 10, weight: .semibold))
+                .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(.secondary)
                 .textCase(.uppercase)
-                .padding(.bottom, 6)
+                .padding(.bottom, 8)
 
             ForEach(gestureStore.templates) { template in
                 VStack(alignment: .leading, spacing: 0) {
@@ -450,7 +527,8 @@ struct ContentView: View {
                                 set: { gestureStore.rename(id: template.id, to: $0) }
                             ),
                             action: gestureStore.templates.first { $0.id == template.id }?.action ?? .none,
-                            setAction: { gestureStore.setAction($0, forID: template.id) }
+                            setAction: { gestureStore.setAction($0, forID: template.id) },
+                            onDismiss: { withAnimation(.easeInOut(duration: 0.18)) { editingGestureID = nil } }
                         )
                         .padding(.top, 6)
                         .padding(.bottom, 4)
@@ -466,51 +544,105 @@ struct ContentView: View {
         HStack(spacing: 6) {
             gesturePathPreview(template.displayPath.isEmpty ? template.path : template.displayPath)
             Text(template.name)
-                .font(.system(size: 12))
+                .font(.system(size: 13))
                 .lineLimit(1)
             Spacer()
-            if template.action != .none {
-                Circle().frame(width: 5, height: 5).foregroundStyle(Color.accentColor)
+            if let label = actionSummary(template.action) {
+                HStack(spacing: 4) {
+                    if let icon = actionIcon(template.action) {
+                        Image(nsImage: icon).resizable().frame(width: 14, height: 14)
+                    }
+                    Text(label)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.tertiary)
+                        .lineLimit(1)
+                }
+                .frame(maxWidth: 100, alignment: .trailing)
             }
             editToggle(id: template.id, binding: $editingGestureID)
             deleteButton { gestureStore.remove(id: template.id); if editingGestureID == template.id { editingGestureID = nil } }
         }
-        .padding(.vertical, 3)
+        .padding(.vertical, 5)
     }
 
     // MARK: - Gesture path preview
 
-    private func gesturePathPreview(_ points: [GesturePoint]) -> some View {
+    private func gesturePathPreview(_ points: [GesturePoint], side: CGFloat = 42) -> some View {
         Canvas { ctx, size in
             guard points.count >= 2 else { return }
-            let s  = Double(min(size.width, size.height)) / 250.0 * 0.85
-            let cx = Double(size.width)  / 2
-            let cy = Double(size.height) / 2
+
+            // Fit the gesture's bounding box into the canvas
+            let xs     = points.map(\.x),  ys     = points.map(\.y)
+            let minX   = xs.min()!,        maxX   = xs.max()!
+            let minY   = ys.min()!,        maxY   = ys.max()!
+            let rangeX = maxX - minX,      rangeY = maxY - minY
+            let range  = max(rangeX, rangeY, 1.0)
+            let pad    = Double(min(size.width, size.height)) * 0.12
+            let avail  = Double(min(size.width, size.height)) - 2 * pad
+            let scale  = avail / range
+            let midX   = (minX + maxX) / 2
+            let midY   = (minY + maxY) / 2
+            let cx     = Double(size.width)  / 2
+            let cy     = Double(size.height) / 2
 
             func pt(_ p: GesturePoint) -> CGPoint {
-                CGPoint(x: cx + p.x * s, y: cy - p.y * s)
+                CGPoint(x: cx + (p.x - midX) * scale,
+                        y: cy - (p.y - midY) * scale)
             }
 
             // Stroke
             var path = Path()
             path.move(to: pt(points[0]))
             for p in points.dropFirst() { path.addLine(to: pt(p)) }
-            ctx.stroke(path, with: .color(Color.accentColor), lineWidth: 1.5)
+            ctx.stroke(path, with: .color(Color.accentColor), lineWidth: side > 42 ? 2.0 : 1.5)
 
-            // Start — filled circle (shows where the gesture begins)
+            // Start — filled circle
             let start = pt(points[0])
+            let dotR: Double = side > 42 ? 3.5 : 2.5
             var startDot = Path()
-            startDot.addEllipse(in: CGRect(x: start.x - 2.5, y: start.y - 2.5, width: 5, height: 5))
+            startDot.addEllipse(in: CGRect(x: start.x - dotR, y: start.y - dotR,
+                                           width: dotR * 2, height: dotR * 2))
             ctx.fill(startDot, with: .color(Color.accentColor))
 
-            // End — ring (shows where the gesture ends)
+            // End — ring
             let end = pt(points[points.count - 1])
             var endDot = Path()
-            endDot.addEllipse(in: CGRect(x: end.x - 2.5, y: end.y - 2.5, width: 5, height: 5))
-            ctx.stroke(endDot, with: .color(Color.accentColor), lineWidth: 1.2)
+            endDot.addEllipse(in: CGRect(x: end.x - dotR, y: end.y - dotR,
+                                         width: dotR * 2, height: dotR * 2))
+            ctx.stroke(endDot, with: .color(Color.accentColor), lineWidth: 1.5)
         }
-        .frame(width: 36, height: 36)
-        .background(.quaternary, in: RoundedRectangle(cornerRadius: 5))
+        .frame(width: side, height: side)
+        .background(.quaternary, in: RoundedRectangle(cornerRadius: side > 42 ? 10 : 6))
+    }
+
+    // MARK: - Action icon
+
+    private func actionIcon(_ action: PatternAction) -> NSImage? {
+        guard case .launchApp(let bundleID, _) = action,
+              let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID)
+        else { return nil }
+        return NSWorkspace.shared.icon(forFile: url.path)
+    }
+
+    // MARK: - Action summary
+
+    private func actionSummary(_ action: PatternAction) -> String? {
+        switch action {
+        case .none:
+            return nil
+        case .virtualKey(let keyCode):
+            let map: [UInt16: String] = [105: "F13", 107: "F14", 113: "F15",
+                                         106: "F16",  64: "F17",  79: "F18",
+                                          80: "F19",  90: "F20"]
+            return map[keyCode] ?? "F?"
+        case .typeText(let t):
+            let line = t.components(separatedBy: .newlines)
+                        .first { !$0.trimmingCharacters(in: .whitespaces).isEmpty } ?? ""
+            guard !line.isEmpty else { return nil }
+            return line.count > 22 ? String(line.prefix(22)) + "…" : line
+        case .launchApp(_, let appName):
+            return appName.isEmpty ? nil : appName
+        }
     }
 
     // MARK: - Row button helpers
@@ -522,7 +654,7 @@ struct ContentView: View {
             }
         } label: {
             Image(systemName: binding.wrappedValue == id ? "chevron.up" : "slider.horizontal.3")
-                .font(.system(size: 10))
+                .font(.system(size: 11))
                 .foregroundStyle(binding.wrappedValue == id ? Color.accentColor : .secondary)
         }
         .buttonStyle(.plain)
@@ -533,7 +665,7 @@ struct ContentView: View {
             withAnimation { action() }
         } label: {
             Image(systemName: "trash")
-                .font(.system(size: 10))
+                .font(.system(size: 11))
         }
         .buttonStyle(.plain)
         .foregroundStyle(.secondary)
@@ -542,7 +674,7 @@ struct ContentView: View {
     // MARK: - Footer
 
     private var footer: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 8) {
             Toggle(isOn: Binding(
                 get: { SMAppService.mainApp.status == .enabled },
                 set: { on in
@@ -553,7 +685,7 @@ struct ContentView: View {
                 }
             )) { Text("Lancer au démarrage") }
                 .toggleStyle(.checkbox)
-                .font(.system(size: 11))
+                .font(.system(size: 12))
 
             if !trackpad.isInputMonitoringGranted {
                 warningButton("Input Monitoring requis") { trackpad.requestInputMonitoring() }
@@ -564,25 +696,25 @@ struct ContentView: View {
 
             HStack {
                 Button("Vérifier les mises à jour") { updater.checkForUpdates() }
-                    .font(.system(size: 11))
+                    .font(.system(size: 12))
                     .foregroundStyle(.secondary)
                     .buttonStyle(.plain)
                 Spacer()
                 Button("Quitter") { NSApplication.shared.terminate(nil) }
                     .keyboardShortcut("q")
-                    .font(.system(size: 11))
+                    .font(.system(size: 12))
                     .foregroundStyle(.secondary)
                     .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
     }
 
     private func warningButton(_ label: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Label(label, systemImage: "exclamationmark.triangle.fill")
-                .font(.system(size: 11))
+                .font(.system(size: 12))
                 .foregroundStyle(.orange)
         }
         .buttonStyle(.plain)
@@ -595,7 +727,7 @@ struct ContentView: View {
         return HStack(spacing: 3) {
             ForEach(events.prefix(8).indices, id: \.self) { i in
                 let norm = maxI > 0 ? events[i].intensity / maxI : 0.5
-                let size = CGFloat(5 + norm * 7)
+                let size = CGFloat(6 + norm * 8)
                 Circle()
                     .frame(width: size, height: size)
                     .foregroundStyle(color)
@@ -610,6 +742,49 @@ struct ContentView: View {
 private extension PatternAction {
     var isVirtualKey: Bool { if case .virtualKey = self { return true }; return false }
     var isTypeText:   Bool { if case .typeText   = self { return true }; return false }
+    var isLaunchApp:  Bool { if case .launchApp  = self { return true }; return false }
+}
+
+// MARK: - AppEntry
+
+private struct AppEntry: Identifiable {
+    let id:   String  // bundleID
+    let name: String
+    let url:  URL
+
+    static func loadAll() -> [AppEntry] {
+        let dirs: [String] = [
+            "/Applications",
+            "/System/Applications",
+            "/System/Applications/Utilities",
+            "/Applications/Utilities",
+            NSString(string: "~/Applications").expandingTildeInPath
+        ]
+        var seen    = Set<String>()
+        var entries = [AppEntry]()
+        for dir in dirs {
+            guard let urls = try? FileManager.default.contentsOfDirectory(
+                at: URL(fileURLWithPath: dir), includingPropertiesForKeys: nil
+            ) else { continue }
+            for url in urls where url.pathExtension == "app" {
+                let plist = url.appendingPathComponent("Contents/Info.plist")
+                guard let info     = NSDictionary(contentsOf: plist),
+                      let bundleID = info["CFBundleIdentifier"] as? String,
+                      !seen.contains(bundleID) else { continue }
+                let name = info["CFBundleDisplayName"] as? String
+                    ?? info["CFBundleName"] as? String
+                    ?? url.deletingPathExtension().lastPathComponent
+                seen.insert(bundleID)
+                entries.append(AppEntry(id: bundleID, name: name, url: url))
+            }
+        }
+        return entries.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+}
+
+private struct TextHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
 }
 
 // MARK: - ActionEditorView
@@ -623,11 +798,17 @@ private struct ActionEditorView: View {
     let name:      Binding<String>
     let action:    PatternAction
     let setAction: (PatternAction) -> Void
+    let onDismiss: () -> Void
 
     @State private var nameBuffer: String
     @State private var textBuffer: String
-    @FocusState private var nameFocused: Bool
-    @FocusState private var textFocused: Bool
+    @FocusState private var nameFocused:  Bool
+    @FocusState private var textFocused:  Bool
+    @State private var appSearch:         String     = ""
+    @State private var textEditorHeight:  CGFloat    = 60
+    @State private var installedApps:     [AppEntry] = []
+    @State private var selectedBundleID:  String     = ""
+    @State private var selectedAppName:   String     = ""
 
     private let fKeys: [(label: String, code: UInt16)] = [
         ("F13", 105), ("F14", 107), ("F15", 113),
@@ -636,38 +817,44 @@ private struct ActionEditorView: View {
     ]
 
     init(name: Binding<String>, action: PatternAction,
-         setAction: @escaping (PatternAction) -> Void) {
+         setAction: @escaping (PatternAction) -> Void,
+         onDismiss: @escaping () -> Void) {
         self.name      = name
         self.action    = action
         self.setAction = setAction
+        self.onDismiss = onDismiss
         _nameBuffer    = State(initialValue: name.wrappedValue)
         if case .typeText(let t) = action {
             _textBuffer = State(initialValue: t)
         } else {
             _textBuffer = State(initialValue: "")
         }
+        if case .launchApp(let bid, let appN) = action {
+            _selectedBundleID = State(initialValue: bid)
+            _selectedAppName  = State(initialValue: appN)
+        }
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 8) {
 
             // Name — saves on Enter or focus loss
             HStack(spacing: 4) {
                 TextField("Nom", text: $nameBuffer)
                     .textFieldStyle(.roundedBorder)
-                    .font(.system(size: 11))
+                    .font(.system(size: 12))
                     .focused($nameFocused)
                     .onSubmit { commitName() }
                     .onChange(of: nameFocused) { _, focused in
                         if !focused { commitName() }
                     }
                 if nameBuffer != name.wrappedValue {
-                    Button { commitName() } label: {
+                    Button { commitName(); onDismiss() } label: {
                         Image(systemName: "checkmark")
                             .font(.system(size: 10, weight: .bold))
                     }
                     .buttonStyle(.borderedProminent)
-                    .controlSize(.mini)
+                    .controlSize(.small)
                 }
             }
 
@@ -678,6 +865,7 @@ private struct ActionEditorView: View {
                     switch tag {
                     case 1: setAction(action.isVirtualKey ? action : .virtualKey(keyCode: 105))
                     case 2: setAction(action.isTypeText  ? action : .typeText(textBuffer))
+                    case 3: setAction(action.isLaunchApp ? action : .launchApp(bundleID: "", appName: ""))
                     default: setAction(.none)
                     }
                 }
@@ -685,6 +873,7 @@ private struct ActionEditorView: View {
                 Text("—").tag(0)
                 Text("Touche").tag(1)
                 Text("Texte").tag(2)
+                Text("App").tag(3)
             }
             .pickerStyle(.segmented)
             .labelsHidden()
@@ -701,38 +890,168 @@ private struct ActionEditorView: View {
                 .labelsHidden()
 
             case .typeText(let saved):
-                HStack(spacing: 4) {
-                    TextField("Texte à écrire", text: $textBuffer)
-                        .textFieldStyle(.roundedBorder)
-                        .font(.system(size: 11))
-                        .focused($textFocused)
-                        .onSubmit { commitText() }
-                        .onChange(of: textFocused) { _, focused in
-                            if !focused { commitText() }
+                VStack(alignment: .trailing, spacing: 4) {
+                    ZStack(alignment: .topLeading) {
+                        // Placeholder
+                        if textBuffer.isEmpty {
+                            Text("Texte à écrire…")
+                                .font(.system(size: 12))
+                                .foregroundStyle(.tertiary)
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 8)
+                                .allowsHitTesting(false)
                         }
+                        // Hidden text that drives auto-height
+                        Text(textBuffer.isEmpty ? " " : textBuffer)
+                            .font(.system(size: 12))
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 8)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .opacity(0)
+                            .background {
+                                GeometryReader { geo in
+                                    Color.clear.preference(
+                                        key: TextHeightKey.self,
+                                        value: geo.size.height
+                                    )
+                                }
+                            }
+                        TextEditor(text: $textBuffer)
+                            .font(.system(size: 12))
+                            .scrollContentBackground(.hidden)
+                            .focused($textFocused)
+                            .onChange(of: textFocused) { _, focused in
+                                if !focused { commitText() }
+                            }
+                    }
+                    .onPreferenceChange(TextHeightKey.self) { h in
+                        textEditorHeight = max(60, min(400, h))
+                    }
+                    .frame(height: textEditorHeight)
+                    .background(.background, in: RoundedRectangle(cornerRadius: 6))
+                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(.separator, lineWidth: 0.5))
+
                     if textBuffer != saved {
-                        Button { commitText() } label: {
+                        Button { commitText(); onDismiss() } label: {
                             Image(systemName: "checkmark")
                                 .font(.system(size: 10, weight: .bold))
                         }
                         .buttonStyle(.borderedProminent)
-                        .controlSize(.mini)
+                        .controlSize(.small)
                     }
+                }
+
+            case .launchApp:
+                VStack(alignment: .leading, spacing: 6) {
+                    TextField("Rechercher une app…", text: $appSearch)
+                        .textFieldStyle(.roundedBorder)
+                        .font(.system(size: 12))
+                    ScrollView {
+                        if installedApps.isEmpty {
+                            HStack {
+                                Spacer()
+                                Text("Chargement…")
+                                    .font(.system(size: 11))
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                            }
+                            .padding(.vertical, 10)
+                        }
+                        LazyVStack(alignment: .leading, spacing: 0) {
+                            ForEach(filteredApps) { app in
+                                HStack(spacing: 6) {
+                                    Image(nsImage: NSWorkspace.shared.icon(forFile: app.url.path))
+                                        .resizable()
+                                        .frame(width: 16, height: 16)
+                                    Text(app.name)
+                                        .font(.system(size: 12))
+                                        .lineLimit(1)
+                                    Spacer()
+                                    if app.id == selectedBundleID {
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 10, weight: .bold))
+                                            .foregroundStyle(Color.accentColor)
+                                    }
+                                }
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    selectedBundleID = app.id
+                                    selectedAppName  = app.name
+                                }
+                                .padding(.horizontal, 4)
+                                .padding(.vertical, 4)
+                                .background(
+                                    app.id == selectedBundleID
+                                        ? Color.accentColor.opacity(0.1) : .clear,
+                                    in: RoundedRectangle(cornerRadius: 4)
+                                )
+                            }
+                        }
+                        .padding(.vertical, 2)
+                    }
+                    .frame(minHeight: 120, maxHeight: 220)
+                    .background(.background, in: RoundedRectangle(cornerRadius: 6))
+                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(.separator, lineWidth: 0.5))
+
                 }
 
             case .none:
                 EmptyView()
             }
+
+            HStack {
+                Button("Annuler") {
+                    nameBuffer = name.wrappedValue
+                    if case .typeText(let t) = action { textBuffer = t }
+                    if case .launchApp(let bid, let appN) = action {
+                        selectedBundleID = bid
+                        selectedAppName  = appN
+                    } else {
+                        selectedBundleID = ""
+                        selectedAppName  = ""
+                    }
+                    onDismiss()
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                Spacer()
+                if hasPendingAppChange {
+                    Button("Sauver") {
+                        setAction(.launchApp(bundleID: selectedBundleID, appName: selectedAppName))
+                        onDismiss()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.small)
+                }
+            }
         }
-        .font(.system(size: 11))
-        .padding(8)
+        .font(.system(size: 12))
+        .padding(10)
         .background(.quaternary, in: RoundedRectangle(cornerRadius: 6))
         .onChange(of: name.wrappedValue) { _, newName in
             if !nameFocused { nameBuffer = newName }
         }
         .onChange(of: action) { _, newAction in
             if case .typeText(let t) = newAction, !textFocused { textBuffer = t }
+            if case .launchApp(let bid, let appN) = newAction {
+                selectedBundleID = bid
+                selectedAppName  = appN
+            }
         }
+        .task {
+            guard installedApps.isEmpty else { return }
+            installedApps = AppEntry.loadAll()
+        }
+    }
+
+    private var hasPendingAppChange: Bool {
+        guard case .launchApp(let savedID, _) = action else { return false }
+        return !selectedBundleID.isEmpty && selectedBundleID != savedID
+    }
+
+    private var filteredApps: [AppEntry] {
+        appSearch.isEmpty ? installedApps
+            : installedApps.filter { $0.name.localizedCaseInsensitiveContains(appSearch) }
     }
 
     private var actionTag: Int {
@@ -740,6 +1059,7 @@ private struct ActionEditorView: View {
         case .none:       return 0
         case .virtualKey: return 1
         case .typeText:   return 2
+        case .launchApp:  return 3
         }
     }
 

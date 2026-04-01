@@ -48,6 +48,7 @@ enum PatternAction: Codable, Equatable {
     case none
     case virtualKey(keyCode: UInt16)   // F13 = 105, F14 = 107 …
     case typeText(String)
+    case launchApp(bundleID: String, appName: String)
 }
 
 // MARK: - PatternStore

@@ -5,6 +5,7 @@
 //  Created by Arsène Laurent on 28/03/2026.
 //
 
+import AppKit
 import CoreGraphics
 import ApplicationServices
 
@@ -31,6 +32,10 @@ enum ActionExecutor {
         case .none:                   break
         case .virtualKey(let code):   postKey(code)
         case .typeText(let text):     postText(text)
+        case .launchApp(let bundleID, _):
+            if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) {
+                NSWorkspace.shared.openApplication(at: url, configuration: .init(), completionHandler: nil)
+            }
         }
     }
 

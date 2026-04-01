@@ -25,10 +25,11 @@ final class TrackpadReader {
     var onGesture: (([CGPoint]) -> Void)?
 
     var isListening              = false
-    var isInputMonitoringGranted = false
-    var isAccessibilityGranted   = false
-    var tapCount:    Int  = 0
-    var lastTapDate: Date = .distantPast
+    var isInputMonitoringGranted = CGPreflightListenEventAccess()
+    var isAccessibilityGranted   = AXIsProcessTrusted()
+    var tapCount:         Int    = 0
+    var lastTapDate:      Date   = .distantPast
+    var lastTapIntensity: Double = 0
 
     @ObservationIgnored var settings: SettingsStore?
 
@@ -58,8 +59,9 @@ final class TrackpadReader {
             gesturePoints = []   // discard any movement that happened during the click
             let ms = Date().timeIntervalSince(downDate) * 1000
             let intensity = max(400.0, min(1200.0, 400.0 + ms * 5.3))
-            tapCount    += 1
-            lastTapDate  = Date()
+            tapCount         += 1
+            lastTapDate       = Date()
+            lastTapIntensity  = intensity
             onTap?(intensity)
             print("[Slapppy] Tap! \(Int(ms)) ms → intensity \(Int(intensity))")
         }
@@ -140,12 +142,20 @@ final class TrackpadReader {
         isListening = false
     }
 
-    func requestInputMonitoring() { CGRequestListenEventAccess() }
+    func requestInputMonitoring() {
+        CGRequestListenEventAccess()
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent") {
+            NSWorkspace.shared.open(url)
+        }
+    }
 
     func requestAccessibility() {
         let opts = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
         _ = AXIsProcessTrustedWithOptions(opts)
     }
+
+    /// Called by OnboardingView to update permission state before engines start.
+    func refreshPermissions() { checkPermissions() }
 
     // MARK: - Private
 
