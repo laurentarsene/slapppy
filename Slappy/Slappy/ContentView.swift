@@ -24,6 +24,7 @@ struct ContentView: View {
     @State private var newPatternName     = ""
     @State private var editingPatternID:  UUID? = nil
     @State private var newGestureName     = ""
+    @FocusState private var gestureNameFocused: Bool
     @State private var editingGestureID:  UUID? = nil
     @State private var showResetAlert           = false
     @State private var tapDisplayIntensity:     Double = 0
@@ -422,7 +423,9 @@ struct ContentView: View {
                     TextField("Nom du geste", text: $newGestureName)
                         .textFieldStyle(.roundedBorder)
                         .font(.system(size: 13))
+                        .focused($gestureNameFocused)
                         .onSubmit { saveGesture() }
+                        .onAppear { gestureNameFocused = true }
                     Button("Sauver", action: saveGesture)
                         .buttonStyle(.borderedProminent)
                         .controlSize(.small)
@@ -713,7 +716,6 @@ struct ContentView: View {
                     .buttonStyle(.plain)
                 Spacer()
                 Button("Quitter") { NSApplication.shared.terminate(nil) }
-                    .keyboardShortcut("q")
                     .font(.system(size: 12))
                     .foregroundStyle(.secondary)
                     .buttonStyle(.plain)
