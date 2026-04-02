@@ -445,6 +445,15 @@
 
     .hero-fine { font-size: 12px; color: var(--fg-3); position: relative; z-index: 1; }
 
+    /* Accent gradient — used sparingly */
+    .grad {
+      background: linear-gradient(90deg, #0070f3 0%, #00DC82 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .sparkle { color: #BD34FE; }
+
     /* ── CONTEXT (Mac frame) ── */
     #context {
       background: var(--bg);
@@ -1013,9 +1022,9 @@
   <div class="hero-glow"></div>
 
   <p class="eyebrow hero-eyebrow reveal">Menu bar app · macOS · Works everywhere</p>
-  <h1 class="hero-title reveal reveal-d1">Stop typing<br>what you always type.</h1>
+  <h1 class="hero-title reveal reveal-d1">Stop <span class="grad">retyping</span><br>the same things.</h1>
   <p class="hero-sub reveal reveal-d2">
-    Record any tap rhythm or drawn gesture — map it to your email, postal address, sign-off, anything you retype daily. Fires from any app, in a single tap.
+    Tap a rhythm or draw a gesture on your trackpad — Slapppy pastes your text, fires a shortcut, or launches apps. From any app, instantly.
   </p>
 
   <!-- Trackpad block -->
@@ -1078,9 +1087,9 @@
   <div class="container">
     <div class="context-inner">
       <div class="context-header reveal">
-        <p class="eyebrow">The app</p>
+        <p class="eyebrow">Always on</p>
         <h2>It lives quietly<br>in your menu bar.</h2>
-        <p>One click opens your pattern library. From there, hold ⌥ and trigger any pattern from any app — browser, editor, Slack, anywhere.</p>
+        <p>One click opens your pattern library. Hold ⌥ and trigger any pattern from any app — browser, editor, Slack, terminal, anywhere.</p>
       </div>
 
       <div class="mac-wrap reveal">
@@ -1204,9 +1213,9 @@
 <section id="features">
   <div class="container">
     <div class="features-hdr reveal">
-      <p class="eyebrow">Three demos</p>
+      <p class="eyebrow">In action</p>
       <h2>Tap a rhythm. Draw a shape.<br>Watch it fire.</h2>
-      <p>Each pattern or gesture maps to exactly what you need — a saved phrase or any keyboard action.</p>
+      <p>Each pattern or gesture maps to exactly what you need — a saved phrase, a shortcut, or apps and URLs to open.</p>
     </div>
 
     <div class="demo-layout reveal">
@@ -1440,21 +1449,21 @@
   <div class="container">
     <div class="how-hdr reveal">
       <p class="eyebrow">Setup in 60 seconds</p>
-      <h2>Record once. Use forever.</h2>
+      <h2>Three steps.<br>Done in a minute.</h2>
     </div>
     <div class="steps">
       <div class="step reveal">
-        <div class="step-num">1</div>
+        <div class="step-num" style="border-color:rgba(0,112,243,.35);color:#0070f3">1</div>
         <h3>Record your input</h3>
         <p>Open Slapppy from the menu bar. Hold ⌥ and tap a rhythm or draw a gesture on the trackpad. Slapppy captures it.</p>
       </div>
       <div class="step reveal reveal-d1">
-        <div class="step-num">2</div>
+        <div class="step-num" style="border-color:rgba(0,220,130,.4);color:#009a55">2</div>
         <h3>Assign an output</h3>
-        <p>Pick what fires — a text snippet, a keyboard shortcut, one or more apps to launch, or URLs to open in your browser. Assign once, trigger forever.</p>
+        <p>Pick what fires — a text snippet, a keyboard shortcut, one or more apps to launch, or URLs to open. Assign once, trigger forever.</p>
       </div>
       <div class="step reveal reveal-d2">
-        <div class="step-num">3</div>
+        <div class="step-num" style="border-color:rgba(189,52,254,.35);color:#BD34FE">3</div>
         <h3>Use it anywhere</h3>
         <p>From any app, hold ⌥ and trigger your input. Slapppy fires the right action every time, silently, in the background.</p>
       </div>
@@ -1501,7 +1510,7 @@
   <div class="container">
     <div class="faq-hdr reveal">
       <p class="eyebrow">FAQ</p>
-      <h2>Quick answers.</h2>
+      <h2>Everything you need to know.</h2>
     </div>
     <div class="faq-grid">
       <div class="faq-item reveal">
@@ -1543,10 +1552,10 @@
       <div class="price-wrap">
         <div class="price-row">
           <span class="price-cur">€</span>
-          <span class="price-num">9.99</span>
+          <span class="price-num grad">9.99</span>
           <span class="price-mo"> once</span>
         </div>
-        <span class="price-trial">✦ 14-day money-back guarantee</span>
+        <span class="price-trial"><span class="sparkle">✦</span> 14-day money-back guarantee</span>
         <span class="price-note">One-time payment · no subscription ever</span>
       </div>
       <ul class="feat-list">
@@ -1578,7 +1587,7 @@
 <!-- ── FOOTER ── -->
 <footer>
   <div class="container">
-    <p>Made with ♥ by Arsène Laurent · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · macOS only</p>
+    <p>Made with <span style="color:#FF1E56">♥</span> by Arsène Laurent · <a href="mailto:hello@slapppy.com">hello@slapppy.com</a> · macOS only</p>
     <p style="margin-top:8px;font-size:12px"><a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms &amp; Conditions</a> · <a href="/refund">Refund Policy</a></p>
   </div>
 </footer>
