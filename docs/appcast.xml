@@ -6,16 +6,16 @@
     <description>Slapppy release notes</description>
     <language>en</language>
     <item>
-      <title>Version 2.4</title>
-      <pubDate>Wed, 01 Apr 2026 15:31:37 +0000</pubDate>
-      <sparkle:version>18</sparkle:version>
-      <sparkle:shortVersionString>2.4</sparkle:shortVersionString>
+      <title>Version 2.5</title>
+      <pubDate>Thu, 02 Apr 2026 14:32:41 +0000</pubDate>
+      <sparkle:version>22</sparkle:version>
+      <sparkle:shortVersionString>2.5</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <sparkle:releaseNotesLink>https://slapppy.com/release-notes/2.4.html</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>https://slapppy.com/release-notes/2.5.html</sparkle:releaseNotesLink>
       <enclosure
-        url="https://github.com/laurentarsene/slapppy/releases/download/v2.4/Slapppy-2.4.dmg"
-        sparkle:edSignature="zYpZCYaWooa+/ylmcVITYlcH1gFtf46ucL49knWTY42kmY1VTIOJvHGYy1hh3DfG2OxK3H7uUnwz9ZpKks96AQ=="
-        length="1535186"
+        url="https://github.com/laurentarsene/slapppy/releases/download/v2.5/Slapppy-2.5.dmg"
+        sparkle:edSignature="qPpVsxt9uEt4zj9IBLoFWo8DB8aylBXoO7UueHhjHDSKEr5C32sZ5doA6kvotitgAirQT0LngkhS4/5p7tYeCQ=="
+        length="1586647"
         type="application/octet-stream"/>
     </item>
   </channel>
