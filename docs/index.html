@@ -26,17 +26,17 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #000;
-      --bg-1:     #0a0a0a;
-      --bg-card:  #0f0f0f;
-      --bg-2:     #141414;
-      --fg:       #ededed;
-      --fg-2:     #888;
-      --fg-3:     #3a3a3a;
-      --accent:   #0071e3;
-      --border:   rgba(255,255,255,.08);
-      --border-h: rgba(255,255,255,.15);
-      --radius:   8px;
+      --bg:       #fafafa;
+      --bg-1:     #fff;
+      --bg-card:  #fff;
+      --bg-2:     #f2f2f2;
+      --fg:       #000;
+      --fg-2:     #666;
+      --fg-3:     #999;
+      --accent:   #0070f3;
+      --border:   rgba(0,0,0,.08);
+      --border-h: rgba(0,0,0,.16);
+      --radius:   6px;
       --font:     'Inter', system-ui, -apple-system, sans-serif;
     }
 
@@ -80,9 +80,9 @@
       position: fixed; inset: 0 0 auto; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 32px; height: 54px;
-      background: rgba(0,0,0,.85);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      background: rgba(250,250,250,.85);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
       border-bottom: 1px solid var(--border);
     }
 
@@ -92,18 +92,18 @@
       color: var(--fg); text-decoration: none;
     }
 
-    .nav-logo img { flex-shrink: 0; filter: invert(1) brightness(1.1); }
+    .nav-logo img { flex-shrink: 0; }
 
     .nav-cta {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 7px 16px;
-      background: var(--fg); color: #000;
+      background: #000; color: #fff;
       border-radius: var(--radius);
       font-size: 13px; font-weight: 600; text-decoration: none;
       letter-spacing: -.01em;
       transition: opacity .2s, transform .15s;
     }
-    .nav-cta:hover { opacity: .88; transform: scale(.98); }
+    .nav-cta:hover { opacity: .82; transform: scale(.98); }
 
     /* ── HERO ── */
     #hero {
@@ -116,21 +116,21 @@
       border-top: none;
     }
 
-    /* Vercel-style dot grid */
+    /* Vercel-style dot grid — light version */
     .hero-grid {
       position: absolute; inset: 0;
       background-image:
-        radial-gradient(rgba(255,255,255,.15) 1px, transparent 1px);
+        radial-gradient(rgba(0,0,0,.09) 1px, transparent 1px);
       background-size: 28px 28px;
-      mask-image: radial-gradient(ellipse 75% 65% at 50% 0%, black 0%, transparent 75%);
-      -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 0%, black 0%, transparent 75%);
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 80%);
       pointer-events: none;
     }
 
     .hero-glow {
       position: absolute; inset: -30%;
-      background: radial-gradient(ellipse 50% 40% at 50% 15%,
-        rgba(0,113,227,.1), transparent 65%);
+      background: radial-gradient(ellipse 45% 35% at 50% 20%,
+        rgba(0,112,243,.06), transparent 70%);
       pointer-events: none;
     }
 
@@ -168,11 +168,11 @@
     .hero-tap-instruction .key-chip {
       display: inline-flex; align-items: center;
       padding: 4px 10px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.12);
+      border-radius: 6px;
       font-size: 18px; font-weight: 600;
-      box-shadow: 0 1px 4px rgba(0,0,0,.08), 0 -1px 0 rgba(0,0,0,.04) inset;
+      box-shadow: 0 1px 3px rgba(0,0,0,.07), 0 -1px 0 rgba(0,0,0,.06) inset;
       color: var(--fg);
     }
 
@@ -184,10 +184,10 @@
 
     /* Trackpad */
     .trackpad {
-      background: linear-gradient(180deg, #232325 0%, #1a1a1c 100%);
+      background: linear-gradient(180deg, #e0e0e0 0%, #d4d4d4 100%);
       border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.1);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 8px 32px rgba(0,0,0,.6);
+      border: 1px solid rgba(0,0,0,.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 6px 24px rgba(0,0,0,.14);
       aspect-ratio: 16/10;
       width: min(420px, 88vw);
       position: relative;
@@ -201,7 +201,7 @@
       left: 0; right: 0;
       bottom: 28%;
       height: 1px;
-      background: rgba(255,255,255,.05);
+      background: rgba(0,0,0,.07);
     }
 
     /* Cursor dot */
@@ -277,10 +277,10 @@
       display: none; /* shown via JS */
       align-items: center; gap: 12px;
       padding: 14px 20px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-h);
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.08);
       border-radius: var(--radius);
-      box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 8px 32px rgba(0,0,0,.4);
+      box-shadow: 0 4px 16px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.04);
       opacity: 0; transform: translateY(6px);
       transition: opacity .4s, transform .4s;
       min-height: 56px;
@@ -307,11 +307,11 @@
     .email-compose {
       position: absolute; top: 0; left: 0; right: 0;
       display: none; /* shown via JS */
-      background: var(--bg-card);
-      border: 1px solid var(--border-h);
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.08);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+      box-shadow: 0 4px 16px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.04);
       opacity: 0; transform: translateY(6px);
       transition: opacity .4s, transform .4s;
       text-align: left;
@@ -321,11 +321,11 @@
     .addr-form {
       position: absolute; top: 0; left: 0; right: 0;
       display: none; /* shown via JS */
-      background: var(--bg-card);
-      border: 1px solid var(--border-h);
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.08);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+      box-shadow: 0 4px 16px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.04);
       opacity: 0; transform: translateY(6px);
       transition: opacity .4s, transform .4s;
       text-align: left;
@@ -334,7 +334,7 @@
     .addr-form-header {
       display: flex; align-items: center; gap: 7px;
       padding: 8px 12px;
-      background: var(--bg); border-bottom: 1px solid var(--border);
+      background: #fafafa; border-bottom: 1px solid var(--border);
       font-size: 11px; font-weight: 600; color: var(--fg);
     }
 
@@ -352,9 +352,9 @@
 
     .addr-val {
       padding: 3px 7px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 5px;
+      background: #fafafa;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 4px;
       color: var(--accent); font-weight: 600; font-size: 11px;
       flex: 1; min-height: 20px;
     }
@@ -371,7 +371,7 @@
     .ec-topbar {
       display: flex; align-items: center; gap: 8px;
       padding: 8px 12px;
-      background: var(--bg); border-bottom: 1px solid var(--border);
+      background: #fafafa; border-bottom: 1px solid var(--border);
     }
 
     .ec-dots { display: flex; gap: 5px; }
@@ -424,13 +424,13 @@
     .btn-primary {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 13px 26px;
-      background: var(--fg); color: #000;
+      background: #000; color: #fff;
       border-radius: var(--radius);
       font-size: 15px; font-weight: 600; font-family: var(--font);
       text-decoration: none; letter-spacing: -.01em;
       transition: opacity .2s, transform .15s;
     }
-    .btn-primary:hover { opacity: .88; transform: scale(.98); }
+    .btn-primary:hover { opacity: .82; transform: scale(.98); }
 
     .btn-secondary {
       display: inline-flex; align-items: center; gap: 8px;
@@ -438,10 +438,10 @@
       background: transparent; color: var(--fg);
       border-radius: var(--radius);
       font-size: 15px; font-weight: 500; font-family: var(--font);
-      text-decoration: none; border: 1px solid var(--border-h);
+      text-decoration: none; border: 1px solid rgba(0,0,0,.14);
       transition: border-color .2s, transform .15s;
     }
-    .btn-secondary:hover { border-color: rgba(255,255,255,.3); transform: scale(.98); }
+    .btn-secondary:hover { border-color: rgba(0,0,0,.3); transform: scale(.98); }
 
     .hero-fine { font-size: 12px; color: var(--fg-3); position: relative; z-index: 1; }
 
@@ -472,8 +472,8 @@
     .mac-frame {
       width: min(460px, 92vw);
       border-radius: 12px; overflow: hidden;
-      box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 32px 80px rgba(0,0,0,.7);
-      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 0 0 1px rgba(0,0,0,.08), 0 24px 64px rgba(0,0,0,.18);
+      border: 1px solid rgba(0,0,0,.1);
     }
 
     .mac-menubar {
@@ -509,9 +509,9 @@
 
     .mac-popup {
       width: 240px;
-      background: #111;
+      background: #1a1a1a;
       border-radius: 10px;
-      box-shadow: 0 16px 48px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08);
+      box-shadow: 0 16px 48px rgba(0,0,0,.25), 0 0 0 1px rgba(255,255,255,.08);
       border: 1px solid rgba(255,255,255,.1);
       overflow: hidden;
     }
@@ -576,20 +576,21 @@
       padding: 1px 5px; border-radius: 4px;
     }
 
-    .tag-t { background: color-mix(in srgb,#34c759 13%,transparent); color:#34c759; }
-    .tag-k { background: color-mix(in srgb,var(--accent) 13%,transparent); color:var(--accent); }
+    .tag-t { background: rgba(0,138,50,.08); color:#007a2d; }
+    .tag-k { background: rgba(0,112,243,.08); color:var(--accent); }
 
     /* Annotation callout */
     .mac-annotation {
       position: absolute;
-      background: var(--bg-2);
+      background: #fff;
       color: var(--fg-2);
       font-size: 11px; font-weight: 500;
       padding: 5px 10px;
-      border: 1px solid var(--border-h);
+      border: 1px solid rgba(0,0,0,.1);
       border-radius: 6px;
       white-space: nowrap;
       pointer-events: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
     }
 
     .mac-annotation::after {
@@ -604,7 +605,7 @@
 
     .mac-annotation.top-right::after {
       bottom: -10px; right: 18px;
-      border-top-color: var(--border-h);
+      border-top-color: rgba(0,0,0,.1);
     }
 
     .mac-annotation.left {
@@ -613,7 +614,7 @@
 
     .mac-annotation.left::after {
       right: -10px; top: 8px;
-      border-left-color: var(--border-h);
+      border-left-color: rgba(0,0,0,.1);
     }
 
     @media (max-width: 640px) {
@@ -621,7 +622,7 @@
     }
 
     /* ── DEMO SECTION ── */
-    #features { background: var(--bg-1); }
+    #features { background: var(--bg); }
 
     .features-hdr { text-align: center; margin-bottom: 64px; }
     .features-hdr h2 { margin-top: 12px; }
@@ -646,8 +647,8 @@
     }
 
     .demo-item.active {
-      background: rgba(255,255,255,.04);
-      border-color: var(--border-h);
+      background: var(--bg-2);
+      border-color: rgba(0,0,0,.1);
     }
 
     .demo-item-top {
@@ -717,8 +718,8 @@
     .sch-arrow { display: flex; justify-content: center; color: var(--fg-3); }
 
     .sch-engine {
-      background: rgba(0,113,227,.06);
-      border: 1px solid rgba(0,113,227,.2);
+      background: rgba(0,112,243,.04);
+      border: 1px solid rgba(0,112,243,.18);
       border-radius: var(--radius); padding: 20px 14px; text-align: center;
     }
 
@@ -785,10 +786,10 @@
       transition: opacity .18s, transform .18s, background-color .25s;
     }
     .rhythm-dot.visible { opacity: 1; transform: scale(1); }
-    .rhythm-dot.success { background-color: #34c759; }
+    .rhythm-dot.success { background-color: #008a32; }
 
     .rhythm-result {
-      font-size: 12px; font-weight: 500; color: #34c759;
+      font-size: 12px; font-weight: 500; color: #008a32;
       opacity: 0; transform: translateX(-6px);
       transition: opacity .3s, transform .3s; white-space: nowrap;
     }
@@ -800,7 +801,7 @@
     @media (max-width: 600px) { .mouse-compat-card { padding: 24px 20px; } }
 
     /* ── HOW IT WORKS ── */
-    #how { background: var(--bg-1); }
+    #how { background: var(--bg); }
 
     .how-hdr { text-align: center; margin-bottom: 64px; }
     .how-hdr h2 { margin-top: 12px; }
@@ -821,7 +822,7 @@
 
     .step-num {
       width: 36px; height: 36px;
-      border: 1px solid var(--border-h);
+      border: 1px solid rgba(0,0,0,.12);
       border-radius: 50%;
       color: var(--fg-2);
       font-size: 14px; font-weight: 600;
@@ -860,9 +861,9 @@
     .price-trial {
       display: inline-flex; align-items: center; gap: 5px;
       padding: 4px 12px;
-      border: 1px solid rgba(52,199,89,.25);
+      border: 1px solid rgba(0,160,60,.2);
       border-radius: 980px;
-      font-size: 11px; font-weight: 600; color: #34c759;
+      font-size: 11px; font-weight: 600; color: #008a32;
     }
 
     .price-note { font-size: 11px; color: var(--fg-3); }
@@ -883,7 +884,7 @@
 
     .feat-list li::before {
       content: '✓'; flex-shrink: 0;
-      color: #34c759; font-size: 11px; font-weight: 700;
+      color: #008a32; font-size: 11px; font-weight: 700;
       width: 14px;
     }
 
@@ -932,7 +933,7 @@
     footer a:hover { color: var(--fg); }
 
     /* ── FAQ ── */
-    #faq { background: var(--bg-1); }
+    #faq { background: var(--bg); }
     .faq-hdr { text-align: center; margin-bottom: 56px; }
     .faq-hdr h2 { margin-top: 12px; }
 
@@ -946,11 +947,11 @@
     }
 
     .faq-item {
-      background: var(--bg-1);
+      background: #fff;
       padding: 24px 26px;
       transition: background .2s;
     }
-    .faq-item:hover { background: var(--bg-2); }
+    .faq-item:hover { background: #fafafa; }
 
     .faq-item h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--fg); }
     .faq-item p  { font-size: 13px; }
@@ -990,8 +991,8 @@
     }
     .uc-pill:hover { border-color: var(--border-h); color: var(--fg); }
     .uc-pill.fun {
-      border-color: rgba(255,255,255,.12);
-      color: var(--fg);
+      border-color: rgba(0,0,0,.14);
+      color: #000;
     }
   </style>
 </head>
@@ -1210,35 +1211,35 @@
 
     <div class="demo-layout reveal">
       <div class="demo-list">
-        <div class="demo-item" id="di0" style="--di-color:#34c759">
+        <div class="demo-item" id="di0" style="--di-color:#008a32">
           <div class="demo-item-top">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#34c759 13%,transparent)">💬</div>
+            <div class="demo-item-icon" style="background:rgba(0,138,50,.08)">💬</div>
             <div class="demo-item-label">Quick reply</div>
           </div>
           <div class="demo-item-hint">⌥ + quick-quick · pause · quick-quick</div>
-          <div class="demo-item-result" id="dr0" style="background:color-mix(in srgb,#34c759 10%,transparent);color:#34c759">
+          <div class="demo-item-result" id="dr0" style="background:rgba(0,138,50,.07);color:#007a2d">
             💬 Quick reply — typed
           </div>
         </div>
 
         <div class="demo-item" id="di1" style="--di-color:#0071e3">
           <div class="demo-item-top">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#0071e3 13%,transparent)">@</div>
+            <div class="demo-item-icon" style="background:rgba(0,112,243,.08)">@</div>
             <div class="demo-item-label">Draw an @ gesture</div>
           </div>
           <div class="demo-item-hint">⌥ + trace an @ with the cursor</div>
-          <div class="demo-item-result" id="dr1" style="background:color-mix(in srgb,#0071e3 10%,transparent);color:#0071e3">
+          <div class="demo-item-result" id="dr1" style="background:rgba(0,112,243,.07);color:#0055c0">
             ✉️ arsene@protonmail.com
           </div>
         </div>
 
         <div class="demo-item" id="di2" style="--di-color:#ff9f0a">
           <div class="demo-item-top">
-            <div class="demo-item-icon" style="background:color-mix(in srgb,#ff9f0a 13%,transparent)">😅</div>
+            <div class="demo-item-icon" style="background:rgba(180,100,0,.08)">😅</div>
             <div class="demo-item-label">"Didn't see your msg"</div>
           </div>
           <div class="demo-item-hint">⌥ + slow · quick quick quick</div>
-          <div class="demo-item-result" id="dr2" style="background:color-mix(in srgb,#ff9f0a 10%,transparent);color:#ff9f0a">
+          <div class="demo-item-result" id="dr2" style="background:rgba(180,90,0,.07);color:#a05000">
             😅 sent in one tap
           </div>
         </div>
@@ -1341,28 +1342,28 @@
 
       <div class="sch-outputs">
         <div class="sch-output">
-          <div class="sch-output-icon" style="background:color-mix(in srgb,#34c759 12%,transparent)">💬</div>
+          <div class="sch-output-icon" style="background:rgba(0,138,50,.08)">💬</div>
           <div>
             <div class="sch-output-title">Text snippet</div>
             <div class="sch-output-eg">"arsene@protonmail.com"</div>
           </div>
         </div>
         <div class="sch-output">
-          <div class="sch-output-icon" style="background:color-mix(in srgb,#0071e3 12%,transparent)">⌨️</div>
+          <div class="sch-output-icon" style="background:rgba(0,112,243,.08)">⌨️</div>
           <div>
             <div class="sch-output-title">Keyboard shortcut</div>
             <div class="sch-output-eg">F13 → Alfred · ⌘⇧4 · mute mic</div>
           </div>
         </div>
         <div class="sch-output">
-          <div class="sch-output-icon" style="background:color-mix(in srgb,#ff9f0a 12%,transparent)">📋</div>
+          <div class="sch-output-icon" style="background:rgba(180,100,0,.08)">📋</div>
           <div>
             <div class="sch-output-title">Any saved phrase</div>
             <div class="sch-output-eg">Sign-off · address · meeting link</div>
           </div>
         </div>
         <div class="sch-output">
-          <div class="sch-output-icon" style="background:color-mix(in srgb,#bf5af2 12%,transparent)">🚀</div>
+          <div class="sch-output-icon" style="background:rgba(140,60,200,.08)">🚀</div>
           <div>
             <div class="sch-output-title">Launch apps & open URLs</div>
             <div class="sch-output-eg">Figma + Spotify · youtube.com · dashboard</div>
