@@ -8,6 +8,7 @@
 import AppKit
 import CoreGraphics
 import ApplicationServices
+import Foundation
 
 /// Translates a PatternAction into system-level keyboard events (CGEvent).
 ///
@@ -29,17 +30,37 @@ enum ActionExecutor {
     static func execute(_ action: PatternAction) {
         print("[Slapppy] execute action=\(action) trusted=\(AXIsProcessTrusted())")
         switch action {
-        case .none:                   break
-        case .virtualKey(let code):   postKey(code)
-        case .typeText(let text):     postText(text)
+        case .none:
+            break
+        case .virtualKey(let code):
+            postKey(code)
+        case .typeText(let text):
+            postText(text)
         case .launchApp(let bundleID, _):
-            if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) {
-                NSWorkspace.shared.openApplication(at: url, configuration: .init(), completionHandler: nil)
-            }
+            openApp(bundleID: bundleID)
+        case .launchApps(let items):
+            for item in items { openApp(bundleID: item.bundleID) }
+        case .openURL(let urlString):
+            openURL(urlString)
+        case .open(let apps, let urls):
+            for item in apps { openApp(bundleID: item.bundleID) }
+            for urlString in urls { openURL(urlString) }
         }
     }
 
     // MARK: - Private
+
+    private static func openApp(bundleID: String) {
+        if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) {
+            NSWorkspace.shared.openApplication(at: url, configuration: .init(), completionHandler: nil)
+        }
+    }
+
+    private static func openURL(_ urlString: String) {
+        var s = urlString.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !s.isEmpty && !s.contains("://") { s = "https://" + s }
+        if let url = URL(string: s) { NSWorkspace.shared.open(url) }
+    }
 
     private static func postKey(_ keyCode: UInt16) {
         let src = CGEventSource(stateID: .hidSystemState)

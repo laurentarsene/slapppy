@@ -143,9 +143,11 @@ final class TrackpadReader {
     }
 
     func requestInputMonitoring() {
-        CGRequestListenEventAccess()
-        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent") {
-            NSWorkspace.shared.open(url)
+        if !CGRequestListenEventAccess() {
+            // Already denied or macOS won't show the dialog — open System Settings directly
+            if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ListenEvent") {
+                NSWorkspace.shared.open(url)
+            }
         }
     }
 

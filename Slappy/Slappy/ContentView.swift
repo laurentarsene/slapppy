@@ -492,18 +492,8 @@ struct ContentView: View {
                 .font(.system(size: 13))
                 .lineLimit(1)
             Spacer()
-            if let label = actionSummary(pattern.action) {
-                HStack(spacing: 4) {
-                    if let icon = actionIcon(pattern.action) {
-                        Image(nsImage: icon).resizable().frame(width: 14, height: 14)
-                    }
-                    Text(label)
-                        .font(.system(size: 11))
-                        .foregroundStyle(.tertiary)
-                        .lineLimit(1)
-                }
+            actionSummaryView(pattern.action)
                 .frame(maxWidth: 100, alignment: .trailing)
-            }
             editToggle(id: pattern.id, binding: $editingPatternID)
             deleteButton { store.remove(id: pattern.id); if editingPatternID == pattern.id { editingPatternID = nil } }
         }
@@ -550,18 +540,8 @@ struct ContentView: View {
                 .font(.system(size: 13))
                 .lineLimit(1)
             Spacer()
-            if let label = actionSummary(template.action) {
-                HStack(spacing: 4) {
-                    if let icon = actionIcon(template.action) {
-                        Image(nsImage: icon).resizable().frame(width: 14, height: 14)
-                    }
-                    Text(label)
-                        .font(.system(size: 11))
-                        .foregroundStyle(.tertiary)
-                        .lineLimit(1)
-                }
+            actionSummaryView(template.action)
                 .frame(maxWidth: 100, alignment: .trailing)
-            }
             editToggle(id: template.id, binding: $editingGestureID)
             deleteButton { gestureStore.remove(id: template.id); if editingGestureID == template.id { editingGestureID = nil } }
         }
@@ -630,33 +610,67 @@ struct ContentView: View {
         .background(.quaternary, in: RoundedRectangle(cornerRadius: side > 42 ? 10 : 6))
     }
 
-    // MARK: - Action icon
+    // MARK: - Action summary view
 
-    private func actionIcon(_ action: PatternAction) -> NSImage? {
-        guard case .launchApp(let bundleID, _) = action,
-              let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID)
-        else { return nil }
-        return NSWorkspace.shared.icon(forFile: url.path)
-    }
-
-    // MARK: - Action summary
-
-    private func actionSummary(_ action: PatternAction) -> String? {
+    @ViewBuilder
+    private func actionSummaryView(_ action: PatternAction) -> some View {
         switch action {
         case .none:
-            return nil
+            EmptyView()
         case .virtualKey(let keyCode):
             let map: [UInt16: String] = [105: "F13", 107: "F14", 113: "F15",
                                          106: "F16",  64: "F17",  79: "F18",
                                           80: "F19",  90: "F20"]
-            return map[keyCode] ?? "F?"
+            Text(map[keyCode] ?? "F?")
+                .font(.system(size: 11))
+                .foregroundStyle(.tertiary)
         case .typeText(let t):
             let line = t.components(separatedBy: .newlines)
                         .first { !$0.trimmingCharacters(in: .whitespaces).isEmpty } ?? ""
-            guard !line.isEmpty else { return nil }
-            return line.count > 22 ? String(line.prefix(22)) + "…" : line
-        case .launchApp(_, let appName):
-            return appName.isEmpty ? nil : appName
+            if !line.isEmpty {
+                Text(line.count > 20 ? String(line.prefix(20)) + "…" : line)
+                    .font(.system(size: 11))
+                    .foregroundStyle(.tertiary)
+                    .lineLimit(1)
+            }
+        case .launchApp(let bundleID, _):
+            if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) {
+                Image(nsImage: NSWorkspace.shared.icon(forFile: url.path))
+                    .resizable().frame(width: 16, height: 16)
+            }
+        case .launchApps(let items):
+            HStack(spacing: 3) {
+                ForEach(items.prefix(4), id: \.bundleID) { item in
+                    if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: item.bundleID) {
+                        Image(nsImage: NSWorkspace.shared.icon(forFile: url.path))
+                            .resizable().frame(width: 16, height: 16)
+                    }
+                }
+            }
+        case .openURL(let urlString):
+            HStack(spacing: 3) {
+                Image(systemName: "globe")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.tertiary)
+                Text(urlString.count > 18 ? String(urlString.prefix(18)) + "…" : urlString)
+                    .font(.system(size: 11))
+                    .foregroundStyle(.tertiary)
+                    .lineLimit(1)
+            }
+        case .open(let apps, let urls):
+            HStack(spacing: 3) {
+                ForEach(apps.prefix(3), id: \.bundleID) { item in
+                    if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: item.bundleID) {
+                        Image(nsImage: NSWorkspace.shared.icon(forFile: url.path))
+                            .resizable().frame(width: 16, height: 16)
+                    }
+                }
+                if !urls.isEmpty {
+                    Image(systemName: "globe")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.tertiary)
+                }
+            }
         }
     }
 
@@ -756,7 +770,12 @@ struct ContentView: View {
 private extension PatternAction {
     var isVirtualKey: Bool { if case .virtualKey = self { return true }; return false }
     var isTypeText:   Bool { if case .typeText   = self { return true }; return false }
-    var isLaunchApp:  Bool { if case .launchApp  = self { return true }; return false }
+    var isLaunchApp:  Bool {
+        switch self {
+        case .launchApp, .launchApps, .open: return true
+        default: return false
+        }
+    }
 }
 
 // MARK: - AppEntry
@@ -814,15 +833,17 @@ private struct ActionEditorView: View {
     let setAction: (PatternAction) -> Void
     let onDismiss: () -> Void
 
-    @State private var nameBuffer: String
-    @State private var textBuffer: String
+    @State private var nameBuffer:        String
+    @State private var textBuffer:        String
+    @State private var selectedApps:      [AppItem]  = []
+    @State private var urlList:           [String]   = []
+    @State private var newURLBuffer:      String     = ""
     @FocusState private var nameFocused:  Bool
     @FocusState private var textFocused:  Bool
+    @FocusState private var newURLFocused: Bool
     @State private var appSearch:         String     = ""
     @State private var textEditorHeight:  CGFloat    = 60
     @State private var installedApps:     [AppEntry] = []
-    @State private var selectedBundleID:  String     = ""
-    @State private var selectedAppName:   String     = ""
 
     private let fKeys: [(label: String, code: UInt16)] = [
         ("F13", 105), ("F14", 107), ("F15", 113),
@@ -843,9 +864,18 @@ private struct ActionEditorView: View {
         } else {
             _textBuffer = State(initialValue: "")
         }
-        if case .launchApp(let bid, let appN) = action {
-            _selectedBundleID = State(initialValue: bid)
-            _selectedAppName  = State(initialValue: appN)
+        switch action {
+        case .launchApp(let bid, let appN):
+            _selectedApps = State(initialValue: [AppItem(bundleID: bid, appName: appN)])
+        case .launchApps(let items):
+            _selectedApps = State(initialValue: items)
+        case .openURL(let u):
+            _urlList = State(initialValue: [u])
+        case .open(let apps, let urls):
+            _selectedApps = State(initialValue: apps)
+            _urlList      = State(initialValue: urls)
+        default:
+            break
         }
     }
 
@@ -878,8 +908,8 @@ private struct ActionEditorView: View {
                 set: { tag in
                     switch tag {
                     case 1: setAction(action.isVirtualKey ? action : .virtualKey(keyCode: 105))
-                    case 2: setAction(action.isTypeText  ? action : .typeText(textBuffer))
-                    case 3: setAction(action.isLaunchApp ? action : .launchApp(bundleID: "", appName: ""))
+                    case 2: setAction(action.isTypeText   ? action : .typeText(textBuffer))
+                    case 3: setAction(action.isLaunchApp ? action : .open(apps: selectedApps, urls: urlList))
                     default: setAction(.none)
                     }
                 }
@@ -887,7 +917,7 @@ private struct ActionEditorView: View {
                 Text("—").tag(0)
                 Text("Touche").tag(1)
                 Text("Texte").tag(2)
-                Text("App").tag(3)
+                Text("Ouvrir").tag(3)
             }
             .pickerStyle(.segmented)
             .labelsHidden()
@@ -906,7 +936,6 @@ private struct ActionEditorView: View {
             case .typeText(let saved):
                 VStack(alignment: .trailing, spacing: 4) {
                     ZStack(alignment: .topLeading) {
-                        // Placeholder
                         if textBuffer.isEmpty {
                             Text("Texte à écrire…")
                                 .font(.system(size: 12))
@@ -915,7 +944,6 @@ private struct ActionEditorView: View {
                                 .padding(.vertical, 8)
                                 .allowsHitTesting(false)
                         }
-                        // Hidden text that drives auto-height
                         Text(textBuffer.isEmpty ? " " : textBuffer)
                             .font(.system(size: 12))
                             .padding(.horizontal, 5)
@@ -955,58 +983,115 @@ private struct ActionEditorView: View {
                     }
                 }
 
-            case .launchApp:
-                VStack(alignment: .leading, spacing: 6) {
-                    TextField("Rechercher une app…", text: $appSearch)
-                        .textFieldStyle(.roundedBorder)
-                        .font(.system(size: 12))
-                    ScrollView {
-                        if installedApps.isEmpty {
-                            HStack {
-                                Spacer()
-                                Text("Chargement…")
-                                    .font(.system(size: 11))
-                                    .foregroundStyle(.secondary)
-                                Spacer()
+            case .launchApp, .launchApps, .openURL, .open:
+                VStack(alignment: .leading, spacing: 10) {
+
+                    // ── Résumé de ce qui va s'ouvrir ─────────────────────
+                    if selectedApps.isEmpty && urlList.isEmpty {
+                        Label("Coche des apps ou ajoute un lien ci-dessous", systemImage: "hand.point.down")
+                            .font(.system(size: 11))
+                            .foregroundStyle(.tertiary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.vertical, 6)
+                    } else {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("S'ouvrira au déclenchement")
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundStyle(.secondary)
+                            ForEach(selectedApps, id: \.bundleID) { item in
+                                openChip(
+                                    label: item.appName,
+                                    icon: {
+                                        if let u = NSWorkspace.shared.urlForApplication(withBundleIdentifier: item.bundleID) {
+                                            Image(nsImage: NSWorkspace.shared.icon(forFile: u.path))
+                                                .resizable().frame(width: 13, height: 13)
+                                        }
+                                    },
+                                    onRemove: { selectedApps.removeAll { $0.bundleID == item.bundleID } }
+                                )
                             }
-                            .padding(.vertical, 10)
-                        }
-                        LazyVStack(alignment: .leading, spacing: 0) {
-                            ForEach(filteredApps) { app in
-                                HStack(spacing: 6) {
-                                    Image(nsImage: NSWorkspace.shared.icon(forFile: app.url.path))
-                                        .resizable()
-                                        .frame(width: 16, height: 16)
-                                    Text(app.name)
-                                        .font(.system(size: 12))
-                                        .lineLimit(1)
-                                    Spacer()
-                                    if app.id == selectedBundleID {
-                                        Image(systemName: "checkmark")
-                                            .font(.system(size: 10, weight: .bold))
-                                            .foregroundStyle(Color.accentColor)
-                                    }
-                                }
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    selectedBundleID = app.id
-                                    selectedAppName  = app.name
-                                }
-                                .padding(.horizontal, 4)
-                                .padding(.vertical, 4)
-                                .background(
-                                    app.id == selectedBundleID
-                                        ? Color.accentColor.opacity(0.1) : .clear,
-                                    in: RoundedRectangle(cornerRadius: 4)
+                            ForEach(urlList, id: \.self) { url in
+                                openChip(
+                                    label: url,
+                                    icon: { Image(systemName: "link").font(.system(size: 10)).foregroundStyle(.secondary) },
+                                    onRemove: { urlList.removeAll { $0 == url } }
                                 )
                             }
                         }
-                        .padding(.vertical, 2)
+                        .padding(8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.background, in: RoundedRectangle(cornerRadius: 7))
+                        .overlay(RoundedRectangle(cornerRadius: 7).stroke(Color.accentColor.opacity(0.3), lineWidth: 1))
                     }
-                    .frame(minHeight: 120, maxHeight: 220)
+
+                    // ── Liste d'apps (coche pour ajouter / décocher pour retirer) ─
+                    TextField("Rechercher une app…", text: $appSearch)
+                        .textFieldStyle(.roundedBorder)
+                        .font(.system(size: 12))
+                    Group {
+                        if installedApps.isEmpty {
+                            HStack { Spacer(); ProgressView().controlSize(.small); Spacer() }
+                                .padding(.vertical, 12)
+                        } else {
+                            ScrollView {
+                                LazyVStack(alignment: .leading, spacing: 0) {
+                                    ForEach(filteredApps) { app in
+                                        let isSelected = selectedApps.contains { $0.bundleID == app.id }
+                                        HStack(spacing: 7) {
+                                            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                                                .font(.system(size: 14))
+                                                .foregroundStyle(isSelected ? Color.accentColor : Color.secondary.opacity(0.4))
+                                            Image(nsImage: NSWorkspace.shared.icon(forFile: app.url.path))
+                                                .resizable().frame(width: 15, height: 15)
+                                            Text(app.name)
+                                                .font(.system(size: 12)).lineLimit(1)
+                                        }
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            withAnimation(.easeInOut(duration: 0.12)) {
+                                                if isSelected {
+                                                    selectedApps.removeAll { $0.bundleID == app.id }
+                                                } else {
+                                                    selectedApps.append(AppItem(bundleID: app.id, appName: app.name))
+                                                }
+                                            }
+                                        }
+                                        .padding(.horizontal, 6).padding(.vertical, 5)
+                                        .background(
+                                            isSelected ? Color.accentColor.opacity(0.08) : .clear,
+                                            in: RoundedRectangle(cornerRadius: 4)
+                                        )
+                                    }
+                                }
+                                .padding(.vertical, 2)
+                            }
+                            .frame(minHeight: 80, maxHeight: 130)
+                        }
+                    }
                     .background(.background, in: RoundedRectangle(cornerRadius: 6))
                     .overlay(RoundedRectangle(cornerRadius: 6).stroke(.separator, lineWidth: 0.5))
 
+                    // ── Ajouter un lien ────────────────────────────────────
+                    HStack(spacing: 6) {
+                        Image(systemName: "link")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.tertiary)
+                        TextField("Ajouter un lien (ex : youtube.com)", text: $newURLBuffer)
+                            .textFieldStyle(.plain)
+                            .font(.system(size: 12))
+                            .focused($newURLFocused)
+                            .onSubmit { addURL() }
+                        if !newURLBuffer.trimmingCharacters(in: .whitespaces).isEmpty {
+                            Button("Ajouter", action: addURL)
+                                .buttonStyle(.borderedProminent)
+                                .controlSize(.small)
+                                .transition(.opacity.combined(with: .scale(scale: 0.9)))
+                        }
+                    }
+                    .padding(.horizontal, 8).padding(.vertical, 7)
+                    .background(.background, in: RoundedRectangle(cornerRadius: 6))
+                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(.separator, lineWidth: 0.5))
+                    .animation(.easeInOut(duration: 0.15), value: newURLBuffer.isEmpty)
                 }
 
             case .none:
@@ -1017,21 +1102,26 @@ private struct ActionEditorView: View {
                 Button("Annuler") {
                     nameBuffer = name.wrappedValue
                     if case .typeText(let t) = action { textBuffer = t }
-                    if case .launchApp(let bid, let appN) = action {
-                        selectedBundleID = bid
-                        selectedAppName  = appN
-                    } else {
-                        selectedBundleID = ""
-                        selectedAppName  = ""
+                    switch action {
+                    case .launchApp(let bid, let appN):
+                        selectedApps = [AppItem(bundleID: bid, appName: appN)]; urlList = []
+                    case .launchApps(let items):
+                        selectedApps = items; urlList = []
+                    case .openURL(let u):
+                        selectedApps = []; urlList = [u]
+                    case .open(let apps, let urls):
+                        selectedApps = apps; urlList = urls
+                    default:
+                        selectedApps = []; urlList = []
                     }
                     onDismiss()
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
                 Spacer()
-                if hasPendingAppChange {
+                if hasPendingChange {
                     Button("Sauver") {
-                        setAction(.launchApp(bundleID: selectedBundleID, appName: selectedAppName))
+                        setAction(.open(apps: selectedApps, urls: urlList))
                         onDismiss()
                     }
                     .buttonStyle(.borderedProminent)
@@ -1047,9 +1137,12 @@ private struct ActionEditorView: View {
         }
         .onChange(of: action) { _, newAction in
             if case .typeText(let t) = newAction, !textFocused { textBuffer = t }
-            if case .launchApp(let bid, let appN) = newAction {
-                selectedBundleID = bid
-                selectedAppName  = appN
+            switch newAction {
+            case .launchApp(let bid, let appN): selectedApps = [AppItem(bundleID: bid, appName: appN)]; urlList = []
+            case .launchApps(let items):        selectedApps = items; urlList = []
+            case .openURL(let u):               selectedApps = []; urlList = [u]
+            case .open(let apps, let urls):     selectedApps = apps; urlList = urls
+            default: break
             }
         }
         .task {
@@ -1058,9 +1151,17 @@ private struct ActionEditorView: View {
         }
     }
 
-    private var hasPendingAppChange: Bool {
-        guard case .launchApp(let savedID, _) = action else { return false }
-        return !selectedBundleID.isEmpty && selectedBundleID != savedID
+    private var hasPendingChange: Bool {
+        let savedApps: [AppItem]
+        let savedURLs: [String]
+        switch action {
+        case .launchApp(let bid, let n): savedApps = [AppItem(bundleID: bid, appName: n)]; savedURLs = []
+        case .launchApps(let items):     savedApps = items; savedURLs = []
+        case .openURL(let u):            savedApps = []; savedURLs = [u]
+        case .open(let apps, let urls):  savedApps = apps; savedURLs = urls
+        default: return !selectedApps.isEmpty || !urlList.isEmpty
+        }
+        return selectedApps != savedApps || urlList != savedURLs
     }
 
     private var filteredApps: [AppEntry] {
@@ -1070,10 +1171,11 @@ private struct ActionEditorView: View {
 
     private var actionTag: Int {
         switch action {
-        case .none:       return 0
-        case .virtualKey: return 1
-        case .typeText:   return 2
-        case .launchApp:  return 3
+        case .none:                          return 0
+        case .virtualKey:                    return 1
+        case .typeText:                      return 2
+        case .launchApp, .launchApps,
+             .openURL, .open:               return 3
         }
     }
 
@@ -1083,5 +1185,30 @@ private struct ActionEditorView: View {
 
     private func commitText() {
         setAction(.typeText(textBuffer))
+    }
+
+    @ViewBuilder
+    private func openChip<Icon: View>(label: String, @ViewBuilder icon: () -> Icon, onRemove: @escaping () -> Void) -> some View {
+        HStack(spacing: 5) {
+            icon()
+            Text(label)
+                .font(.system(size: 11))
+                .lineLimit(1)
+            Spacer(minLength: 0)
+            Button(action: onRemove) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(.tertiary)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private func addURL() {
+        var s = newURLBuffer.trimmingCharacters(in: .whitespaces)
+        guard !s.isEmpty else { return }
+        if !s.contains("://") { s = "https://" + s }
+        if !urlList.contains(s) { urlList.append(s) }
+        newURLBuffer = ""
     }
 }

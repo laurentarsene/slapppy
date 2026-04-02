@@ -8,6 +8,13 @@
 import Foundation
 import SwiftUI
 
+// MARK: - AppItem
+
+struct AppItem: Codable, Equatable {
+    var bundleID: String
+    var appName:  String
+}
+
 /// Minimum posdev for a slap to participate in pattern recording / matching.
 /// The detection threshold in AccelerometerReader is ~260 (noiseEnvelope + kSlapMargin).
 /// Anything that barely clears 260 is likely a vibration artefact, not an intentional tap.
@@ -46,9 +53,12 @@ struct Pattern: Identifiable, Codable, Equatable {
 
 enum PatternAction: Codable, Equatable {
     case none
-    case virtualKey(keyCode: UInt16)   // F13 = 105, F14 = 107 …
+    case virtualKey(keyCode: UInt16)                    // F13 = 105, F14 = 107 …
     case typeText(String)
-    case launchApp(bundleID: String, appName: String)
+    case launchApp(bundleID: String, appName: String)   // legacy — kept for decode compat
+    case launchApps([AppItem])                          // legacy — kept for decode compat
+    case openURL(String)                                // legacy — kept for decode compat
+    case open(apps: [AppItem], urls: [String])          // combined: apps + urls
 }
 
 // MARK: - PatternStore
