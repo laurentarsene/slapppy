@@ -84,7 +84,7 @@ echo "   GitHub Release: https://github.com/laurentarsene/slapppy/releases/tag/v
 # ── Commit and push updated appcast.xml ───────────────────────────
 echo ""
 echo "▶  Pushing appcast.xml..."
-git add docs/appcast.xml scripts/release.sh
+git add docs/appcast.xml docs/release-notes/ scripts/release.sh
 git commit -m "release $VERSION"
 git push
 
