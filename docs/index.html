@@ -158,11 +158,13 @@
     }
 
     .hero-tap-instruction {
-      font-size: clamp(20px, 2.8vw, 28px);
+      font-size: clamp(15px, 2.8vw, 28px);
       font-weight: 700; letter-spacing: -.025em;
       color: var(--fg);
       margin-bottom: 20px;
-      display: flex; align-items: center; gap: 12px;
+      display: flex; align-items: center; gap: 8px;
+      flex-wrap: wrap; justify-content: center; text-align: center;
+      max-width: 420px;
     }
 
     .hero-tap-instruction .key-chip {
@@ -1274,13 +1276,15 @@
 
   @media (max-width: 900px) {
     .bento-grid { grid-template-columns: 1fr 1fr; }
-    .bento-cell:nth-child(3n)  { border-right: 1px solid var(--border); }
+    .bento-cell-title { grid-row: span 1; border-bottom: 1px solid var(--border); }
     .bento-cell:nth-child(2n)  { border-right: none; }
-    .bento-cell:nth-child(n+5) { border-bottom: none; }
-    .bento-cell:nth-child(5)   { border-bottom: 1px solid var(--border); }
+    .bento-cell:nth-child(2n-1) { border-right: 1px solid var(--border); }
+    .bento-cell:nth-child(4),
+    .bento-cell:nth-child(5)   { border-bottom: none; }
   }
   @media (max-width: 560px) {
     .bento-grid { grid-template-columns: 1fr; }
+    .bento-cell-title { grid-row: span 1; border-bottom: 1px solid var(--border); }
     .bento-cell { border-right: none !important; }
     .bento-cell:last-child { border-bottom: none; }
   }
@@ -1925,9 +1929,14 @@
   background: var(--fg-1);
   transform: scale(1.4);
 }
-@media (max-width: 500px) {
-  .sc-stage { flex-direction: column; gap: 16px; }
+@media (max-width: 600px) {
+  .sc-stage { flex-direction: column; gap: 12px; align-items: flex-start; }
   .sc-scroll-container { height: 320vh; }
+  .sc-num { font-size: clamp(72px, 18vw, 100px); }
+  .sc-verb { font-size: 18px; }
+  .sc-desc { font-size: 14px; }
+  .sc-sticky { padding: 60px 0; }
+  .sc-dots { margin-top: 24px; }
 }
 </style>
 
@@ -3034,8 +3043,8 @@ const HERO_DEMOS = [
   position: fixed;
   left: 54%;
   top: 42%;
-  width: 380px;
-  height: 380px;
+  width: clamp(180px, 30vw, 380px);
+  height: clamp(180px, 30vw, 380px);
   object-fit: contain;
   opacity: 0.045;
   pointer-events: none;
