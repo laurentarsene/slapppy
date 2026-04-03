@@ -27,8 +27,19 @@ set -euo pipefail
 # ── Config ────────────────────────────────────────────────────────
 SCHEME="Slappy"
 PROJECT="Slappy/Slappy.xcodeproj"
+
+# Last released version (auto-updated on each run — do not edit manually)
 APP_VERSION="2.6"
 BUILD_NUMBER="23"
+
+# Auto-bump: +0.1 to version, +1 to build, save back into this script
+_NEW_VER=$(printf "%.1f" "$(echo "$APP_VERSION + 0.1" | bc)")
+_NEW_BUILD=$((BUILD_NUMBER + 1))
+sed -i '' "s/^APP_VERSION=.*/APP_VERSION=\"$_NEW_VER\"/" "$0"
+sed -i '' "s/^BUILD_NUMBER=.*/BUILD_NUMBER=\"$_NEW_BUILD\"/" "$0"
+APP_VERSION="$_NEW_VER"
+BUILD_NUMBER="$_NEW_BUILD"
+echo "▶ Releasing version $APP_VERSION (build $BUILD_NUMBER)"
 BUILD_DIR="build"
 ARCHIVE_PATH="$BUILD_DIR/Slapppy.xcarchive"
 EXPORT_PATH="$BUILD_DIR/export"
@@ -211,13 +222,19 @@ EOF
 
 echo "   Appcast: $APPCAST_PATH"
 
+# ── 7. GitHub Release + git push ─────────────────────────────────
+echo ""
+echo "▶ 7/7  Creating GitHub Release and pushing..."
+gh release create "v$APP_VERSION" "$DMG_PATH" \
+  --repo laurentarsene/slapppy \
+  --title "Slapppy $APP_VERSION" \
+  --notes "Version $APP_VERSION"
+
+git add docs/appcast.xml docs/release-notes/$APP_VERSION.html scripts/release.sh
+git commit -m "release $APP_VERSION"
+git push
+
 # ── Done ──────────────────────────────────────────────────────────
 echo ""
-echo "✅  Done!"
-echo "   File: $DMG_PATH"
-echo ""
-echo "   Next steps:"
-echo "   1. Upload $DMG_PATH to GitHub Releases (tag: v$APP_VERSION)"
-echo "   2. git add docs/appcast.xml && git commit -m 'release $APP_VERSION' && git push"
-echo "   3. Update Polar product file if needed"
+echo "✅  Done! Slapppy $APP_VERSION is live."
 echo ""
