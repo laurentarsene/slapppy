@@ -40,7 +40,7 @@
       --font:     'Geist', 'Inter', system-ui, -apple-system, sans-serif;
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
       font-family: var(--font);
       background: var(--bg);
@@ -128,7 +128,7 @@
     }
 
     .hero-glow {
-      position: absolute; inset: -30%;
+      position: absolute; inset: -30% 0;
       background: radial-gradient(ellipse 45% 35% at 50% 20%,
         rgba(0,112,243,.06), transparent 70%);
       pointer-events: none;
