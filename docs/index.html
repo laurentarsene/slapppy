@@ -112,7 +112,7 @@
       align-items: center; justify-content: center;
       text-align: center;
       padding: 96px 24px 72px;
-      position: relative; overflow: hidden;
+      position: relative; overflow: visible;
       border-top: none;
     }
 
@@ -2657,8 +2657,8 @@ function makeAnimator(ids) {
 
         const defaultFinals = [
           { id: 'bi-gmail',   x: bw * .68,        y: bh * .13,  rot:  10, delay:   0, ringColor: 'rgba(234,67,53,.55)'  },
-          { id: 'bi-spotify', x: bw - iHalf - 4,  y: bh * .40,  rot:  -7, delay:  80, ringColor: 'rgba(29,185,84,.55)'  },
-          { id: 'bi-notes',   x: iHalf + 4,        y: bh * .36,  rot:  13, delay:  40, ringColor: 'rgba(251,191,36,.7)'  },
+          { id: 'bi-spotify', x: bw - 15,           y: bh * .40,  rot:  -7, delay:  80, ringColor: 'rgba(29,185,84,.55)'  },
+          { id: 'bi-notes',   x: 14,               y: bh * .36,  rot:  13, delay:  40, ringColor: 'rgba(251,191,36,.7)'  },
           { id: 'bi-chatgpt', x: bw * .28,         y: bh * .74,  rot: -11, delay: 150, ringColor: 'rgba(16,163,127,.55)' },
         ];
         const finals = (demo.burstIcons || defaultFinals).map(f => ({
@@ -2867,8 +2867,8 @@ const HERO_DEMOS = [
     burstRipples: ['#007acd','#cc7a3e','#a259ff','#28c840'],
     burstIcons: [
       { id: 'bi-vscode',   x: (bw, h) => bw * .70,       y: (bh, h) => bh * .12,  rot:  8,  delay:   0, ringColor: 'rgba(0,122,204,.55)'  },
-      { id: 'bi-claude',   x: (bw, h) => bw - h - 4,     y: (bh, h) => bh * .42,  rot: -9,  delay:  70, ringColor: 'rgba(204,122,62,.55)' },
-      { id: 'bi-figma',    x: (bw, h) => h + 4,           y: (bh, h) => bh * .38,  rot: 12,  delay:  35, ringColor: 'rgba(162,89,255,.6)'  },
+      { id: 'bi-claude',   x: (bw, h) => bw - 15,         y: (bh, h) => bh * .42,  rot: -9,  delay:  70, ringColor: 'rgba(204,122,62,.55)' },
+      { id: 'bi-figma',    x: (bw, h) => 14,              y: (bh, h) => bh * .38,  rot: 12,  delay:  35, ringColor: 'rgba(162,89,255,.6)'  },
       { id: 'bi-terminal', x: (bw, h) => bw * .30,        y: (bh, h) => bh * .76,  rot:-10,  delay: 140, ringColor: 'rgba(40,200,80,.55)'  },
     ],
   },
