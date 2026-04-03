@@ -72,6 +72,11 @@ enum ActionExecutor {
         let src = CGEventSource(stateID: .hidSystemState)
         for scalar in text.unicodeScalars {
             guard scalar.value <= 0xFFFF else { continue }   // BMP only
+            // Newline: send a real Return key press instead of Unicode character
+            if scalar.value == 0x0A || scalar.value == 0x0D {
+                postKey(36)
+                continue
+            }
             let u = [UniChar(scalar.value)]
             let dn = CGEvent(keyboardEventSource: src, virtualKey: 0, keyDown: true)
             let up = CGEvent(keyboardEventSource: src, virtualKey: 0, keyDown: false)

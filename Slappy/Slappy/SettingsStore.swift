@@ -28,7 +28,7 @@ final class SettingsStore {
     }
 
     /// Minimum similarity score (0–1) for a gesture to match.
-    var gestureThreshold: Double = 0.80 {
+    var gestureThreshold: Double = 0.50 {
         didSet { save(); DollarOneRecognizer.matchThreshold = gestureThreshold }
     }
 
@@ -62,7 +62,7 @@ final class SettingsStore {
     func reset() {
         patternThreshold     = 0.75
         timingTolerance      = 0.30
-        gestureThreshold     = 0.80
+        gestureThreshold     = 0.50
         matchCooldown        = 1.5
         minGesturePathLength = 30.0
     }
