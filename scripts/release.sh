@@ -38,11 +38,14 @@ DMG_PATH="$BUILD_DIR/$DMG_NAME"
 APPCAST_PATH="docs/appcast.xml"
 SIGN_UPDATE="/tmp/sparkle/bin/sign_update"
 
-# Credentials — prefer env vars; fall back to the placeholders below
+# Credentials — load from .env.local if present, then fall back to env vars
+if [[ -f ".env.local" ]]; then
+  set -a; source ".env.local"; set +a
+fi
 APPLE_ID="${APPLE_ID:-REPLACE_WITH_YOUR_APPLE_ID}"
 APP_PASSWORD="${APP_PASSWORD:-REPLACE_WITH_APP_SPECIFIC_PASSWORD}"
 TEAM_ID="${TEAM_ID:-REPLACE_WITH_TEAM_ID}"
-DOWNLOAD_BASE_URL="${DOWNLOAD_BASE_URL:-REPLACE_WITH_DOWNLOAD_BASE_URL}"
+DOWNLOAD_BASE_URL="${DOWNLOAD_BASE_URL:-https://github.com/laurentarsene/slapppy/releases/download/v$APP_VERSION}"
 
 # ── Sanity checks ─────────────────────────────────────────────────
 if [[ "$APPLE_ID" == REPLACE* ]] || [[ "$APP_PASSWORD" == REPLACE* ]] || [[ "$TEAM_ID" == REPLACE* ]]; then
