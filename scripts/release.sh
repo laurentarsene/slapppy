@@ -29,16 +29,14 @@ SCHEME="Slappy"
 PROJECT="Slappy/Slappy.xcodeproj"
 
 # Last released version (auto-updated on each run — do not edit manually)
-APP_VERSION="2.9"
-BUILD_NUMBER="26"
+APP_VERSION="3.0"
+BUILD_NUMBER="29"
 
 # Auto-bump: +0.1 to version, +1 to build, save back into this script
 _NEW_VER=$(printf "%.1f" "$(echo "$APP_VERSION + 0.1" | bc)")
 _NEW_BUILD=$((BUILD_NUMBER + 1))
 sed -i '' "s/^APP_VERSION=.*/APP_VERSION=\"$_NEW_VER\"/" "$0"
 sed -i '' "s/^BUILD_NUMBER=.*/BUILD_NUMBER=\"$_NEW_BUILD\"/" "$0"
-APP_VERSION="2.9"
-BUILD_NUMBER="26"
 echo "▶ Releasing version $APP_VERSION (build $BUILD_NUMBER)"
 BUILD_DIR="build"
 ARCHIVE_PATH="$BUILD_DIR/Slapppy.xcarchive"
