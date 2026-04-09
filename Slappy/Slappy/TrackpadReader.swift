@@ -23,6 +23,7 @@ final class TrackpadReader {
 
     var onTap:     ((Double)    -> Void)?
     var onGesture: (([CGPoint]) -> Void)?
+    var onLiveGestureUpdate: (([CGPoint]) -> Void)?
 
     var isListening              = false
     var isInputMonitoringGranted = CGPreflightListenEventAccess()
@@ -39,6 +40,7 @@ final class TrackpadReader {
     @ObservationIgnored private var globalMonitor:   Any?
     @ObservationIgnored private var localMonitor:    Any?
     @ObservationIgnored private var permissionTimer: Timer?
+    @ObservationIgnored private var releaseTime:     Date?     = nil
 
     // MARK: - Lifecycle
 
@@ -70,11 +72,14 @@ final class TrackpadReader {
         // deltaX/deltaY capture actual finger movement, independent of
         // cursor speed settings and screen position.
         let onMove: (NSEvent) -> Void = { [weak self] event in
-            guard let self, optionHeld, let last = gesturePoints.last else { return }
+            guard let self else { return }
+            let inGrace = releaseTime.map { Date().timeIntervalSince($0) < 0.02 } ?? false
+            guard (optionHeld || inGrace), let last = gesturePoints.last else { return }
             gesturePoints.append(CGPoint(
                 x: last.x + Double(event.deltaX),
                 y: last.y - Double(event.deltaY)  // deltaY is positive downward in AppKit
             ))
+            onLiveGestureUpdate?(gesturePoints)
         }
 
         // FLAGS — detect ⌥ press/release to start/finish gesture capture
@@ -82,21 +87,28 @@ final class TrackpadReader {
             guard let self else { return }
             let nowHeld = event.modifierFlags.contains(.option)
             if nowHeld && !optionHeld {
-                // ⌥ just pressed → start fresh capture from origin
+                // ⌥ just pressed → cancel any pending capture & start fresh
+                releaseTime   = nil
                 optionHeld    = true
                 gesturePoints = [.zero]
+                onLiveGestureUpdate?([.zero])
             } else if !nowHeld && optionHeld {
-                // ⌥ just released → evaluate the collected path
-                optionHeld = false
-                let captured = gesturePoints
-                gesturePoints = []
-                let pathLen = zip(captured, captured.dropFirst()).reduce(0.0) {
-                    $0 + hypot(Double($1.1.x - $1.0.x), Double($1.1.y - $1.0.y))
-                }
-                let minLen = settings?.minGesturePathLength ?? 30.0
-                if pathLen >= minLen {
-                    onGesture?(captured)
-                    print("[Slapppy] Gesture! \(captured.count) pts, path=\(Int(pathLen))pt")
+                // ⌥ just released → brief grace period to flush trailing trackpad events
+                optionHeld  = false
+                releaseTime = Date()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) { [weak self] in
+                    guard let self, releaseTime != nil else { return }
+                    releaseTime = nil
+                    let captured = gesturePoints
+                    gesturePoints = []
+                    let pathLen = zip(captured, captured.dropFirst()).reduce(0.0) {
+                        $0 + hypot(Double($1.1.x - $1.0.x), Double($1.1.y - $1.0.y))
+                    }
+                    let minLen = settings?.minGesturePathLength ?? 30.0
+                    if pathLen >= minLen {
+                        onGesture?(captured)
+                        print("[Slapppy] Gesture! \(captured.count) pts, path=\(Int(pathLen))pt")
+                    }
                 }
             }
         }

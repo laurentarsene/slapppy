@@ -24,13 +24,21 @@ final class GestureRecorder {
     var state:                State          = .idle
     var capturedPoints:       [GesturePoint] = []   // normalised, ready for recognition
     var capturedDisplayPoints:[GesturePoint] = []   // for display only (no rotation/stretch)
+    var livePoints:           [GesturePoint] = []   // raw points streamed during recording
 
     // MARK: - Public API
 
     func startRecording() {
         capturedPoints        = []
         capturedDisplayPoints = []
+        livePoints            = []
         state                 = .recording
+    }
+
+    /// Stream raw points from TrackpadReader during recording.
+    func updateLivePoints(_ points: [CGPoint]) {
+        guard state == .recording else { return }
+        livePoints = points.map { GesturePoint(x: $0.x, y: $0.y) }
     }
 
     /// Called once per completed drag gesture (all points delivered in one batch).
@@ -61,6 +69,7 @@ final class GestureRecorder {
     func discard() {
         capturedPoints        = []
         capturedDisplayPoints = []
+        livePoints            = []
         state                 = .idle
     }
 }

@@ -403,12 +403,17 @@ struct ContentView: View {
             }
 
         case .recording:
-            HStack {
-                Label("Maintiens ⌥ et dessine…", systemImage: "record.circle")
-                    .font(.system(size: 13))
-                    .foregroundStyle(.red)
-                Spacer()
-                cancelButton { gestureRecorder.discard() }
+            VStack(alignment: .leading, spacing: 8) {
+                if gestureRecorder.livePoints.count >= 2 {
+                    gesturePathPreview(gestureRecorder.livePoints, side: 100)
+                }
+                HStack {
+                    Label("Maintiens ⌥ et dessine…", systemImage: "record.circle")
+                        .font(.system(size: 13))
+                        .foregroundStyle(.red)
+                    Spacer()
+                    cancelButton { gestureRecorder.discard() }
+                }
             }
 
         case .captured:

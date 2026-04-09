@@ -78,6 +78,12 @@ struct SlappyApp: App {
             engine.handleSlap(intensity: intensity, patterns: store.patterns)
         }
 
+        trackpad.onLiveGestureUpdate = { [self] points in
+            if gestureRecorder.state == .recording {
+                gestureRecorder.updateLivePoints(points)
+            }
+        }
+
         trackpad.onGesture = { [self] points in
             if gestureRecorder.state == .recording {
                 gestureRecorder.handleGesture(points: points)
